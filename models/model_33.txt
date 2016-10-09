@@ -1,0 +1,8 @@
+The texts contained in this test data set were translated from German using Google
+translate and correcting grammatical errors. Additionally, the original texts made of
+several abbreviations specific to the domain of electric power supply. In order to be consistent,
+these were also translated. The translation and the meaning of the abbreviations
+in English and German are given in table B.11.
+The MPON sents the dismissal to the MPOO. The MPOO reviews the dismissal. The
+MPOO opposes the dismissal of MPON or the MPOO confirmes the dismissal of the
+MPON.
