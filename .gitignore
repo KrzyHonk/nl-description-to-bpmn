@@ -8,6 +8,7 @@ __pycache__/
 
 # Distribution / packaging
 .Python
+scrap/*
 env/
 build/
 develop-eggs/
@@ -87,3 +88,4 @@ ENV/
 
 # Rope project settings
 .ropeproject
+.idea
