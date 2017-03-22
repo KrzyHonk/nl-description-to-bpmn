@@ -17,7 +17,7 @@ def sentence_decomposition(sentence: Span):
     subsentences_list = subsent.subsentence_extraction(sentence)
 
     if len(subsentences_list) == 0:
-        elem_extr.extract_elements(sentence)
+        return elem_extr.extract_elements(sentence)
     else:
         tmp_sentence = sentence[0:sentence.end]
         for subsentence in subsentences_list:
@@ -35,4 +35,4 @@ def sentence_decomposition(sentence: Span):
             subsentences_list.append(s)
 
         for subsentence in subsentences_list:
-            elem_extr.extract_elements(subsentence)
+            return elem_extr.extract_elements(subsentence)

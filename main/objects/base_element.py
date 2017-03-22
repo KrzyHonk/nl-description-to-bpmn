@@ -8,25 +8,25 @@ class BaseElement(object):
     """
     Base class for elements extracted from text
     Fields:
-    - __token: an instance of spacy.Token class.
+    - __ident: a string value.
     """
 
-    def __init__(self, token=None):
+    def __init__(self, ident: str = None):
         """
         Default constructor, initializes object fields with new instances.
         """
-        self.__token = token
+        self.__ident = ident
 
-    def get_id(self):
+    def get_ident(self):
         """
-        Getter for '__token' field.
-        :return: object set as '__token' field.
+        Getter for '__ident' field.
+        :return: object set as '__ident' field.
         """
-        return self.__token
+        return self.__ident
 
-    def set_id(self, token):
+    def set_ident(self, ident):
         """
-        Setter for '__token' field.
-        :param token - a new object for '__token' field.
+        Setter for '__ident' field.
+        :param ident - a new object for '__ident' field.
         """
-        self.__token = token
+        self.__ident = ident
