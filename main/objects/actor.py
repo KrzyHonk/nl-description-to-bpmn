@@ -34,4 +34,11 @@ class Actor(BaseElement):
         self.__object = object
 
     def pretty_print(self):
-        return self.__object
+        left = ""
+        right = " "
+        for token in self.__object.lefts:
+            left += (token.text + " ")
+
+        for token in self.__object.rights:
+            right += (token.text + " ")
+        return left + self.__object.text + right

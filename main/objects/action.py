@@ -66,6 +66,17 @@ class Action(BaseElement):
         """
         self.__object = object
 
+    def find_complement(self):
+        """
+        Find child token in complement relationship.
+        """
+        self.__object = object
+
     def pretty_print(self):
-        return self.__subject.text + " " + self.__verb.text + " " + \
+        verb_text = ""
+        for token in self.__verb.subtree:
+            if token.dep_ in ["aux", "auxpass", "neg"] and token.head == self.__verb:
+                verb_text += (token.text + " ")
+        verb_text += self.__verb.text
+        return self.__subject.text + " " + verb_text + " " + \
                ("" if self.__object == None else self.__object.text)
