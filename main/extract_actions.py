@@ -50,10 +50,10 @@ def extract_actions_from_conjunction(sentence: Span) -> List[Action]:
         if word.dep_ in ('conj'):
             main_pred = word.head
             complements_list = dep.find_tokens_with_dependencies_for_token_in_subtree(word, ["acomp", "ccomp", "pcomp",
-                                                                                             "dobj", "obj", "pobj",
-                                                                                             "attr"])
+                                                                                             "xcomp", "dobj", "obj",
+                                                                                             "pobj", "attr"])
             for complement in complements_list:
-                output_obj = complements_list[0]
+                output_obj = complement
                 for child in main_pred.children:
                     if child.dep_ in ('nsubj', 'nsubjpass'):
                         subject = child
