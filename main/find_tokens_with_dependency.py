@@ -16,7 +16,15 @@ def find_tokens_with_dependencies_in_sentence(sentence: Span, dependencies: List
     return output
 
 
-def find_tokens_with_dependencies_for_token(token: Token, dependencies: List[str]) -> List[Token]:
+def find_tokens_with_dependencies_for_token_check_children(token: Token, dependencies: List[str]) -> List[Token]:
+    output = []
+    for word in token.subtree:
+        if word.dep_ in dependencies:
+            output.append(word)
+    return output
+
+
+def find_tokens_with_dependencies_for_token_in_subtree(token: Token, dependencies: List[str]) -> List[Token]:
     output = []
     for word in token.subtree:
         if word.dep_ in dependencies:

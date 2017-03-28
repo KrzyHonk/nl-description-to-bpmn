@@ -9,6 +9,7 @@ import spacy
 
 import main.extract_actors as act_extr
 import main.utils as utils
+import main.sentence_decompositon as decomp
 
 
 class ActorsTests(unittest.TestCase):
@@ -19,13 +20,13 @@ class ActorsTests(unittest.TestCase):
         text = open(filepath).read().replace("\n", " ")
         doc = nlp(text)
 
-        outcome = []
+        actors = []
         for sentence in doc.sents:
             [utils.to_nltk_tree(sent.root).pretty_print() for sent in doc.sents]
-            outcome = act_extr.extract_actors(sentence)
-            for actor in outcome:
+            actors, actions = decomp.sentence_decomposition(sentence)
+            for actor in actors:
                 print(actor.pretty_print())
-        self.assertEqual(len(outcome), 2, "Actors list length is incorrect")
+        self.assertEqual(len(actors), 2, "Actors list length is incorrect")
 
     def test_example_phrase_two(self):
         filepath = "../examples/example_phrase_two"
@@ -34,13 +35,28 @@ class ActorsTests(unittest.TestCase):
         text = open(filepath).read().replace("\n", " ")
         doc = nlp(text)
 
-        outcome = []
+        actors = []
         for sentence in doc.sents:
             [utils.to_nltk_tree(sent.root).pretty_print() for sent in doc.sents]
-            outcome = act_extr.extract_actors(sentence)
-            for actor in outcome:
+            actors, actions = decomp.sentence_decomposition(sentence)
+            for actor in actors:
                 print(actor.pretty_print())
-        self.assertEqual(len(outcome), 1, "Actors list length is incorrect")
+        self.assertEqual(len(actors), 1, "Actors list length is incorrect")
+
+    def test_example_phrase_three(self):
+        filepath = "../examples/example_phrase_three"
+        nlp = spacy.load('en')
+
+        text = open(filepath).read().replace("\n", " ")
+        doc = nlp(text)
+
+        actors = []
+        for sentence in doc.sents:
+            [utils.to_nltk_tree(sent.root).pretty_print() for sent in doc.sents]
+            actors, actions = decomp.sentence_decomposition(sentence)
+            for actor in actors:
+                print(actor.pretty_print())
+        self.assertEqual(len(actors), 4, "Actors list length is incorrect")
 
     def test_example_phrase_four(self):
         filepath = "../examples/example_phrase_four"
@@ -49,13 +65,13 @@ class ActorsTests(unittest.TestCase):
         text = open(filepath).read().replace("\n", " ")
         doc = nlp(text)
 
-        outcome = []
+        actors = []
         for sentence in doc.sents:
             [utils.to_nltk_tree(sent.root).pretty_print() for sent in doc.sents]
-            outcome = act_extr.extract_actors(sentence)
-            for actor in outcome:
+            actors, actions = decomp.sentence_decomposition(sentence)
+            for actor in actors:
                 print(actor.pretty_print())
-        self.assertEqual(len(outcome), 2, "Actors list length is incorrect")
+        self.assertEqual(len(actors), 2, "Actors list length is incorrect")
 
     def test_example_phrase_five(self):
         filepath = "../examples/example_phrase_five"
@@ -64,28 +80,13 @@ class ActorsTests(unittest.TestCase):
         text = open(filepath).read().replace("\n", " ")
         doc = nlp(text)
 
-        outcome = []
+        actors = []
         for sentence in doc.sents:
             [utils.to_nltk_tree(sent.root).pretty_print() for sent in doc.sents]
-            outcome = act_extr.extract_actors(sentence)
-            for actor in outcome:
+            actors, actions = decomp.sentence_decomposition(sentence)
+            for actor in actors:
                 print(actor.pretty_print())
-        self.assertEqual(len(outcome), 2, "Actors list length is incorrect")
-
-    def test_example_phrase_six(self):
-        filepath = "../examples/example_phrase_three"
-        nlp = spacy.load('en')
-
-        text = open(filepath).read().replace("\n", " ")
-        doc = nlp(text)
-
-        outcome = []
-        for sentence in doc.sents:
-            [utils.to_nltk_tree(sent.root).pretty_print() for sent in doc.sents]
-            outcome = act_extr.extract_actors(sentence)
-            for actor in outcome:
-                print(actor.pretty_print())
-        self.assertEqual(len(outcome), 4, "Actors list length is incorrect")
+        self.assertEqual(len(actors), 2, "Actors list length is incorrect")
 
 
 if __name__ == '__main__':

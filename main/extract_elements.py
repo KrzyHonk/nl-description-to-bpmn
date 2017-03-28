@@ -2,9 +2,9 @@
 """
 Function for extracting elements from sentence
 """
-from spacy.tokens.span import Span
 from typing import List
 
+from spacy.tokens.span import Span
 from spacy.tokens.token import Token
 
 from main.extract_actions import extract_actions
