@@ -18,6 +18,7 @@ class Actor(BaseElement):
         """
         super().__init__(ident)
         self.__object = object
+        self.__anaphora = False
 
     def get_object(self):
         """
@@ -26,12 +27,26 @@ class Actor(BaseElement):
         """
         return self.__object
 
-    def set_object(self, object):
+    def set_object(self, new_object):
         """
         Setter for '__object' field.
-        :param object - a new object for '__object' field.
+        :param new_object - a new object for '__object' field.
         """
-        self.__object = object
+        self.__object = new_object
+
+    def get_anaphora(self):
+        """
+        Getter for '__anaphora' field.
+        :return: value of '__anaphora' field.
+        """
+        return self.__anaphora
+
+    def set_anaphora(self, anaphora):
+        """
+        Setter for '__anaphora' field.
+        :param anaphora - a new value of '__anaphora' field.
+        """
+        self.__anaphora = anaphora
 
     def pretty_print(self):
         left = ""

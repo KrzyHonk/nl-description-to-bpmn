@@ -8,9 +8,17 @@ import unittest
 import spacy
 
 import main.subsentence_extraction as decomp
+from main import utils
 
 
 class SubsentenceTests(unittest.TestCase):
+    def test_thesis_example(self):
+        nlp = spacy.load('en')
+
+        text = "This is an example of sentence, which can be parsed by SpaCy"
+        doc = nlp(text)
+        [utils.to_nltk_tree(sent.root).pretty_print() for sent in doc.sents]
+
     def test_simple_subsentence_example_one(self):
         # Should be spliced into two sentences
         model_one_filepath = "../examples/example_phrase_one"

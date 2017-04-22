@@ -13,5 +13,6 @@ from main.extract_actors import extract_actors
 
 def extract_elements(sentence: Span) -> (List[Token], List[Token]):
     actors = extract_actors(sentence)
-    actions = extract_actions(sentence)
+    actions = extract_actions(sentence, actors)
+
     return actors, actions

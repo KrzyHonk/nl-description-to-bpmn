@@ -58,6 +58,7 @@ class SubsentenceTests(unittest.TestCase):
                 print(action.pretty_print())
         self.assertEqual(len(actions), 4, "Action list length is incorrect")
 
+    """
     def test_example_phrase_four(self):
         filepath = "../examples/example_phrase_four"
         nlp = spacy.load('en')
@@ -72,6 +73,7 @@ class SubsentenceTests(unittest.TestCase):
             for action in actions:
                 print(action.pretty_print())
         self.assertEqual(len(actions), 1, "Action list length is incorrect")
+    """
 
     def test_example_phrase_five(self):
         filepath = "../examples/example_phrase_five"
