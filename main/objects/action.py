@@ -25,6 +25,7 @@ class Action(BaseElement):
         self.__verb = verb
         self.__object = new_object
         self.__actor = None
+        self.__passive = False
 
     def get_subject(self):
         """
@@ -82,6 +83,19 @@ class Action(BaseElement):
         """
         return self.__actor
 
+    def set_passive(self, passive: bool):
+        """
+        Setter for '__passive' field.
+        :param passive - a new verb for '__passive' field.
+        """
+        self.__passive = passive
+
+    def get_passive(self):
+        """
+        Getter for '__passive' field.
+        :return: object set as '__passive' field.
+        """
+        return self.__passive
 
     def find_complement(self):
         """
@@ -90,10 +104,23 @@ class Action(BaseElement):
         return None
 
     def pretty_print(self):
+        subject_text = ""
+        for token in self.__subject.subtree:
+            if token.dep_ in ["det", "compound", "amod"] and token.head == self.__subject:
+                subject_text += (token.text + " ")
+        subject_text += self.__subject.text
+
         verb_text = ""
         for token in self.__verb.subtree:
             if token.dep_ in ["aux", "auxpass", "neg"] and token.head == self.__verb:
                 verb_text += (token.text + " ")
         verb_text += self.__verb.text
-        return self.__subject.text + " " + verb_text + " " + \
-               ("" if self.__object == None else self.__object.text)
+
+        object_text = ""
+        if self.__object is not None:
+            for token in self.__object.subtree:
+                if token.dep_ in ["det", "compound", "amod"] and token.head == self.__object:
+                    object_text += (token.text + " ")
+            object_text += self.__object.text
+
+        return subject_text + " " + verb_text + " " + object_text

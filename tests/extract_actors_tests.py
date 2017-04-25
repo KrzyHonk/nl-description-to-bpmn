@@ -89,5 +89,36 @@ class ActorsTests(unittest.TestCase):
         self.assertEqual(len(actors), 2, "Actors list length is incorrect")
 
 
+    def test_example_phrase_six(self):
+        filepath = "../examples/example_phrase_six"
+        nlp = spacy.load('en')
+
+        text = open(filepath).read().replace("\n", " ")
+        doc = nlp(text)
+
+        actors = []
+        for sentence in doc.sents:
+            [utils.to_nltk_tree(sent.root).pretty_print() for sent in doc.sents]
+            actors, actions = decomp.sentence_decomposition(sentence)
+            for actor in actors:
+                print(actor.pretty_print())
+        self.assertEqual(len(actors), 0, "Actors list length is incorrect")
+
+    def test_example_phrase_seven(self):
+        filepath = "../examples/example_phrase_seven"
+        nlp = spacy.load('en')
+
+        text = open(filepath).read().replace("\n", " ")
+        doc = nlp(text)
+
+        actors = []
+        for sentence in doc.sents:
+            [utils.to_nltk_tree(sent.root).pretty_print() for sent in doc.sents]
+            actors, actions = decomp.sentence_decomposition(sentence)
+            for actor in actors:
+                print(actor.pretty_print())
+        self.assertEqual(len(actors), 1, "Actors list length is incorrect")
+
+
 if __name__ == '__main__':
     unittest.main()

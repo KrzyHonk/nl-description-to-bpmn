@@ -22,34 +22,39 @@ def extract_actions(sentence: Span, actors: List[Actor]) -> List[Action]:
             output_obj = None
             subject = token
             verb = subject.head
-            complements_list = dep.find_tokens_with_dependencies_for_token_in_subtree(verb, ["xcomp", "acomp", "ccomp",
-                                                                                             "pcomp"])
-            for complement in complements_list:
+            objects_list = dep.find_tokens_with_dependencies_for_token_in_subtree(verb,
+                                                                                  ["xcomp", "acomp", "ccomp", "pcomp",
+                                                                                   "dobj", "iobj", "attr"])
+            for complement in objects_list:
                 if complement.head == verb:
                     output_obj = complement
             action = Action(subject=subject, verb=verb, new_object=output_obj)
-            tmp_output.append(action)
-    elif len(dobj_list) > 0:
-        for token in dobj_list:
-            subject = token
-            verb = subject.head
-            action = Action(subject=subject, verb=verb)
             tmp_output.append(action)
     elif len(nsubjpass_list) > 0:
         for token in nsubjpass_list:
             subject = token
             verb = subject.head
             action = Action(subject=subject, verb=verb)
+            action.set_passive(True)
+            tmp_output.append(action)
+    elif len(dobj_list) > 0:
+        for token in dobj_list:
+            subject = token
+            verb = subject.head
+            action = Action(subject=subject, verb=verb)
+            action.set_passive(True)
             tmp_output.append(action)
     tmp_output += extract_actions_from_conjunction(sentence)
 
     # Check if extracted action can be assigned to verified actor
     output = set()
     for action in tmp_output:
-        for actor in actors:
-            if actor.get_object() == action.get_subject():
-                output.add(action)
-
+        if action.get_passive():
+            output.add(action)
+        else:
+            for actor in actors:
+                if actor.get_actor_token() == action.get_subject():
+                    output.add(action)
     return output
 
 

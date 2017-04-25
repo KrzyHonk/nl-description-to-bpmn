@@ -23,7 +23,7 @@ def extract_actors(sentence: Span) -> List[Actor]:
     for word in sentence:
         if word.dep_ in ('nsubj'):
             new_object = word
-            actor = Actor(object=new_object)
+            actor = Actor(actor_token=new_object)
             if new_object.pos_ == "pron":
                 actor.set_anaphora(True)
             tmp_output.append(actor)
@@ -31,7 +31,7 @@ def extract_actors(sentence: Span) -> List[Actor]:
             for token in word.children:
                 if token.dep_ in ('pobj'):
                     new_object = token
-                    actor = Actor(object=new_object)
+                    actor = Actor(actor_token=new_object)
                     if new_object.pos_ == "pron":
                         actor.set_anaphora(True)
                     tmp_output.append(actor)
@@ -39,7 +39,7 @@ def extract_actors(sentence: Span) -> List[Actor]:
 
     # Check if Actor is an acceptable entity
     for actor in tmp_output:
-        actor_text = actor.get_object().text
+        actor_text = actor.get_actor_token().text
 
         flag = False
         # Check whether actor is a pronoun
@@ -70,6 +70,6 @@ def extract_actors_from_conjunction(sentence: Span) -> List[Actor]:
             for token in word.children:
                 if token.dep_ in ('pobj', 'dobj', 'iobj'):
                     object = token
-                    actor = Actor(object=object)
+                    actor = Actor(actor_token=object)
                     output.append(actor)
     return output

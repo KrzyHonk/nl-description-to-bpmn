@@ -12,27 +12,27 @@ class Actor(BaseElement):
     Class for actors extracted from text
     """
 
-    def __init__(self, ident=None, object: Token = None):
+    def __init__(self, ident=None, actor_token: Token = None):
         """
         Default constructor, initializes object fields with new instances.
         """
         super().__init__(ident)
-        self.__object = object
+        self.__actor_token = actor_token
         self.__anaphora = False
 
-    def get_object(self):
+    def get_actor_token(self):
         """
-        Getter for '__object' field.
-        :return: object set as '__object' field.
+        Getter for '__actor_token' field.
+        :return: object set as '__actor_token' field.
         """
-        return self.__object
+        return self.__actor_token
 
-    def set_object(self, new_object):
+    def set_actor_token(self, actor_token):
         """
-        Setter for '__object' field.
-        :param new_object - a new object for '__object' field.
+        Setter for '__actor_token' field.
+        :param actor_token - a new object for '__actor_token' field.
         """
-        self.__object = new_object
+        self.__actor_token = actor_token
 
     def get_anaphora(self):
         """
@@ -51,9 +51,9 @@ class Actor(BaseElement):
     def pretty_print(self):
         left = ""
         right = " "
-        for token in self.__object.lefts:
+        for token in self.__actor_token.lefts:
             left += (token.text + " ")
 
-        for token in self.__object.rights:
+        for token in self.__actor_token.rights:
             right += (token.text + " ")
-        return left + self.__object.text + right
+        return left + self.__actor_token.text + right
