@@ -15,7 +15,6 @@ def extract_actions(sentence: Span, actors: List[Actor]) -> List[Action]:
     tmp_output = []
     root = sentence.root
     nsubj_list = dep.find_tokens_with_dependencies_for_token_in_subtree(root, ["nsubj"])
-    dobj_list = dep.find_tokens_with_dependencies_for_token_in_subtree(root, ["dobj", "pobj"])
     nsubjpass_list = dep.find_tokens_with_dependencies_for_token_in_subtree(root, ["nsubjpass"])
     if len(nsubj_list) > 0:
         for token in nsubj_list:
@@ -23,22 +22,14 @@ def extract_actions(sentence: Span, actors: List[Actor]) -> List[Action]:
             subject = token
             verb = subject.head
             objects_list = dep.find_tokens_with_dependencies_for_token_in_subtree(verb,
-                                                                                  ["xcomp", "acomp", "ccomp", "pcomp",
-                                                                                   "dobj", "iobj", "attr"])
+                                                                                  ["dobj", "iobj", "pobj", "attr"])
             for complement in objects_list:
                 if complement.head == verb:
                     output_obj = complement
             action = Action(subject=subject, verb=verb, new_object=output_obj)
             tmp_output.append(action)
-    elif len(nsubjpass_list) > 0:
+    if len(nsubjpass_list) > 0:
         for token in nsubjpass_list:
-            subject = token
-            verb = subject.head
-            action = Action(subject=subject, verb=verb)
-            action.set_passive(True)
-            tmp_output.append(action)
-    elif len(dobj_list) > 0:
-        for token in dobj_list:
             subject = token
             verb = subject.head
             action = Action(subject=subject, verb=verb)
@@ -62,16 +53,22 @@ def extract_actions_from_conjunction(sentence: Span) -> List[Action]:
     output = []
     for word in sentence:
         if word.dep_ in ('conj'):
-            main_pred = word.head
-            complements_list = dep.find_tokens_with_dependencies_for_token_in_subtree(word, ["acomp", "ccomp", "pcomp",
-                                                                                             "xcomp", "dobj", "obj",
-                                                                                             "pobj", "attr"])
-            for complement in complements_list:
-                output_obj = complement
-                for child in main_pred.children:
+            conj_verb = word
+            output_object = None
+            for child in conj_verb.children:
+                if child.dep_ in ["dobj", "iobj", "attr"]:
+                    output_object = child
+
+            subject = None
+            token = conj_verb
+            while token.head is not None and subject is None:
+                for child in token.children:
                     if child.dep_ in ('nsubj', 'nsubjpass'):
                         subject = child
-                        verb = word
-                        action = Action(subject=subject, verb=verb, new_object=output_obj)
-                        output.append(action)
+                if subject is None:
+                    token = token.head
+
+            if subject is not None:
+                action = Action(subject=subject, verb=conj_verb, new_object=output_object)
+                output.append(action)
     return output

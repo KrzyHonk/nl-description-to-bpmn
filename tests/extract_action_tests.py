@@ -58,7 +58,6 @@ class SubsentenceTests(unittest.TestCase):
                 print(action.pretty_print())
         self.assertEqual(len(actions), 4, "Action list length is incorrect")
 
-    """
     def test_example_phrase_four(self):
         filepath = "../examples/example_phrase_four"
         nlp = spacy.load('en')
@@ -73,7 +72,6 @@ class SubsentenceTests(unittest.TestCase):
             for action in actions:
                 print(action.pretty_print())
         self.assertEqual(len(actions), 1, "Action list length is incorrect")
-    """
 
     def test_example_phrase_five(self):
         filepath = "../examples/example_phrase_five"
@@ -119,6 +117,21 @@ class SubsentenceTests(unittest.TestCase):
             for action in actions:
                 print(action.pretty_print())
         self.assertEqual(len(actions), 2, "Action list length is incorrect")
+
+    def test_example_phrase_eight(self):
+        filepath = "../examples/example_phrase_eight"
+        nlp = spacy.load('en')
+
+        text = open(filepath).read().replace("\n", " ")
+        doc = nlp(text)
+
+        actions = []
+        for sentence in doc.sents:
+            [utils.to_nltk_tree(sent.root).pretty_print() for sent in doc.sents]
+            actors, actions = decomp.sentence_decomposition(sentence)
+            for action in actions:
+                print(action.pretty_print())
+        self.assertEqual(len(actions), 3, "Action list length is incorrect")
 
 
 if __name__ == '__main__':

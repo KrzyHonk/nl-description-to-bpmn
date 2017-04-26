@@ -42,4 +42,4 @@ problem, and ii) an SLA violation rebate is reported to Billing & Collections wh
 The report for the customer is sent out to her. After all three activities are completed the process ends
 within Customer Service. After the customer then receives the report about service performance and
 problem resolution from Customer Service, the process
-ow at the customer also ends.
+flow at the customer also ends.
