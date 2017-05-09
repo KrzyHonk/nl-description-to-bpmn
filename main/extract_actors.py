@@ -12,6 +12,10 @@ from main.objects.actor import Actor
 
 def extract_actors(sentence: Span) -> List[Actor]:
     pronoun_set = {"I", "Me", "We", "Us", "You", "She", "Her", "He", "Him", "It", "They", "Them"}
+    actors_keywords_set = {"provisioning", "service", "support", "office", "officer", "master", "masters", "assembler",
+                           "acme", "accounting", "secretary", "office", "registry", "head", "storehouse", "atm", "crs",
+                           "company", "garage", "kitchen", "department", "ec", "sp", "mpo", "mpoo", "mpon", "msp",
+                           "mspo", "mspn", "go", "pu", "ip", "inq" "sp", "pu", "go", "detector"}
     real_actors_terms_list = ["person", "social_group", "software_system"]
     real_actors_synonyms = []
     for term in real_actors_terms_list:
@@ -45,6 +49,10 @@ def extract_actors(sentence: Span) -> List[Actor]:
         # Check whether actor is a pronoun
         for pronoun in pronoun_set:
             if actor_text.casefold() == pronoun.casefold():
+                flag = True
+
+        for actor_keyword in actors_keywords_set:
+            if actor_text.casefold() == actor_keyword.casefold():
                 flag = True
 
         if flag is False:

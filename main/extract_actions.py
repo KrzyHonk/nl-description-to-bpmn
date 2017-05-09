@@ -5,6 +5,7 @@ Function for extracting actions from sentence
 from typing import List
 
 from spacy.tokens.span import Span
+from nltk.corpus import wordnet as wn
 
 import main.find_tokens_with_dependency as dep
 from main.objects.action import Action
@@ -13,6 +14,7 @@ from main.objects.actor import Actor
 
 def extract_actions(sentence: Span, actors: List[Actor]) -> List[Action]:
     tmp_output = []
+    ignore_verbs = ["be", "have", "do", "achieve", "start", "exist", "base"]
     root = sentence.root
     nsubj_list = dep.find_tokens_with_dependencies_for_token_in_subtree(root, ["nsubj"])
     nsubjpass_list = dep.find_tokens_with_dependencies_for_token_in_subtree(root, ["nsubjpass"])
@@ -21,21 +23,45 @@ def extract_actions(sentence: Span, actors: List[Actor]) -> List[Action]:
             output_obj = None
             subject = token
             verb = subject.head
-            objects_list = dep.find_tokens_with_dependencies_for_token_in_subtree(verb,
-                                                                                  ["dobj", "iobj", "pobj", "attr"])
-            for complement in objects_list:
-                if complement.head == verb:
-                    output_obj = complement
-            action = Action(subject=subject, verb=verb, new_object=output_obj)
-            tmp_output.append(action)
+            base_verb = wn.morphy(verb.text, wn.VERB)
+            if base_verb is not None and base_verb.casefold() not in ignore_verbs:
+                objects_list = dep.find_tokens_with_dependencies_for_token_in_subtree(verb,
+                                                                                      ["dobj", "iobj", "pobj", "attr"])
+                for complement in objects_list:
+                    if complement.head == verb:
+                        output_obj = complement
+                action = Action(subject=subject, verb=verb, new_object=output_obj)
+                insert_flag = True
+                if len(tmp_output) > 0:
+                    for tmp_action in tmp_output:
+                        if action.get_subject() == tmp_action.get_subject() \
+                                and action.get_verb() == tmp_action.get_verb() \
+                                and action.get_object() == tmp_action.get_object():
+                            insert_flag = False
+                    if insert_flag:
+                        tmp_output.append(action)
+                else:
+                    tmp_output.append(action)
     if len(nsubjpass_list) > 0:
         for token in nsubjpass_list:
             subject = token
             verb = subject.head
-            action = Action(subject=subject, verb=verb)
-            action.set_passive(True)
-            tmp_output.append(action)
-    tmp_output += extract_actions_from_conjunction(sentence)
+            base_verb = wn.morphy(verb.text, wn.VERB)
+            if base_verb is not None and base_verb.casefold() not in ignore_verbs:
+                action = Action(subject=subject, verb=verb)
+                action.set_passive(True)
+                insert_flag = True
+                if len(tmp_output) > 0:
+                    for tmp_action in tmp_output:
+                        if action.get_subject() == tmp_action.get_subject() \
+                                and action.get_verb() == tmp_action.get_verb() \
+                                and action.get_object() == tmp_action.get_object():
+                            insert_flag = False
+                    if insert_flag:
+                        tmp_output.append(action)
+                else:
+                    tmp_output.append(action)
+    extract_actions_from_conjunction(sentence, tmp_output)
 
     # Check if extracted action can be assigned to verified actor
     output = set()
@@ -49,8 +75,8 @@ def extract_actions(sentence: Span, actors: List[Actor]) -> List[Action]:
     return output
 
 
-def extract_actions_from_conjunction(sentence: Span) -> List[Action]:
-    output = []
+def extract_actions_from_conjunction(sentence: Span, tmp_output: List[Action]) -> List[Action]:
+    ignore_verbs = ["be", "have", "do", "achieve", "start", "exist", "base"]
     for word in sentence:
         if word.dep_ in ('conj'):
             conj_verb = word
@@ -69,6 +95,17 @@ def extract_actions_from_conjunction(sentence: Span) -> List[Action]:
                     token = token.head
 
             if subject is not None:
-                action = Action(subject=subject, verb=conj_verb, new_object=output_object)
-                output.append(action)
-    return output
+                base_verb = wn.morphy(conj_verb.text, wn.VERB)
+                if base_verb is not None and base_verb.casefold() not in ignore_verbs:
+                    action = Action(subject=subject, verb=conj_verb, new_object=output_object)
+                    insert_flag = True
+                    if len(tmp_output) > 0:
+                        for tmp_action in tmp_output:
+                            if action.get_subject() == tmp_action.get_subject() \
+                                    and action.get_verb() == tmp_action.get_verb() \
+                                    and action.get_object() == tmp_action.get_object():
+                                insert_flag = False
+                        if insert_flag:
+                            tmp_output.append(action)
+                    else:
+                        tmp_output.append(action)

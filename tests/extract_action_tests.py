@@ -7,7 +7,6 @@ import unittest
 
 import spacy
 
-import main.extract_actions as act_extr
 import main.utils as utils
 import main.sentence_decompositon as decomp
 
@@ -56,7 +55,7 @@ class SubsentenceTests(unittest.TestCase):
             actors, actions = decomp.sentence_decomposition(sentence)
             for action in actions:
                 print(action.pretty_print())
-        self.assertEqual(len(actions), 4, "Action list length is incorrect")
+        self.assertEqual(len(actions), 3, "Action list length is incorrect")
 
     def test_example_phrase_four(self):
         filepath = "../examples/example_phrase_four"
@@ -86,7 +85,7 @@ class SubsentenceTests(unittest.TestCase):
             actors, actions = decomp.sentence_decomposition(sentence)
             for action in actions:
                 print(action.pretty_print())
-        self.assertEqual(len(actions), 2, "Action list length is incorrect")
+        self.assertEqual(len(actions), 1, "Action list length is incorrect")
 
     def test_example_phrase_six(self):
         filepath = "../examples/example_phrase_six"
