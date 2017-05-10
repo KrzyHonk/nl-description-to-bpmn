@@ -16,7 +16,8 @@ class Action(BaseElement):
     - __object: an instance of spacy.Token class.
     """
 
-    def __init__(self, ident=None, subject: Token = None, verb: Token = None, new_object: Token = None):
+    def __init__(self, ident=None, subject: Token = None, verb: Token = None, new_object: Token = None,
+                 position: int = 0):
         """
         Default constructor, initializes object fields with new instances.
         """
@@ -26,6 +27,7 @@ class Action(BaseElement):
         self.__object = new_object
         self.__actor = None
         self.__passive = False
+        self.__position = position
 
     def get_subject(self):
         """
@@ -97,11 +99,12 @@ class Action(BaseElement):
         """
         return self.__passive
 
-    def find_complement(self):
+    def get_position(self):
         """
-        Find child token in complement relationship.
+        Getter for '__position' field.
+        :return: object set as '__position' field.
         """
-        return None
+        return self.__position
 
     def pretty_print(self):
         subject_text = ""

@@ -30,7 +30,7 @@ def extract_actions(sentence: Span, actors: List[Actor]) -> List[Action]:
                 for complement in objects_list:
                     if complement.head == verb:
                         output_obj = complement
-                action = Action(subject=subject, verb=verb, new_object=output_obj)
+                action = Action(subject=subject, verb=verb, new_object=output_obj, position=verb.i)
                 insert_flag = True
                 if len(tmp_output) > 0:
                     for tmp_action in tmp_output:
@@ -48,7 +48,7 @@ def extract_actions(sentence: Span, actors: List[Actor]) -> List[Action]:
             verb = subject.head
             base_verb = wn.morphy(verb.text, wn.VERB)
             if base_verb is not None and base_verb.casefold() not in ignore_verbs:
-                action = Action(subject=subject, verb=verb)
+                action = Action(subject=subject, verb=verb, position=verb.i)
                 action.set_passive(True)
                 insert_flag = True
                 if len(tmp_output) > 0:
@@ -97,7 +97,7 @@ def extract_actions_from_conjunction(sentence: Span, tmp_output: List[Action]) -
             if subject is not None:
                 base_verb = wn.morphy(conj_verb.text, wn.VERB)
                 if base_verb is not None and base_verb.casefold() not in ignore_verbs:
-                    action = Action(subject=subject, verb=conj_verb, new_object=output_object)
+                    action = Action(subject=subject, verb=conj_verb, new_object=output_object,position=conj_verb.i)
                     insert_flag = True
                     if len(tmp_output) > 0:
                         for tmp_action in tmp_output:
