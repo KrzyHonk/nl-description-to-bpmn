@@ -15,7 +15,6 @@ def sentence_decomposition(sentence: Span):
 
     :param sentence:
     """
-    '''
     subsentences_list = subsent.subsentence_extraction(sentence)
 
     if len(subsentences_list) == 0:
@@ -48,6 +47,3 @@ def sentence_decomposition(sentence: Span):
             actors += actors_output
             actions += actions_output
         return actors, actions
-    '''
-
-    return elem_extr.extract_elements(sentence)

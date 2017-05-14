@@ -7,9 +7,8 @@ import unittest
 
 import spacy
 
-import main.extract_actors as act_extr
+import main.extract_elements as extract
 import main.utils as utils
-import main.sentence_decompositon as decomp
 
 
 class ActorsTests(unittest.TestCase):
@@ -23,8 +22,9 @@ class ActorsTests(unittest.TestCase):
         actors = []
         for sentence in doc.sents:
             [utils.to_nltk_tree(sent.root).pretty_print() for sent in doc.sents]
-            actors, actions = decomp.sentence_decomposition(sentence)
-            for actor in actors:
+            tmp_actors, actions = extract.extract_elements(sentence)
+            actors.extend(tmp_actors)
+            for actor in tmp_actors:
                 print(actor.pretty_print())
         self.assertEqual(len(actors), 2, "Actors list length is incorrect")
 
@@ -38,7 +38,7 @@ class ActorsTests(unittest.TestCase):
         actors = []
         for sentence in doc.sents:
             [utils.to_nltk_tree(sent.root).pretty_print() for sent in doc.sents]
-            actors, actions = decomp.sentence_decomposition(sentence)
+            actors, actions = extract.extract_elements(sentence)
             for actor in actors:
                 print(actor.pretty_print())
         self.assertEqual(len(actors), 1, "Actors list length is incorrect")
@@ -53,7 +53,7 @@ class ActorsTests(unittest.TestCase):
         actors = []
         for sentence in doc.sents:
             [utils.to_nltk_tree(sent.root).pretty_print() for sent in doc.sents]
-            actors, actions = decomp.sentence_decomposition(sentence)
+            actors, actions = extract.extract_elements(sentence)
             for actor in actors:
                 print(actor.pretty_print())
         self.assertEqual(len(actors), 4, "Actors list length is incorrect")
@@ -68,10 +68,10 @@ class ActorsTests(unittest.TestCase):
         actors = []
         for sentence in doc.sents:
             [utils.to_nltk_tree(sent.root).pretty_print() for sent in doc.sents]
-            actors, actions = decomp.sentence_decomposition(sentence)
+            actors, actions = extract.extract_elements(sentence)
             for actor in actors:
                 print(actor.pretty_print())
-        self.assertEqual(len(actors), 2, "Actors list length is incorrect")
+        self.assertEqual(len(actors), 3, "Actors list length is incorrect")
 
     def test_example_phrase_five(self):
         filepath = "../examples/example_phrase_five"
@@ -83,11 +83,10 @@ class ActorsTests(unittest.TestCase):
         actors = []
         for sentence in doc.sents:
             [utils.to_nltk_tree(sent.root).pretty_print() for sent in doc.sents]
-            actors, actions = decomp.sentence_decomposition(sentence)
+            actors, actions = extract.extract_elements(sentence)
             for actor in actors:
                 print(actor.pretty_print())
         self.assertEqual(len(actors), 2, "Actors list length is incorrect")
-
 
     def test_example_phrase_six(self):
         filepath = "../examples/example_phrase_six"
@@ -99,7 +98,7 @@ class ActorsTests(unittest.TestCase):
         actors = []
         for sentence in doc.sents:
             [utils.to_nltk_tree(sent.root).pretty_print() for sent in doc.sents]
-            actors, actions = decomp.sentence_decomposition(sentence)
+            actors, actions = extract.extract_elements(sentence)
             for actor in actors:
                 print(actor.pretty_print())
         self.assertEqual(len(actors), 0, "Actors list length is incorrect")
@@ -114,7 +113,7 @@ class ActorsTests(unittest.TestCase):
         actors = []
         for sentence in doc.sents:
             [utils.to_nltk_tree(sent.root).pretty_print() for sent in doc.sents]
-            actors, actions = decomp.sentence_decomposition(sentence)
+            actors, actions = extract.extract_elements(sentence)
             for actor in actors:
                 print(actor.pretty_print())
         self.assertEqual(len(actors), 1, "Actors list length is incorrect")
@@ -129,7 +128,7 @@ class ActorsTests(unittest.TestCase):
         actors = []
         for sentence in doc.sents:
             [utils.to_nltk_tree(sent.root).pretty_print() for sent in doc.sents]
-            actors, actions = decomp.sentence_decomposition(sentence)
+            actors, actions = extract.extract_elements(sentence)
             for actor in actors:
                 print(actor.pretty_print())
         self.assertEqual(len(actors), 2, "Actors list length is incorrect")

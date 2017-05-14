@@ -8,12 +8,14 @@ import unittest
 import spacy
 
 import main.sentence_decompositon as decomp
-from main import utils
 
 
 class SentenceDecompositionTests(unittest.TestCase):
     def test_model_one(self):
-        example_filepath = "../models/model_1.txt"
+        """
+        Ignore, method is not used
+        """
+        example_filepath = "../models/model_1"
         nlp = spacy.load('en')
 
         text = open(example_filepath).read().replace("\n", " ")

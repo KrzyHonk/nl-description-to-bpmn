@@ -28,6 +28,7 @@ class Action(BaseElement):
         self.__actor = None
         self.__passive = False
         self.__position = position
+        self.__marker = None
 
     def get_subject(self):
         """
@@ -106,6 +107,20 @@ class Action(BaseElement):
         """
         return self.__position
 
+    def set_marker(self, marker: str):
+        """
+        Setter for '__marker' field.
+        :param marker - a value of '__marker' field.
+        """
+        self.__marker = marker
+
+    def get_marker(self):
+        """
+        Getter for '__marker' field.
+        :return: object set as '__marker' field.
+        """
+        return self.__marker
+
     def pretty_print(self):
         subject_text = ""
         for token in self.__subject.subtree:
@@ -127,3 +142,6 @@ class Action(BaseElement):
             object_text += self.__object.text
 
         return subject_text + " " + verb_text + " " + object_text
+
+    def marker_print(self):
+        return "Action: " + self.pretty_print() + " Marker: " + (self.__marker if self.__marker is not None else "")

@@ -25,7 +25,7 @@ def extract_actors(sentence: Span) -> List[Actor]:
     tmp_output = []
     output = []
     for word in sentence:
-        if word.dep_ in ('nsubj'):
+        if word.dep_ in ('nsubj', 'nsubjpass'):
             new_object = word
             actor = Actor(actor_token=new_object)
             if new_object.pos_ == "pron":
@@ -50,6 +50,7 @@ def extract_actors(sentence: Span) -> List[Actor]:
         for pronoun in pronoun_set:
             if actor_text.casefold() == pronoun.casefold():
                 flag = True
+                actor.set_anaphora(True)
 
         for actor_keyword in actors_keywords_set:
             if actor_text.casefold() == actor_keyword.casefold():

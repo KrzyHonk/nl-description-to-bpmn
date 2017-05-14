@@ -12,9 +12,8 @@ from main.objects.action import Action
 from main.objects.actor import Actor
 
 
-def extract_actions(sentence: Span, actors: List[Actor]) -> List[Action]:
+def extract_svo_constructs(sentence: Span, actors: List[Actor]) -> List[Action]:
     tmp_output = []
-    ignore_verbs = ["be", "have", "do", "achieve", "start", "exist", "base"]
     root = sentence.root
     nsubj_list = dep.find_tokens_with_dependencies_for_token_in_subtree(root, ["nsubj"])
     nsubjpass_list = dep.find_tokens_with_dependencies_for_token_in_subtree(root, ["nsubjpass"])
@@ -24,7 +23,7 @@ def extract_actions(sentence: Span, actors: List[Actor]) -> List[Action]:
             subject = token
             verb = subject.head
             base_verb = wn.morphy(verb.text, wn.VERB)
-            if base_verb is not None and base_verb.casefold() not in ignore_verbs:
+            if base_verb is not None:
                 objects_list = dep.find_tokens_with_dependencies_for_token_in_subtree(verb,
                                                                                       ["dobj", "iobj", "pobj", "attr"])
                 for complement in objects_list:
@@ -47,7 +46,7 @@ def extract_actions(sentence: Span, actors: List[Actor]) -> List[Action]:
             subject = token
             verb = subject.head
             base_verb = wn.morphy(verb.text, wn.VERB)
-            if base_verb is not None and base_verb.casefold() not in ignore_verbs:
+            if base_verb is not None:
                 action = Action(subject=subject, verb=verb, position=verb.i)
                 action.set_passive(True)
                 insert_flag = True
@@ -66,13 +65,10 @@ def extract_actions(sentence: Span, actors: List[Actor]) -> List[Action]:
     # Check if extracted action can be assigned to verified actor
     output = set()
     for action in tmp_output:
-        if action.get_passive():
-            output.add(action)
-        else:
             for actor in actors:
                 if actor.get_actor_token() == action.get_subject():
-                    output.add(action)
-    return output
+                    action.set_actor(actor)
+    return tmp_output
 
 
 def extract_actions_from_conjunction(sentence: Span, tmp_output: List[Action]) -> List[Action]:
