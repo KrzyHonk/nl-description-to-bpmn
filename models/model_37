@@ -1,3 +1,6 @@
-The MPON requests a device takeover bid of the MPOO. The MPOO sends a tender for
-the equipment takeover to the MPON. The MPON places an order at the MPOO. The
-MPOO confirms the order of the MPON and sends the master data.
+The MSPO deregisters at the GO. The GO verifies the deregistration. The GO rejects
+the deregistration of the MSPO or the GO preliminarily confirms the deregistration of
+the MSPO. The GO assigns himself as MSP. The GO informs the MSPO about the end
+of the assignment and the beginning of the assignment of the GO. The GO informs the
+MPO about the assignment of the GO. The GO informs the SP about the assignment of
+the GO.

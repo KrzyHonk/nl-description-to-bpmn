@@ -1,8 +1,9 @@
-The texts contained in this test data set were translated from German using Google
-translate and correcting grammatical errors. Additionally, the original texts made of
-several abbreviations specific to the domain of electric power supply. In order to be consistent,
-these were also translated. The translation and the meaning of the abbreviations
-in English and German are given in table B.11.
-The MPON sents the dismissal to the MPOO. The MPOO reviews the dismissal. The
-MPOO opposes the dismissal of MPON or the MPOO confirmes the dismissal of the
-MPON.
+The MPON notifies the MPOO about equipment change intentions. The MPOO announces
+self dismounting to the MPON or the MPOO shall notify the MPON about no
+self-dismounting of the MPOO. The MPON or the MPOO perform the final reading. The
+MPON or the MPOO dismount the old equipment. The MPON mounts the new device.
+The MPON reads the meter count from the installed meter. The MPON sents the values
+of the final reading to the GO. The MPON tells the GO about the device changes, the
+master data and the meter count at installation. The GO shall notify the MSP about the
+device changes, the master data, the meter count at dismounting, and the meter count at
+installation.

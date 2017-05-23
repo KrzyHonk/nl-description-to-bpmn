@@ -1,5 +1,3 @@
-The SP/PU/GO request changes of the MPO or the MPO himself causes a change. The
-MPO reviews the change request. The MPO rejects the change of the measuring point by
-the SP/PU/GO or the MPO confirmes the request of the SP/PU/GO. The MPO performs
-the measuring point change. The MPO reports the implementation to the SP/PU/GO
-or notifies the SP/PU/GO about the failure of the changes.
+The EC tells the INQ about the change of his master data. The INQ notifies the IP of
+the change. The IP checks whether the master data can be changed at the desired time.
+The IP confirmes the changes of the INQ or the IP rejectes the changes of the INQ.

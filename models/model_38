@@ -1,2 +1,5 @@
-The MSPN sents a dismissal to the MSPO. The MSPO reviews the dismissal. The MSPO
-rejects the dismissal of the MSPN or The MSPO conrms the dismissal of the MSPN.
+The SP/PU/GO request changes of the MPO or the MPO himself causes a change. The
+MPO reviews the change request. The MPO rejects the change of the measuring point by
+the SP/PU/GO or the MPO confirmes the request of the SP/PU/GO. The MPO performs
+the measuring point change. The MPO reports the implementation to the SP/PU/GO
+or notifies the SP/PU/GO about the failure of the changes.

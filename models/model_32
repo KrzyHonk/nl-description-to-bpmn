@@ -1,16 +1,9 @@
-After the Process starts, a Task is performed to locate and distribute any relevant existing
-designs, both electrical and physical. Next, the design of the electrical and physical
-systems starts in parallel. Any existing or previous Electrical and Physical Designs are
-inputs to both Activities. Development of either design is interrupted by a successful
-update of the other design. If interrupted, then all current work is stopped and that
-design must restart. In each department (Electrical Design and Physical Design), any
-existing designs are reviewed, resulting in an Update Plan for their respective designs
-(i.e. one in Electrical and another in Physical). Using the Update Plan and the existing
-Draft of the Electrical/Physical Design, a revised design is created. Once completed the
-revised design is tested. If the design fails the test, then it is sent back to the first Activity
-(in the department) to review and create a new Update Plan. If the design passes the
-test, then it tells the other department that they need to restart their work. When both
-of the designs have been revised, they are combined and tested. If the combined design
-fails the test, then they are both sent back to the beginning to initiate another design
-cycle. If the designs pass the test, then they are deemed complete and are then sent to
-the manufacturing Process [a separate Process].
+The MPOO deregisters at the GO. The GO verifies the deregistration. The GO rejects
+the deregistration of the MPOO or the GO preliminarily confirms the deregistration of
+the MPOO. The GO prepares the readmission of the measuring point. Optionally, the
+GO may oblige the MPOO to continue the operations. If the GO binds the MPOO to
+continue the operation, the MPOO confirms the continuation to the MPOO. The GO
+performs the equipment acquisition and/or equipment changes. The GO assigns the GO
+as MPO. The GO informs the MPOO about the end of the assignment of the MPOO
+and the beginning of the assignment of the GO. The GO informs the MSPO about the
+assignment of the GO. The GO informs the SP about the assignment of the GO.

@@ -1,6 +1,7 @@
-When I have detected a number of personnel requirements, I report the vacancy to the
-Personnel Department. Then I wait to get the job description for review before it is
-advertized. Under certain circumstances, I must ask for corrections again, otherwise I
-approve the job description. Sometimes it also happens that the colleague from the HR
-department still has questions about the tasks and requirements before he can describe
-the job. Then I am available for clarifications, of course.
+The Customer Service Representative sends a Mortgage offer to the customer and waits
+for a reply. If the customer calls or writes back declining the mortgage, the case details are
+updated and the work is then archived prior to cancellation. If the customer sends back
+the completed offer documents and attaches all prerequisite documents then the case is
+moved to administration for completion. If all pre-requisite documents are not provided
+a message is generated to the customer requesting outstanding documents. If no answer
+is received after 2 weeks, the case details are updated prior to archive and cancellation.

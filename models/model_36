@@ -1,9 +1,5 @@
-The MPON notifies the MPOO about equipment change intentions. The MPOO announces
-self dismounting to the MPON or the MPOO shall notify the MPON about no
-self-dismounting of the MPOO. The MPON or the MPOO perform the final reading. The
-MPON or the MPOO dismount the old equipment. The MPON mounts the new device.
-The MPON reads the meter count from the installed meter. The MPON sents the values
-of the final reading to the GO. The MPON tells the GO about the device changes, the
-master data and the meter count at installation. The GO shall notify the MSP about the
-device changes, the master data, the meter count at dismounting, and the meter count at
-installation.
+The MSPN registers the measurement at the GO. The GO examines the application
+of the MSPN. The GO rejects the application of the MSPN or the GO confirmes the
+application of the MSPN. The GO assigns the MSPN. The GO informs the MSPO about
+the assignment of MSPN. The GO informs the MPO about the assignment of the MSPN.
+The GO informs the SP about the assignment of MSPN.

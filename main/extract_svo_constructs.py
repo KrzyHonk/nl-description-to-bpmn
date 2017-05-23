@@ -63,7 +63,6 @@ def extract_svo_constructs(sentence: Span, actors: List[Actor]) -> List[Action]:
     extract_actions_from_conjunction(sentence, tmp_output)
 
     # Check if extracted action can be assigned to verified actor
-    output = set()
     for action in tmp_output:
             for actor in actors:
                 if actor.get_actor_token() == action.get_subject():
@@ -83,7 +82,7 @@ def extract_actions_from_conjunction(sentence: Span, tmp_output: List[Action]) -
 
             subject = None
             token = conj_verb
-            while token.head is not None and subject is None:
+            while token.dep_ != 'ROOT' and subject is None:
                 for child in token.children:
                     if child.dep_ in ('nsubj', 'nsubjpass'):
                         subject = child
