@@ -34,7 +34,7 @@ def sentence_decomposition(sentence: Span):
                 sentence_rest += (" " + word.text)
         sentence_rest = re.sub("\s\s+", " ", sentence_rest).strip()
 
-        nlp = spacy.load('en')
+        nlp = spacy.load("en")
         doc = nlp(sentence_rest)
         # add the reminder of sentence
         for s in doc.sents:

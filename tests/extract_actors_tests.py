@@ -14,7 +14,7 @@ import main.utils as utils
 class ActorsTests(unittest.TestCase):
     def test_example_phrase_one(self):
         filepath = "../examples/example_phrase_one"
-        nlp = spacy.load('en')
+        nlp = spacy.load("en")
 
         text = open(filepath).read().replace("\n", " ")
         doc = nlp(text)
@@ -30,7 +30,7 @@ class ActorsTests(unittest.TestCase):
 
     def test_example_phrase_two(self):
         filepath = "../examples/example_phrase_two"
-        nlp = spacy.load('en')
+        nlp = spacy.load("en")
 
         text = open(filepath).read().replace("\n", " ")
         doc = nlp(text)
@@ -45,7 +45,7 @@ class ActorsTests(unittest.TestCase):
 
     def test_example_phrase_three(self):
         filepath = "../examples/example_phrase_three"
-        nlp = spacy.load('en')
+        nlp = spacy.load("en")
 
         text = open(filepath).read().replace("\n", " ")
         doc = nlp(text)
@@ -60,7 +60,7 @@ class ActorsTests(unittest.TestCase):
 
     def test_example_phrase_four(self):
         filepath = "../examples/example_phrase_four"
-        nlp = spacy.load('en')
+        nlp = spacy.load("en")
 
         text = open(filepath).read().replace("\n", " ")
         doc = nlp(text)
@@ -75,7 +75,7 @@ class ActorsTests(unittest.TestCase):
 
     def test_example_phrase_five(self):
         filepath = "../examples/example_phrase_five"
-        nlp = spacy.load('en')
+        nlp = spacy.load("en")
 
         text = open(filepath).read().replace("\n", " ")
         doc = nlp(text)
@@ -90,7 +90,7 @@ class ActorsTests(unittest.TestCase):
 
     def test_example_phrase_six(self):
         filepath = "../examples/example_phrase_six"
-        nlp = spacy.load('en')
+        nlp = spacy.load("en")
 
         text = open(filepath).read().replace("\n", " ")
         doc = nlp(text)
@@ -105,7 +105,7 @@ class ActorsTests(unittest.TestCase):
 
     def test_example_phrase_seven(self):
         filepath = "../examples/example_phrase_seven"
-        nlp = spacy.load('en')
+        nlp = spacy.load("en")
 
         text = open(filepath).read().replace("\n", " ")
         doc = nlp(text)
@@ -120,7 +120,7 @@ class ActorsTests(unittest.TestCase):
 
     def test_example_phrase_eight(self):
         filepath = "../examples/example_phrase_eight"
-        nlp = spacy.load('en')
+        nlp = spacy.load("en")
 
         text = open(filepath).read().replace("\n", " ")
         doc = nlp(text)
@@ -134,5 +134,5 @@ class ActorsTests(unittest.TestCase):
         self.assertEqual(len(actors), 2, "Actors list length is incorrect")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

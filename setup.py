@@ -23,9 +23,9 @@ setup(
     keywords=["bpmn", "xml"],
     url="https://github.com/KrzyHonk/nl-description-to-bpmn",
     download_url="https://github.com/KrzyHonk/nl-description-to-bpmn/tarball/0.1.0",
-    packages=['main'],
+    packages=["main"],
     install_requires=[
-        'spacy',
+        "spacy",
     ],
-    long_description=read('README.md'),
+    long_description=read("README.md"),
 )

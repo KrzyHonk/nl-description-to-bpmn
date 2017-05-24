@@ -25,15 +25,15 @@ def extract_actors(sentence: Span) -> List[Actor]:
     tmp_output = []
     output = []
     for word in sentence:
-        if word.dep_ in ('nsubj', 'nsubjpass'):
+        if word.dep_ in ("nsubj", "nsubjpass"):
             new_object = word
             actor = Actor(actor_token=new_object)
             if new_object.pos_ == "pron":
                 actor.set_anaphora(True)
             tmp_output.append(actor)
-        elif word.dep_ in ('agent'):
+        elif word.dep_ == "agent":
             for token in word.children:
-                if token.dep_ in ('pobj'):
+                if token.dep_ == "pobj":
                     new_object = token
                     actor = Actor(actor_token=new_object)
                     if new_object.pos_ == "pron":
@@ -75,10 +75,9 @@ def extract_actors(sentence: Span) -> List[Actor]:
 def extract_actors_from_conjunction(sentence: Span) -> List[Actor]:
     output = []
     for word in sentence:
-        if word.dep_ in ('conj'):
+        if word.dep_ == "conj":
             for token in word.children:
-                if token.dep_ in ('pobj', 'dobj', 'iobj'):
-                    object = token
-                    actor = Actor(actor_token=object)
+                if token.dep_ in ("pobj", "dobj", "iobj"):
+                    actor = Actor(actor_token=token)
                     output.append(actor)
     return output

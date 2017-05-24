@@ -7,7 +7,7 @@ import unittest
 
 import bpmn_python.bpmn_diagram_layouter as layouter
 import bpmn_python.bpmn_diagram_rep as diagram
-import main.generate_model_from_description as generate
+import main.generate_intermediate_model as generate
 import spacy
 
 import main.extract_elements as extract
@@ -237,5 +237,5 @@ class GenerateProcessModelTests(unittest.TestCase):
         generate.generate_intermediate_model(example_file, example_directory, self.output_directory)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

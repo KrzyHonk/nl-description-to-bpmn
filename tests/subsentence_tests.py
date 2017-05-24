@@ -13,7 +13,7 @@ from main import utils
 
 class SubsentenceTests(unittest.TestCase):
     def test_thesis_example(self):
-        nlp = spacy.load('en')
+        nlp = spacy.load("en")
 
         text = "This is an example of sentence, which can be parsed by SpaCy"
         doc = nlp(text)
@@ -22,7 +22,7 @@ class SubsentenceTests(unittest.TestCase):
     def test_simple_subsentence_example_one(self):
         # Should be spliced into two sentences
         model_one_filepath = "../examples/example_phrase_one"
-        nlp = spacy.load('en')
+        nlp = spacy.load("en")
 
         text = open(model_one_filepath).read().replace("\n", " ")
         doc = nlp(text)
@@ -35,7 +35,7 @@ class SubsentenceTests(unittest.TestCase):
     def test_complex_subsentence_example_one(self):
         # Should be spliced into two sentences
         model_one_filepath = "../examples/example_phrase_three"
-        nlp = spacy.load('en')
+        nlp = spacy.load("en")
 
         text = open(model_one_filepath).read().replace("\n", " ")
         doc = nlp(text)
@@ -46,5 +46,5 @@ class SubsentenceTests(unittest.TestCase):
         self.assertEqual(len(outcome), 2, "Subsentence list length is incorrect")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
