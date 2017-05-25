@@ -4,6 +4,7 @@ Class for actors extracted from text
 """
 from spacy.tokens.token import Token
 
+from main.consts import Consts
 from main.objects.base_element import BaseElement
 
 
@@ -52,8 +53,10 @@ class Actor(BaseElement):
         left = ""
         right = " "
         for token in self.__actor_token.lefts:
-            left += (token.text + " ")
+            if token.dep_ in Consts.actor_descriptors_set:
+                left += (token.text + " ")
 
         for token in self.__actor_token.rights:
-            right += (token.text + " ")
+            if token.dep_ in Consts.actor_descriptors_set:
+                right += (token.text + " ")
         return left + self.__actor_token.text + right

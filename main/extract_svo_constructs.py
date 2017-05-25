@@ -5,10 +5,12 @@ Function for extracting actions from sentence
 from typing import List
 
 from spacy.tokens.span import Span
+from spacy.tokens.token import Token
 
 import main.find_tokens_with_dependency as dep
 from main.objects.action import Action
 from main.objects.actor import Actor
+from main.consts import Consts
 
 
 def extract_svo_constructs(sentence: Span, actors: List[Actor]) -> List[Action]:
@@ -18,13 +20,10 @@ def extract_svo_constructs(sentence: Span, actors: List[Actor]) -> List[Action]:
     nsubjpass_list = dep.find_tokens_with_dependencies_for_token_in_subtree(root, ["nsubjpass"])
     if len(nsubj_list) > 0:
         for token in nsubj_list:
-            output_obj = None
             subject = token
             verb = subject.head
-            objects_list = dep.find_tokens_with_dependencies_for_token_in_subtree(verb, ["dobj", "iobj", "pobj", "attr"])
-            for complement in objects_list:
-                if complement.head == verb:
-                    output_obj = complement
+            output_obj = find_token_in_ancestors(verb, Consts.objects_set)
+
             action = Action(subject=subject, verb=verb, new_object=output_obj, position=verb.i)
             insert_flag = True
             if len(tmp_output) > 0:
@@ -69,17 +68,12 @@ def extract_actions_from_conjunction(sentence: Span, tmp_output: List[Action]) -
     for word in sentence:
         if word.dep_ == "conj":
             conj_verb = word
-            output_object = None
-            for child in conj_verb.children:
-                if child.dep_ in ("dobj", "iobj", "pobj", "attr"):
-                    output_object = child
+            output_object = find_token_in_ancestors(conj_verb, Consts.objects_set)
 
             subject = None
             token = conj_verb
             while token is not None and subject is None:
-                for child in token.children:
-                    if child.dep_ in ("nsubj", "nsubjpass"):
-                        subject = child
+                subject = find_token_in_ancestors(token, Consts.subjects_set)
                 if token.dep_ == "ROOT":
                     break
                 if subject is None:
@@ -98,3 +92,15 @@ def extract_actions_from_conjunction(sentence: Span, tmp_output: List[Action]) -
                         tmp_output.append(action)
                 else:
                     tmp_output.append(action)
+
+
+def find_token_in_ancestors(token: Token, dependencies_set):
+    for child in token.children:
+        if child.dep_ in dependencies_set:
+            return child
+        elif child.dep_ in Consts.actor_descriptors_set:
+            for grandchild in child.children:
+                output = find_token_in_ancestors(grandchild, dependencies_set)
+                if output is not None:
+                    return output
+    return None

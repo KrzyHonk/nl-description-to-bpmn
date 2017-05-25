@@ -4,6 +4,7 @@ Class for actions extracted from text
 """
 from spacy.tokens.token import Token
 
+from main.consts import Consts
 from main.objects.actor import Actor
 from main.objects.base_element import BaseElement
 
@@ -122,26 +123,39 @@ class Action(BaseElement):
         return self.__marker
 
     def pretty_print(self):
-        subject_text = ""
-        for token in self.__subject.subtree:
-            if token.dep_ in ["det", "compound", "amod"] and token.head == self.__subject:
-                subject_text += (token.text + " ")
-        subject_text += self.__subject.text
+        left = ""
+        right = " "
+        for token in self.__subject.lefts:
+            if token.dep_ in Consts.actor_descriptors_set:
+                left += (token.text + " ")
+        for token in self.__subject.rights:
+            if token.dep_ in Consts.actor_descriptors_set:
+                right += (token.text + " ")
+        subject_text = left + self.__subject.text + right
 
-        verb_text = ""
-        for token in self.__verb.subtree:
-            if token.dep_ in ["aux", "auxpass", "neg"] and token.head == self.__verb:
-                verb_text += (token.text + " ")
-        verb_text += self.__verb.text
+        left = ""
+        right = " "
+        for token in self.__verb.lefts:
+            if token.dep_ in Consts.action_descriptors_set:
+                left += (token.text + " ")
+        for token in self.__verb.rights:
+            if token.dep_ in Consts.action_descriptors_set:
+                right += (token.text + " ")
+        verb_text = left + self.__verb.text + right
 
+        left = ""
+        right = " "
         object_text = ""
         if self.__object is not None:
-            for token in self.__object.subtree:
-                if token.dep_ in ["det", "compound", "amod"] and token.head == self.__object:
-                    object_text += (token.text + " ")
-            object_text += self.__object.text
+            for token in self.__object.lefts:
+                if token.dep_ in Consts.actor_descriptors_set:
+                    left += (token.text + " ")
+            for token in self.__object.rights:
+                if token.dep_ in Consts.actor_descriptors_set:
+                    right += (token.text + " ")
+            object_text = left + self.__object.text + right
 
-        return subject_text + " " + verb_text + " " + object_text
+        return subject_text + verb_text + object_text
 
     def marker_print(self):
         return "Action: " + self.pretty_print() + " Marker: " + (self.__marker if self.__marker is not None else "")
