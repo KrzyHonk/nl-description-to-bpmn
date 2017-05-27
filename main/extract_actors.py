@@ -3,8 +3,8 @@
 Function for extracting actors from sentence
 """
 from typing import List
-from nltk.corpus import wordnet as wn
 
+from nltk.corpus import wordnet as wn
 from spacy.tokens.span import Span
 
 from main.consts import Consts
@@ -12,12 +12,16 @@ from main.objects.actor import Actor
 
 
 def extract_actors(sentence: Span) -> List[Actor]:
-    pronoun_set = {"I", "Me", "We", "Us", "You", "She", "Her", "He", "Him", "It", "They", "Them"}
-    actors_keywords_set = {"provisioning", "service", "support", "office", "officer", "master", "masters", "assembler",
-                           "acme", "accounting", "secretary", "office", "registry", "head", "storehouse", "atm", "crs",
-                           "company", "garage", "kitchen", "department", "ec", "sp", "mpo", "mpoo", "mpon", "msp",
-                           "mspo", "mspn", "go", "pu", "ip", "inq" "sp", "pu", "go", "detector"}
-    real_actors_terms_list = ["person", "social_group", "software_system"]
+    pronoun_set = (
+    "I", "Me", "We", "Us", "You", "She", "Her", "He", "Him", "It", "They", "Them", "who", "whom", "whose",
+    "what", "which", "that")
+    # actors_keywords_set = {"provisioning", "service", "support", "office", "officer", "master", "masters", "assembler",
+    #                       "acme", "accounting", "secretary", "office", "registry", "head", "storehouse", "atm", "crs",
+    #                       "company", "garage", "kitchen", "department", "ec", "sp", "mpo", "mpoo", "mpon", "msp",
+    #                       "mspo", "mspn", "go", "pu", "ip", "inq" "sp", "pu", "go", "detector"}
+    actors_keywords_set = {"accounting", "atm", "crm", "crs", "office", "officer", "provisioning", "service",
+                           "secretary", "support", "storehouse"}
+    real_actors_terms_list = {"group", "organization", "person", "service", "system"}
     real_actors_synonyms = []
     for term in real_actors_terms_list:
         real_actors_synonyms.extend(wn.synsets(term))

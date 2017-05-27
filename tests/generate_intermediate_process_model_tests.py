@@ -5,12 +5,7 @@ Sentence decomposition tests
 
 import unittest
 
-import bpmn_python.bpmn_diagram_layouter as layouter
-import bpmn_python.bpmn_diagram_rep as diagram
 import main.generate_intermediate_model as generate
-import spacy
-
-import main.extract_elements as extract
 
 
 class GenerateProcessModelTests(unittest.TestCase):
@@ -166,6 +161,7 @@ class GenerateProcessModelTests(unittest.TestCase):
         example_file = "model_29"
         generate.generate_intermediate_model(example_file, example_directory, self.output_directory)
 
+'''
     def test_model_thirty(self):
         example_directory = "../models/"
         example_file = "model_30"
@@ -235,6 +231,7 @@ class GenerateProcessModelTests(unittest.TestCase):
         example_directory = "../models/"
         example_file = "model_43"
         generate.generate_intermediate_model(example_file, example_directory, self.output_directory)
+'''
 
 
 if __name__ == "__main__":

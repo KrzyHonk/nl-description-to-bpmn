@@ -21,42 +21,42 @@ class Actor(BaseElement):
         self.__actor_token = actor_token
         self.__anaphora = False
 
-    def get_actor_token(self):
+    def get_actor_token(self) -> Token:
         """
         Getter for '__actor_token' field.
         :return: object set as '__actor_token' field.
         """
         return self.__actor_token
 
-    def set_actor_token(self, actor_token):
+    def set_actor_token(self, actor_token: Token):
         """
         Setter for '__actor_token' field.
         :param actor_token - a new object for '__actor_token' field.
         """
         self.__actor_token = actor_token
 
-    def get_anaphora(self):
+    def is_anaphora(self) -> bool:
         """
         Getter for '__anaphora' field.
         :return: value of '__anaphora' field.
         """
         return self.__anaphora
 
-    def set_anaphora(self, anaphora):
+    def set_anaphora(self, anaphora: bool):
         """
         Setter for '__anaphora' field.
         :param anaphora - a new value of '__anaphora' field.
         """
         self.__anaphora = anaphora
 
-    def pretty_print(self):
+    def pretty_print(self) -> str:
         left = ""
         right = " "
         for token in self.__actor_token.lefts:
             if token.dep_ in Consts.actor_descriptors_set:
-                left += (token.text + " ")
+                left += (token.text.casefold() + " ")
 
         for token in self.__actor_token.rights:
             if token.dep_ in Consts.actor_descriptors_set:
-                right += (token.text + " ")
-        return left + self.__actor_token.text + right
+                right += (token.text.casefold() + " ")
+        return left + self.__actor_token.text.casefold() + right

@@ -1,6 +1,6 @@
 At the beginning the customer perceives that her subscribed service has degraded. A list with all the
 problem parameters is then sent to the Customer Service department of TELECO. At the customer service
-an employee enters (based on the received data) a problem report into system T.. Then the problem report
+an employee enters (based on the received data) a problem report into system. Then the problem report
 is compared to the customer SLA to identify what the extent and the details of the service degradation
 are. Based on this, the necessary counter measures are determined including their respective priorities.
 An electronic service then determines the significance of the customer based on information that has

@@ -31,7 +31,7 @@ class Action(BaseElement):
         self.__position = position
         self.__marker = None
 
-    def get_subject(self):
+    def get_subject(self) -> Token:
         """
         Getter for '__subject' field.
         :return: subject set as '__subject' field.
@@ -45,7 +45,7 @@ class Action(BaseElement):
         """
         self.__subject = subject
 
-    def get_verb(self):
+    def get_verb(self) -> Token:
         """
         Getter for '__verb' field.
         :return: verb set as '__verb' field.
@@ -59,7 +59,7 @@ class Action(BaseElement):
         """
         self.__verb = verb
 
-    def get_object(self):
+    def get_object(self) -> Token:
         """
         Getter for '__object' field.
         :return: object set as '__object' field.
@@ -80,7 +80,7 @@ class Action(BaseElement):
         """
         self.__actor = actor
 
-    def get_actor(self):
+    def get_actor(self) -> Actor:
         """
         Getter for '__actor' field.
         :return: object set as '__actor' field.
@@ -94,14 +94,14 @@ class Action(BaseElement):
         """
         self.__passive = passive
 
-    def get_passive(self):
+    def get_passive(self) -> bool:
         """
         Getter for '__passive' field.
         :return: object set as '__passive' field.
         """
         return self.__passive
 
-    def get_position(self):
+    def get_position(self) -> int:
         """
         Getter for '__position' field.
         :return: object set as '__position' field.
@@ -115,33 +115,33 @@ class Action(BaseElement):
         """
         self.__marker = marker
 
-    def get_marker(self):
+    def get_marker(self) -> str:
         """
         Getter for '__marker' field.
         :return: object set as '__marker' field.
         """
         return self.__marker
 
-    def pretty_print(self):
+    def pretty_print(self) -> str:
         left = ""
         right = " "
         for token in self.__subject.lefts:
             if token.dep_ in Consts.actor_descriptors_set:
-                left += (token.text + " ")
+                left += (token.text.casefold() + " ")
         for token in self.__subject.rights:
             if token.dep_ in Consts.actor_descriptors_set:
-                right += (token.text + " ")
-        subject_text = left + self.__subject.text + right
+                right += (token.text.casefold() + " ")
+        subject_text = left + self.__subject.text.casefold() + right
 
         left = ""
         right = " "
         for token in self.__verb.lefts:
             if token.dep_ in Consts.action_descriptors_set:
-                left += (token.text + " ")
+                left += (token.text.casefold() + " ")
         for token in self.__verb.rights:
             if token.dep_ in Consts.action_descriptors_set:
-                right += (token.text + " ")
-        verb_text = left + self.__verb.text + right
+                right += (token.text.casefold() + " ")
+        verb_text = left + self.__verb.text.casefold() + right
 
         left = ""
         right = " "
@@ -149,13 +149,13 @@ class Action(BaseElement):
         if self.__object is not None:
             for token in self.__object.lefts:
                 if token.dep_ in Consts.actor_descriptors_set:
-                    left += (token.text + " ")
+                    left += (token.text.casefold() + " ")
             for token in self.__object.rights:
                 if token.dep_ in Consts.actor_descriptors_set:
-                    right += (token.text + " ")
-            object_text = left + self.__object.text + right
+                    right += (token.text.casefold() + " ")
+            object_text = left + self.__object.text.casefold() + right
 
         return subject_text + verb_text + object_text
 
-    def marker_print(self):
+    def marker_print(self) -> str:
         return "Action: " + self.pretty_print() + " Marker: " + (self.__marker if self.__marker is not None else "")

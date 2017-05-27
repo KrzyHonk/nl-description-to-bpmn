@@ -1,15 +1,16 @@
 import string
 
 import spacy
+from nltk.corpus import wordnet as wn
 
 import main.extract_elements as extract
 import main.find_gateway_keywords as gateways
+from main import utils
 from main.objects.action import Action
-from nltk.corpus import wordnet as wn
 
 
 def generate_intermediate_model(filename: str, directory: str, output_directory: str):
-    conditional_words = ["if", "whether", "whereas"]
+    conditional_words = ["if", "whether", "whereas", "whenever"]
     default_flow_words = ["otherwise", "optionally"]
     parallel_words = ["while", "meanwhile", "concurrently", "meantime"]
 
@@ -37,9 +38,9 @@ def generate_intermediate_model(filename: str, directory: str, output_directory:
 
     # generate intermediate diagram model
     last_action_name = "start_event"
-    conditional_gateway_started = True
-    parallel_gateway_started = True
-    alphabet_suffix_index = 1
+    conditional_gateway_started = False
+    parallel_gateway_started = False
+    alphabet_suffix_index = 0
 
     with open(output_directory + filename + "_intermediate_model", "w") as fi1e:
         order = 0
@@ -54,15 +55,21 @@ def generate_intermediate_model(filename: str, directory: str, output_directory:
                 if not conditional_gateway_started:
                     order += 1
                     conditional_gateway_started = True
-                    alphabet_suffix_index = 1
+                    alphabet_suffix_index = 0
 
                 # create pair of condition and action
                 conditional_action = action
                 action, actions = (lambda list: (list[0], list[1:]))(actions)
 
                 suffix = string.ascii_lowercase[alphabet_suffix_index]
-                fi1e.write(str(order) + suffix + "1," + action.pretty_print() + "," + conditional_action.pretty_print()
-                           + ",,,\n")
+
+                if action.get_actor() is not None and not action.get_actor().is_anaphora():
+                    fi1e.write(str(order) + suffix + "1," + action.pretty_print() + "," +
+                               conditional_action.pretty_print() + "," + action.get_actor().pretty_print() + ",,\n")
+                else:
+                    fi1e.write(str(order) + suffix + "1," + action.pretty_print() + "," +
+                               conditional_action.pretty_print() + ",,,\n")
+
                 alphabet_suffix_index += 1
             # check if this action is a part of parallel gateway
             elif action.get_marker() is not None and action.get_marker().casefold() in parallel_words:
@@ -71,41 +78,87 @@ def generate_intermediate_model(filename: str, directory: str, output_directory:
                 if not parallel_gateway_started:
                     order += 1
                     parallel_gateway_started = True
-                    alphabet_suffix_index = 1
+                    alphabet_suffix_index = 0
                 suffix = string.ascii_lowercase[alphabet_suffix_index]
-                fi1e.write(str(order) + suffix + "1," + action.pretty_print() + ",,,,\n")
+                if action.get_actor() is not None and not action.get_actor().is_anaphora():
+                    fi1e.write(str(order) + suffix + "1," + action.pretty_print() + ",,"
+                               + action.get_actor().pretty_print() + ",,\n")
+                else:
+                    fi1e.write(str(order) + suffix + "1," + action.pretty_print() + ",,,,\n")
+                alphabet_suffix_index += 1
+                # Get the second action in parallel
+                action, actions = (lambda list: (list[0], list[1:]))(actions)
+                suffix = string.ascii_lowercase[alphabet_suffix_index]
+                if action.get_actor() is not None and not action.get_actor().is_anaphora():
+                    fi1e.write(str(order) + suffix + "1," + action.pretty_print() + ",,"
+                               + action.get_actor().pretty_print() + ",,\n")
+                else:
+                    fi1e.write(str(order) + suffix + "1," + action.pretty_print() + ",,,,\n")
                 alphabet_suffix_index += 1
             # treat action as a part of sequence
             elif action.get_marker() is not None and action.get_marker().casefold() in default_flow_words:
+                # check if it is a default flow of gateway
                 if parallel_gateway_started:
                     suffix = string.ascii_lowercase[alphabet_suffix_index]
-                    fi1e.write(str(order) + suffix + "1," + action.pretty_print() + ",,,,\n")
+                    if action.get_actor() is not None and not action.get_actor().is_anaphora():
+                        fi1e.write(str(order) + suffix + "1," + action.pretty_print() + ",,"
+                                   + action.get_actor().pretty_print() + ",,\n")
+                    else:
+                        fi1e.write(str(order) + suffix + "1," + action.pretty_print() + ",,,,\n")
+                    alphabet_suffix_index += 1
                 elif conditional_gateway_started:
                     suffix = string.ascii_lowercase[alphabet_suffix_index]
-                    fi1e.write(str(order) + suffix + "1," + action.pretty_print() + ",else,,,\n")
+                    if action.get_actor() is not None and not action.get_actor().is_anaphora():
+                        fi1e.write(str(order) + suffix + "1," + action.pretty_print() + ",else,"
+                                   + action.get_actor().pretty_print() + ",,\n")
+                    else:
+                        fi1e.write(str(order) + suffix + "1," + action.pretty_print() + ",else,,,\n")
+                    alphabet_suffix_index += 1
                 # treat it like sequence flow
                 else:
                     if conditional_gateway_started:
                         conditional_gateway_started = False
-                        alphabet_suffix_index = 1
+                        alphabet_suffix_index = 0
                     if parallel_gateway_started:
                         parallel_gateway_started = False
-                        alphabet_suffix_index = 1
+                        alphabet_suffix_index = 0
                     # validate if action has proper actor attached
                     if action.get_actor() and validate_action_no_ignored_verb(action):
                         order += 1
-                        fi1e.write(str(order) + "," + action.pretty_print() + ",,,,\n")
+                        if action.get_actor() is not None and not action.get_actor().is_anaphora():
+                            fi1e.write(str(order) + "," + action.pretty_print() + ",," +
+                                       action.get_actor().pretty_print() + ",,\n")
+                        else:
+                            fi1e.write(str(order) + "," + action.pretty_print() + ",,,,\n")
             else:
                 if conditional_gateway_started:
+                    # if conditional gateway has only one flow, add default flow which leads to end event
+                    if alphabet_suffix_index < 2:
+                        suffix = string.ascii_lowercase[alphabet_suffix_index]
+                        tmp_order = order + 1
+                        fi1e.write(str(order) + suffix + "1,goto " + str(tmp_order) + ",else,,,\n")
+                        order = tmp_order
+                        fi1e.write(str(order) + ",,,,,,yes\n")
                     conditional_gateway_started = False
-                    alphabet_suffix_index = 1
+                    alphabet_suffix_index = 0
                 if parallel_gateway_started:
                     parallel_gateway_started = False
-                    alphabet_suffix_index = 1
+                    alphabet_suffix_index = 0
                 # validate if action has proper actor attached
                 if action.get_actor() and validate_action_no_ignored_verb(action):
-                    order += 1
-                    fi1e.write(str(order) + "," + action.pretty_print() + ",,,,\n")
+                    if action.get_actor() is not None and not action.get_actor().is_anaphora():
+                        order += 1
+                        fi1e.write(str(order) + "," + action.pretty_print() + ",," +
+                                   action.get_actor().pretty_print() + ",,\n")
+                    else:
+                        order += 1
+                        fi1e.write(str(order) + "," + action.pretty_print() + ",,,,\n")
+        if conditional_gateway_started and alphabet_suffix_index < 2:
+            suffix = string.ascii_lowercase[alphabet_suffix_index]
+            tmp_order = order + 1
+            fi1e.write(str(order) + suffix + "1,goto " + str(tmp_order) + ",else,,,\n")
+        order += 1
+        fi1e.write(str(order) + ",,,,,,yes\n")
 
 
 def validate_action_no_ignored_verb(action: Action) -> bool:
