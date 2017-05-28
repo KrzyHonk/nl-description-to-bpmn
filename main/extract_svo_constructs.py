@@ -1,6 +1,6 @@
 # coding=utf-8
 """
-Function for extracting actions from sentence
+Function for extracting svos from sentence
 """
 from typing import List
 
@@ -8,12 +8,12 @@ from spacy.tokens.span import Span
 from spacy.tokens.token import Token
 
 import main.find_tokens_with_dependency as dep
-from main.objects.action import Action
+from main.objects.svoconstruct import SvoConstruct
 from main.objects.actor import Actor
 from main.consts import Consts
 
 
-def extract_svo_constructs(sentence: Span, actors: List[Actor]) -> List[Action]:
+def extract_svo_constructs(sentence: Span, actors: List[Actor]) -> List[SvoConstruct]:
     tmp_output = []
     root = sentence.root
     nsubj_list = dep.find_tokens_with_dependencies_for_token_in_subtree(root, ["nsubj"])
@@ -24,47 +24,47 @@ def extract_svo_constructs(sentence: Span, actors: List[Actor]) -> List[Action]:
             verb = subject.head
             output_obj = find_token_in_ancestors(verb, Consts.objects_set)
 
-            action = Action(subject=subject, verb=verb, new_object=output_obj, position=verb.i)
+            svo = SvoConstruct(subject=subject, verb=verb, new_object=output_obj, position=verb.i)
             insert_flag = True
             if len(tmp_output) > 0:
-                for tmp_action in tmp_output:
-                    if action.get_subject() == tmp_action.get_subject() \
-                            and action.get_verb() == tmp_action.get_verb() \
-                            and action.get_object() == tmp_action.get_object():
+                for tmp_svo in tmp_output:
+                    if svo.get_subject() == tmp_svo.get_subject() \
+                            and svo.get_verb() == tmp_svo.get_verb() \
+                            and svo.get_object() == tmp_svo.get_object():
                         insert_flag = False
                 if insert_flag:
-                    tmp_output.append(action)
+                    tmp_output.append(svo)
             else:
-                tmp_output.append(action)
+                tmp_output.append(svo)
     if len(nsubjpass_list) > 0:
         for token in nsubjpass_list:
             subject = token
             verb = subject.head
-            action = Action(subject=subject, verb=verb, position=verb.i)
-            action.set_passive(True)
+            svo = SvoConstruct(subject=subject, verb=verb, position=verb.i)
+            svo.set_passive(True)
             insert_flag = True
             if len(tmp_output) > 0:
-                # Check if action wasn't already discovered
-                for tmp_action in tmp_output:
-                    if action.get_subject() == tmp_action.get_subject() \
-                            and action.get_verb() == tmp_action.get_verb() \
-                            and action.get_object() == tmp_action.get_object():
+                # Check if svo wasn't already discovered
+                for tmp_svo in tmp_output:
+                    if svo.get_subject() == tmp_svo.get_subject() \
+                            and svo.get_verb() == tmp_svo.get_verb() \
+                            and svo.get_object() == tmp_svo.get_object():
                         insert_flag = False
                 if insert_flag:
-                    tmp_output.append(action)
+                    tmp_output.append(svo)
             else:
-                tmp_output.append(action)
-    extract_actions_from_conjunction(sentence, tmp_output)
+                tmp_output.append(svo)
+    extract_svos_from_conjunction(sentence, tmp_output)
 
-    # Check if extracted action can be assigned to verified actor
-    for action in tmp_output:
+    # Check if extracted svo can be assigned to verified actor
+    for svo in tmp_output:
         for actor in actors:
-            if actor.get_actor_token() == action.get_subject():
-                action.set_actor(actor)
+            if actor.get_actor_token() == svo.get_subject():
+                svo.set_actor(actor)
     return tmp_output
 
 
-def extract_actions_from_conjunction(sentence: Span, tmp_output: List[Action]) -> List[Action]:
+def extract_svos_from_conjunction(sentence: Span, tmp_output: List[SvoConstruct]) -> List[SvoConstruct]:
     for word in sentence:
         if word.dep_ == "conj":
             conj_verb = word
@@ -80,18 +80,18 @@ def extract_actions_from_conjunction(sentence: Span, tmp_output: List[Action]) -
                     token = token.head
 
             if subject is not None:
-                action = Action(subject=subject, verb=conj_verb, new_object=output_object,position=conj_verb.i)
+                svo = SvoConstruct(subject=subject, verb=conj_verb, new_object=output_object, position=conj_verb.i)
                 if len(tmp_output) > 0:
                     insert_flag = True
-                    for tmp_action in tmp_output:
-                        if action.get_subject() == tmp_action.get_subject() \
-                                and action.get_verb() == tmp_action.get_verb() \
-                                and action.get_object() == tmp_action.get_object():
+                    for tmp_svo in tmp_output:
+                        if svo.get_subject() == tmp_svo.get_subject() \
+                                and svo.get_verb() == tmp_svo.get_verb() \
+                                and svo.get_object() == tmp_svo.get_object():
                             insert_flag = False
                     if insert_flag:
-                        tmp_output.append(action)
+                        tmp_output.append(svo)
                 else:
-                    tmp_output.append(action)
+                    tmp_output.append(svo)
 
 
 def find_token_in_ancestors(token: Token, dependencies_set):

@@ -1,13 +1,13 @@
 # coding=utf-8
 """
-Actorsextraction tests
+SVO (subject-verb-object) construct extraction tests
 """
 
 import unittest
 
 import spacy
 
-import main.extract_elements as extract
+import main.extract_process_elements as extract
 import main.utils as utils
 
 
@@ -19,13 +19,13 @@ class SubsentenceTests(unittest.TestCase):
         text = open(filepath).read().replace("\n", " ")
         doc = nlp(text)
 
-        actions = []
+        svos = []
         for sentence in doc.sents:
             [utils.to_nltk_tree(sent.root).pretty_print() for sent in doc.sents]
-            actors, actions = extract.extract_elements(sentence)
-            for action in actions:
-                print(action.pretty_print())
-        self.assertEqual(len(actions), 2, "Action list length is incorrect")
+            actors, svos = extract.extract_process_elements(sentence)
+            for svo in svos:
+                print(svo.pretty_print())
+        self.assertEqual(len(svos), 2, "SVO list length is incorrect")
 
     def test_example_phrase_two(self):
         filepath = "../examples/example_phrase_two"
@@ -34,13 +34,13 @@ class SubsentenceTests(unittest.TestCase):
         text = open(filepath).read().replace("\n", " ")
         doc = nlp(text)
 
-        actions = []
+        svos = []
         for sentence in doc.sents:
             [utils.to_nltk_tree(sent.root).pretty_print() for sent in doc.sents]
-            actors, actions = extract.extract_elements(sentence)
-            for action in actions:
-                print(action.pretty_print())
-        self.assertEqual(len(actions), 1, "Action list length is incorrect")
+            actors, svos = extract.extract_process_elements(sentence)
+            for svo in svos:
+                print(svo.pretty_print())
+        self.assertEqual(len(svos), 1, "SVO list length is incorrect")
 
     def test_example_phrase_three(self):
         filepath = "../examples/example_phrase_three"
@@ -49,13 +49,13 @@ class SubsentenceTests(unittest.TestCase):
         text = open(filepath).read().replace("\n", " ")
         doc = nlp(text)
 
-        actions = []
+        svos = []
         for sentence in doc.sents:
             [utils.to_nltk_tree(sent.root).pretty_print() for sent in doc.sents]
-            actors, actions = extract.extract_elements(sentence)
-            for action in actions:
-                print(action.pretty_print())
-        self.assertEqual(len(actions), 4, "Action list length is incorrect")
+            actors, svos = extract.extract_process_elements(sentence)
+            for svo in svos:
+                print(svo.pretty_print())
+        self.assertEqual(len(svos), 4, "SVO list length is incorrect")
 
     def test_example_phrase_four(self):
         filepath = "../examples/example_phrase_four"
@@ -64,13 +64,13 @@ class SubsentenceTests(unittest.TestCase):
         text = open(filepath).read().replace("\n", " ")
         doc = nlp(text)
 
-        actions = []
+        svos = []
         for sentence in doc.sents:
             [utils.to_nltk_tree(sent.root).pretty_print() for sent in doc.sents]
-            actors, actions = extract.extract_elements(sentence)
-            for action in actions:
-                print(action.pretty_print())
-        self.assertEqual(len(actions), 2, "Action list length is incorrect")
+            actors, svos = extract.extract_process_elements(sentence)
+            for svo in svos:
+                print(svo.pretty_print())
+        self.assertEqual(len(svos), 2, "SVO list length is incorrect")
 
     def test_example_phrase_five(self):
         filepath = "../examples/example_phrase_five"
@@ -79,13 +79,13 @@ class SubsentenceTests(unittest.TestCase):
         text = open(filepath).read().replace("\n", " ")
         doc = nlp(text)
 
-        actions = []
+        svos = []
         for sentence in doc.sents:
             [utils.to_nltk_tree(sent.root).pretty_print() for sent in doc.sents]
-            actors, actions = extract.extract_elements(sentence)
-            for action in actions:
-                print(action.pretty_print())
-        self.assertEqual(len(actions), 2, "Action list length is incorrect")
+            actors, svos = extract.extract_process_elements(sentence)
+            for svo in svos:
+                print(svo.pretty_print())
+        self.assertEqual(len(svos), 2, "SVO list length is incorrect")
 
     def test_example_phrase_six(self):
         filepath = "../examples/example_phrase_six"
@@ -94,13 +94,13 @@ class SubsentenceTests(unittest.TestCase):
         text = open(filepath).read().replace("\n", " ")
         doc = nlp(text)
 
-        actions = []
+        svos = []
         for sentence in doc.sents:
             [utils.to_nltk_tree(sent.root).pretty_print() for sent in doc.sents]
-            actors, actions = extract.extract_elements(sentence)
-            for action in actions:
-                print(action.pretty_print())
-        self.assertEqual(len(actions), 1, "Action list length is incorrect")
+            actors, svos = extract.extract_process_elements(sentence)
+            for svo in svos:
+                print(svo.pretty_print())
+        self.assertEqual(len(svos), 1, "SVO list length is incorrect")
 
     def test_example_phrase_seven(self):
         filepath = "../examples/example_phrase_seven"
@@ -109,13 +109,13 @@ class SubsentenceTests(unittest.TestCase):
         text = open(filepath).read().replace("\n", " ")
         doc = nlp(text)
 
-        actions = []
+        svos = []
         for sentence in doc.sents:
             [utils.to_nltk_tree(sent.root).pretty_print() for sent in doc.sents]
-            actors, actions = extract.extract_elements(sentence)
-            for action in actions:
-                print(action.pretty_print())
-        self.assertEqual(len(actions), 2, "Action list length is incorrect")
+            actors, svos = extract.extract_process_elements(sentence)
+            for svo in svos:
+                print(svo.pretty_print())
+        self.assertEqual(len(svos), 2, "SVO list length is incorrect")
 
     def test_example_phrase_eight(self):
         filepath = "../examples/example_phrase_eight"
@@ -124,13 +124,13 @@ class SubsentenceTests(unittest.TestCase):
         text = open(filepath).read().replace("\n", " ")
         doc = nlp(text)
 
-        actions = []
+        svos = []
         for sentence in doc.sents:
             [utils.to_nltk_tree(sent.root).pretty_print() for sent in doc.sents]
-            actors, actions = extract.extract_elements(sentence)
-            for action in actions:
-                print(action.pretty_print())
-        self.assertEqual(len(actions), 3, "Action list length is incorrect")
+            actors, svos = extract.extract_process_elements(sentence)
+            for svo in svos:
+                print(svo.pretty_print())
+        self.assertEqual(len(svos), 3, "SVO list length is incorrect")
 
 
 if __name__ == "__main__":

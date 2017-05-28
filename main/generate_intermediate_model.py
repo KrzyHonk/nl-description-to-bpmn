@@ -3,10 +3,9 @@ import string
 import spacy
 from nltk.corpus import wordnet as wn
 
-import main.extract_elements as extract
+import main.extract_process_elements as extract
 import main.find_gateway_keywords as gateways
-from main import utils
-from main.objects.action import Action
+from main.objects.svoconstruct import SvoConstruct
 
 
 def generate_intermediate_model(filename: str, directory: str, output_directory: str):
@@ -22,22 +21,23 @@ def generate_intermediate_model(filename: str, directory: str, output_directory:
 
     # elements extraction phase
     actors = []
-    actions = []
+    svos = []
     for sentence in doc.sents:
-        out_actors, out_actions = extract.extract_elements(sentence)
+        out_actors, out_svos = extract.extract_process_elements(sentence)
         actors += out_actors
-        actions += out_actions
+        svos += out_svos
 
     # semantic analysis - find possible gateway relations
-    actions = gateways.find_gateway_keywords(doc, actions)
+    svos = gateways.find_gateway_keywords(doc, svos)
 
-    actions.sort(key=lambda action: action.get_position(), reverse=False)
+    svos.sort(key=lambda svo: svo.get_position(), reverse=False)
+    '''
     with open(output_directory + filename + "_markers", "w") as fi1e:
-        for action in actions:
-            fi1e.write(action.marker_print() + "\n")
+        for svo in svos:
+            fi1e.write(svo.marker_print() + "\n")
+    '''
 
     # generate intermediate diagram model
-    last_action_name = "start_event"
     conditional_gateway_started = False
     parallel_gateway_started = False
     alphabet_suffix_index = 0
@@ -46,10 +46,10 @@ def generate_intermediate_model(filename: str, directory: str, output_directory:
         order = 0
         fi1e.write("Order,Activity,Condition,Who,Subprocess,Terminated\n")
         fi1e.write(str(order) + ",start,,,,,\n")
-        while actions:
-            action, actions = (lambda list: (list[0], list[1:]))(actions)
-            # check if this action is a part of conditional gateway
-            if action.get_marker() is not None and action.get_marker().casefold() in conditional_words:
+        while svos:
+            svo, svos = (lambda list: (list[0], list[1:]))(svos)
+            # check if this svo is a part of conditional gateway
+            if svo.get_marker() is not None and svo.get_marker().casefold() in conditional_words:
                 if parallel_gateway_started:
                     parallel_gateway_started = False
                 if not conditional_gateway_started:
@@ -58,21 +58,21 @@ def generate_intermediate_model(filename: str, directory: str, output_directory:
                     alphabet_suffix_index = 0
 
                 # create pair of condition and action
-                conditional_action = action
-                action, actions = (lambda list: (list[0], list[1:]))(actions)
+                condition = svo
+                svo, svos = (lambda list: (list[0], list[1:]))(svos)
 
                 suffix = string.ascii_lowercase[alphabet_suffix_index]
 
-                if action.get_actor() is not None and not action.get_actor().is_anaphora():
-                    fi1e.write(str(order) + suffix + "1," + action.pretty_print() + "," +
-                               conditional_action.pretty_print() + "," + action.get_actor().pretty_print() + ",,\n")
+                if svo.get_actor() is not None and not svo.get_actor().is_anaphora():
+                    fi1e.write(str(order) + suffix + "1," + svo.pretty_print() + "," +
+                               condition.pretty_print() + "," + svo.get_actor().pretty_print() + ",,\n")
                 else:
-                    fi1e.write(str(order) + suffix + "1," + action.pretty_print() + "," +
-                               conditional_action.pretty_print() + ",,,\n")
+                    fi1e.write(str(order) + suffix + "1," + svo.pretty_print() + "," +
+                               condition.pretty_print() + ",,,\n")
 
                 alphabet_suffix_index += 1
-            # check if this action is a part of parallel gateway
-            elif action.get_marker() is not None and action.get_marker().casefold() in parallel_words:
+            # check if this svo is a part of parallel gateway
+            elif svo.get_marker() is not None and svo.get_marker().casefold() in parallel_words:
                 if conditional_gateway_started:
                     conditional_gateway_started = False
                 if not parallel_gateway_started:
@@ -80,39 +80,39 @@ def generate_intermediate_model(filename: str, directory: str, output_directory:
                     parallel_gateway_started = True
                     alphabet_suffix_index = 0
                 suffix = string.ascii_lowercase[alphabet_suffix_index]
-                if action.get_actor() is not None and not action.get_actor().is_anaphora():
-                    fi1e.write(str(order) + suffix + "1," + action.pretty_print() + ",,"
-                               + action.get_actor().pretty_print() + ",,\n")
+                if svo.get_actor() is not None and not svo.get_actor().is_anaphora():
+                    fi1e.write(str(order) + suffix + "1," + svo.pretty_print() + ",,"
+                               + svo.get_actor().pretty_print() + ",,\n")
                 else:
-                    fi1e.write(str(order) + suffix + "1," + action.pretty_print() + ",,,,\n")
+                    fi1e.write(str(order) + suffix + "1," + svo.pretty_print() + ",,,,\n")
                 alphabet_suffix_index += 1
-                # Get the second action in parallel
-                action, actions = (lambda list: (list[0], list[1:]))(actions)
+                # Get the second task in parallel
+                svo, svos = (lambda list: (list[0], list[1:]))(svos)
                 suffix = string.ascii_lowercase[alphabet_suffix_index]
-                if action.get_actor() is not None and not action.get_actor().is_anaphora():
-                    fi1e.write(str(order) + suffix + "1," + action.pretty_print() + ",,"
-                               + action.get_actor().pretty_print() + ",,\n")
+                if svo.get_actor() is not None and not svo.get_actor().is_anaphora():
+                    fi1e.write(str(order) + suffix + "1," + svo.pretty_print() + ",,"
+                               + svo.get_actor().pretty_print() + ",,\n")
                 else:
-                    fi1e.write(str(order) + suffix + "1," + action.pretty_print() + ",,,,\n")
+                    fi1e.write(str(order) + suffix + "1," + svo.pretty_print() + ",,,,\n")
                 alphabet_suffix_index += 1
-            # treat action as a part of sequence
-            elif action.get_marker() is not None and action.get_marker().casefold() in default_flow_words:
+            # treat task as a part of sequence
+            elif svo.get_marker() is not None and svo.get_marker().casefold() in default_flow_words:
                 # check if it is a default flow of gateway
                 if parallel_gateway_started:
                     suffix = string.ascii_lowercase[alphabet_suffix_index]
-                    if action.get_actor() is not None and not action.get_actor().is_anaphora():
-                        fi1e.write(str(order) + suffix + "1," + action.pretty_print() + ",,"
-                                   + action.get_actor().pretty_print() + ",,\n")
+                    if svo.get_actor() is not None and not svo.get_actor().is_anaphora():
+                        fi1e.write(str(order) + suffix + "1," + svo.pretty_print() + ",,"
+                                   + svo.get_actor().pretty_print() + ",,\n")
                     else:
-                        fi1e.write(str(order) + suffix + "1," + action.pretty_print() + ",,,,\n")
+                        fi1e.write(str(order) + suffix + "1," + svo.pretty_print() + ",,,,\n")
                     alphabet_suffix_index += 1
                 elif conditional_gateway_started:
                     suffix = string.ascii_lowercase[alphabet_suffix_index]
-                    if action.get_actor() is not None and not action.get_actor().is_anaphora():
-                        fi1e.write(str(order) + suffix + "1," + action.pretty_print() + ",else,"
-                                   + action.get_actor().pretty_print() + ",,\n")
+                    if svo.get_actor() is not None and not svo.get_actor().is_anaphora():
+                        fi1e.write(str(order) + suffix + "1," + svo.pretty_print() + ",else,"
+                                   + svo.get_actor().pretty_print() + ",,\n")
                     else:
-                        fi1e.write(str(order) + suffix + "1," + action.pretty_print() + ",else,,,\n")
+                        fi1e.write(str(order) + suffix + "1," + svo.pretty_print() + ",else,,,\n")
                     alphabet_suffix_index += 1
                 # treat it like sequence flow
                 else:
@@ -122,14 +122,14 @@ def generate_intermediate_model(filename: str, directory: str, output_directory:
                     if parallel_gateway_started:
                         parallel_gateway_started = False
                         alphabet_suffix_index = 0
-                    # validate if action has proper actor attached
-                    if action.get_actor() and validate_action_no_ignored_verb(action):
+                    # validate if svo has proper actor attached
+                    if svo.get_actor() and validate_svo_no_ignored_verb(svo):
                         order += 1
-                        if action.get_actor() is not None and not action.get_actor().is_anaphora():
-                            fi1e.write(str(order) + "," + action.pretty_print() + ",," +
-                                       action.get_actor().pretty_print() + ",,\n")
+                        if svo.get_actor() is not None and not svo.get_actor().is_anaphora():
+                            fi1e.write(str(order) + "," + svo.pretty_print() + ",," +
+                                       svo.get_actor().pretty_print() + ",,\n")
                         else:
-                            fi1e.write(str(order) + "," + action.pretty_print() + ",,,,\n")
+                            fi1e.write(str(order) + "," + svo.pretty_print() + ",,,,\n")
             else:
                 if conditional_gateway_started:
                     # if conditional gateway has only one flow, add default flow which leads to end event
@@ -144,15 +144,15 @@ def generate_intermediate_model(filename: str, directory: str, output_directory:
                 if parallel_gateway_started:
                     parallel_gateway_started = False
                     alphabet_suffix_index = 0
-                # validate if action has proper actor attached
-                if action.get_actor() and validate_action_no_ignored_verb(action):
-                    if action.get_actor() is not None and not action.get_actor().is_anaphora():
+                # validate if svo has proper actor attached
+                if svo.get_actor() and validate_svo_no_ignored_verb(svo):
+                    if svo.get_actor() is not None and not svo.get_actor().is_anaphora():
                         order += 1
-                        fi1e.write(str(order) + "," + action.pretty_print() + ",," +
-                                   action.get_actor().pretty_print() + ",,\n")
+                        fi1e.write(str(order) + "," + svo.pretty_print() + ",," +
+                                   svo.get_actor().pretty_print() + ",,\n")
                     else:
                         order += 1
-                        fi1e.write(str(order) + "," + action.pretty_print() + ",,,,\n")
+                        fi1e.write(str(order) + "," + svo.pretty_print() + ",,,,\n")
         if conditional_gateway_started and alphabet_suffix_index < 2:
             suffix = string.ascii_lowercase[alphabet_suffix_index]
             tmp_order = order + 1
@@ -161,10 +161,10 @@ def generate_intermediate_model(filename: str, directory: str, output_directory:
         fi1e.write(str(order) + ",,,,,,yes\n")
 
 
-def validate_action_no_ignored_verb(action: Action) -> bool:
+def validate_svo_no_ignored_verb(svo: SvoConstruct) -> bool:
     ignore_verbs = ["be", "have", "do", "achieve", "start", "exist", "base"]
 
-    base_verb = wn.morphy(action.get_verb().text, wn.VERB)
+    base_verb = wn.morphy(svo.get_verb().text, wn.VERB)
     if base_verb is not None and base_verb.casefold() not in ignore_verbs:
         return True
     else:

@@ -11,8 +11,8 @@ from main.extract_actors import extract_actors
 from main.extract_svo_constructs import extract_svo_constructs
 
 
-def extract_elements(sentence: Span) -> (List[Token], List[Token]):
+def extract_process_elements(sentence: Span) -> (List[Token], List[Token]):
     actors = extract_actors(sentence)
-    actions = extract_svo_constructs(sentence, actors)
+    svos = extract_svo_constructs(sentence, actors)
 
-    return actors, actions
+    return actors, svos

@@ -1,6 +1,6 @@
 # coding=utf-8
 """
-Class for actions extracted from text
+Class for subject-verb-object constructs extracted from text
 """
 from spacy.tokens.token import Token
 
@@ -9,9 +9,9 @@ from main.objects.actor import Actor
 from main.objects.base_element import BaseElement
 
 
-class Action(BaseElement):
+class SvoConstruct(BaseElement):
     """
-    Class for actions extracted from text
+    Class for subject-verb-object constructs extracted from text
     - __subject: an instance of spacy.Token class.
     - __verb: an instance of spacy.Token class.
     - __object: an instance of spacy.Token class.
@@ -136,10 +136,10 @@ class Action(BaseElement):
         left = ""
         right = " "
         for token in self.__verb.lefts:
-            if token.dep_ in Consts.action_descriptors_set:
+            if token.dep_ in Consts.svo_descriptors_set:
                 left += (token.text.casefold() + " ")
         for token in self.__verb.rights:
-            if token.dep_ in Consts.action_descriptors_set:
+            if token.dep_ in Consts.svo_descriptors_set:
                 right += (token.text.casefold() + " ")
         verb_text = left + self.__verb.text.casefold() + right
 
@@ -158,4 +158,4 @@ class Action(BaseElement):
         return subject_text + verb_text + object_text
 
     def marker_print(self) -> str:
-        return "Action: " + self.pretty_print() + " Marker: " + (self.__marker if self.__marker is not None else "")
+        return "SVO: " + self.pretty_print() + " Marker: " + (self.__marker if self.__marker is not None else "")
