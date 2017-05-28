@@ -19,7 +19,7 @@ class Participant(BaseElement):
         """
         super().__init__(ident)
         self.__participant_token = participant_token
-        self.__anaphora = False
+        self.__pronoun = False
 
     def get_participant_token(self) -> Token:
         """
@@ -35,19 +35,19 @@ class Participant(BaseElement):
         """
         self.__participant_token = participant_token
 
-    def is_anaphora(self) -> bool:
+    def is_pronoun(self) -> bool:
         """
-        Getter for '__anaphora' field.
-        :return: value of '__anaphora' field.
+        Getter for '__pronoun' field.
+        :return: value of '__pronoun' field.
         """
-        return self.__anaphora
+        return self.__pronoun
 
-    def set_anaphora(self, anaphora: bool):
+    def set_pronoun(self, pronoun: bool):
         """
-        Setter for '__anaphora' field.
-        :param anaphora - a new value of '__anaphora' field.
+        Setter for '__pronoun' field.
+        :param pronoun - a new value of '__pronoun' field.
         """
-        self.__anaphora = anaphora
+        self.__pronoun = pronoun
 
     def pretty_print(self) -> str:
         left = ""

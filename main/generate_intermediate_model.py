@@ -62,7 +62,7 @@ def generate_intermediate_model(filename: str, directory: str, output_directory:
 
                 suffix = string.ascii_lowercase[alphabet_suffix_index]
 
-                if svo.get_participant() is not None and not svo.get_participant().is_anaphora():
+                if svo.get_participant() is not None and not svo.get_participant().is_pronoun():
                     fi1e.write(str(order) + suffix + "1," + svo.pretty_print() + "," +
                                condition.pretty_print() + "," + svo.get_participant().pretty_print() + ",,\n")
                 else:
@@ -79,7 +79,7 @@ def generate_intermediate_model(filename: str, directory: str, output_directory:
                     parallel_gateway_started = True
                     alphabet_suffix_index = 0
                 suffix = string.ascii_lowercase[alphabet_suffix_index]
-                if svo.get_participant() is not None and not svo.get_participant().is_anaphora():
+                if svo.get_participant() is not None and not svo.get_participant().is_pronoun():
                     fi1e.write(str(order) + suffix + "1," + svo.pretty_print() + ",,"
                                + svo.get_participant().pretty_print() + ",,\n")
                 else:
@@ -88,7 +88,7 @@ def generate_intermediate_model(filename: str, directory: str, output_directory:
                 # Get the second task in parallel
                 svo, svos = (lambda list: (list[0], list[1:]))(svos)
                 suffix = string.ascii_lowercase[alphabet_suffix_index]
-                if svo.get_participant() is not None and not svo.get_participant().is_anaphora():
+                if svo.get_participant() is not None and not svo.get_participant().is_pronoun():
                     fi1e.write(str(order) + suffix + "1," + svo.pretty_print() + ",,"
                                + svo.get_participant().pretty_print() + ",,\n")
                 else:
@@ -99,7 +99,7 @@ def generate_intermediate_model(filename: str, directory: str, output_directory:
                 # check if it is a default flow of gateway
                 if parallel_gateway_started:
                     suffix = string.ascii_lowercase[alphabet_suffix_index]
-                    if svo.get_participant() is not None and not svo.get_participant().is_anaphora():
+                    if svo.get_participant() is not None and not svo.get_participant().is_pronoun():
                         fi1e.write(str(order) + suffix + "1," + svo.pretty_print() + ",,"
                                    + svo.get_participant().pretty_print() + ",,\n")
                     else:
@@ -107,7 +107,7 @@ def generate_intermediate_model(filename: str, directory: str, output_directory:
                     alphabet_suffix_index += 1
                 elif conditional_gateway_started:
                     suffix = string.ascii_lowercase[alphabet_suffix_index]
-                    if svo.get_participant() is not None and not svo.get_participant().is_anaphora():
+                    if svo.get_participant() is not None and not svo.get_participant().is_pronoun():
                         fi1e.write(str(order) + suffix + "1," + svo.pretty_print() + ",else,"
                                    + svo.get_participant().pretty_print() + ",,\n")
                     else:
@@ -124,7 +124,7 @@ def generate_intermediate_model(filename: str, directory: str, output_directory:
                     # validate if svo has proper participant attached
                     if svo.get_participant() and validate_svo_no_ignored_verb(svo):
                         order += 1
-                        if svo.get_participant() is not None and not svo.get_participant().is_anaphora():
+                        if svo.get_participant() is not None and not svo.get_participant().is_pronoun():
                             fi1e.write(str(order) + "," + svo.pretty_print() + ",," +
                                        svo.get_participant().pretty_print() + ",,\n")
                         else:
@@ -145,7 +145,7 @@ def generate_intermediate_model(filename: str, directory: str, output_directory:
                     alphabet_suffix_index = 0
                 # validate if svo has proper participant attached
                 if svo.get_participant() and validate_svo_no_ignored_verb(svo):
-                    if svo.get_participant() is not None and not svo.get_participant().is_anaphora():
+                    if svo.get_participant() is not None and not svo.get_participant().is_pronoun():
                         order += 1
                         fi1e.write(str(order) + "," + svo.pretty_print() + ",," +
                                    svo.get_participant().pretty_print() + ",,\n")
