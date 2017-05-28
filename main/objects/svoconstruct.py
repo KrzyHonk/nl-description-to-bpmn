@@ -29,7 +29,7 @@ class SvoConstruct(BaseElement):
         self.__actor = None
         self.__passive = False
         self.__position = position
-        self.__marker = None
+        self.__gateway_keyword = None
 
     def get_subject(self) -> Token:
         """
@@ -108,19 +108,19 @@ class SvoConstruct(BaseElement):
         """
         return self.__position
 
-    def set_marker(self, marker: str):
+    def set_gateway_keyword(self, gateway_keyword: str):
         """
-        Setter for '__marker' field.
-        :param marker - a value of '__marker' field.
+        Setter for '__gateway_keyword' field.
+        :param gateway_keyword - a value of '__gateway_keyword' field.
         """
-        self.__marker = marker
+        self.__gateway_keyword = gateway_keyword
 
-    def get_marker(self) -> str:
+    def get_gateway_keyword(self) -> str:
         """
-        Getter for '__marker' field.
-        :return: object set as '__marker' field.
+        Getter for '__gateway_keyword' field.
+        :return: object set as '__gateway_keyword' field.
         """
-        return self.__marker
+        return self.__gateway_keyword
 
     def pretty_print(self) -> str:
         left = ""
@@ -157,5 +157,5 @@ class SvoConstruct(BaseElement):
 
         return subject_text + verb_text + object_text
 
-    def marker_print(self) -> str:
-        return "SVO: " + self.pretty_print() + " Marker: " + (self.__marker if self.__marker is not None else "")
+    def gateway_keyword_print(self) -> str:
+        return "SVO: " + self.pretty_print() + " Gateway keyword: " + (self.__gateway_keyword if self.__gateway_keyword is not None else "")

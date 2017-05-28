@@ -29,12 +29,11 @@ def generate_intermediate_model(filename: str, directory: str, output_directory:
 
     # semantic analysis - find possible gateway relations
     svos = gateways.find_gateway_keywords(doc, svos)
-
     svos.sort(key=lambda svo: svo.get_position(), reverse=False)
     '''
-    with open(output_directory + filename + "_markers", "w") as fi1e:
+    with open(output_directory + filename + "_gateway_keywords", "w") as fi1e:
         for svo in svos:
-            fi1e.write(svo.marker_print() + "\n")
+            fi1e.write(svo.gateway_keyword_print() + "\n")
     '''
 
     # generate intermediate diagram model
@@ -49,7 +48,7 @@ def generate_intermediate_model(filename: str, directory: str, output_directory:
         while svos:
             svo, svos = (lambda list: (list[0], list[1:]))(svos)
             # check if this svo is a part of conditional gateway
-            if svo.get_marker() is not None and svo.get_marker().casefold() in conditional_words:
+            if svo.get_gateway_keyword() is not None and svo.get_gateway_keyword().casefold() in conditional_words:
                 if parallel_gateway_started:
                     parallel_gateway_started = False
                 if not conditional_gateway_started:
@@ -72,7 +71,7 @@ def generate_intermediate_model(filename: str, directory: str, output_directory:
 
                 alphabet_suffix_index += 1
             # check if this svo is a part of parallel gateway
-            elif svo.get_marker() is not None and svo.get_marker().casefold() in parallel_words:
+            elif svo.get_gateway_keyword() is not None and svo.get_gateway_keyword().casefold() in parallel_words:
                 if conditional_gateway_started:
                     conditional_gateway_started = False
                 if not parallel_gateway_started:
@@ -96,7 +95,7 @@ def generate_intermediate_model(filename: str, directory: str, output_directory:
                     fi1e.write(str(order) + suffix + "1," + svo.pretty_print() + ",,,,\n")
                 alphabet_suffix_index += 1
             # treat task as a part of sequence
-            elif svo.get_marker() is not None and svo.get_marker().casefold() in default_flow_words:
+            elif svo.get_gateway_keyword() is not None and svo.get_gateway_keyword().casefold() in default_flow_words:
                 # check if it is a default flow of gateway
                 if parallel_gateway_started:
                     suffix = string.ascii_lowercase[alphabet_suffix_index]

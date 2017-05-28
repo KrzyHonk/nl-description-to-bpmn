@@ -18,5 +18,5 @@ def find_gateway_keywords(doc: Doc, svos: List[SvoConstruct]):
                 head = word.head
                 tmp_svo = next((svo for svo in svos if svo.get_position() == head.i), None)
                 if tmp_svo is not None:
-                    tmp_svo.set_marker(word.text)
+                    tmp_svo.set_gateway_keyword(word.text)
     return svos
