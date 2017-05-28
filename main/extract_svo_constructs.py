@@ -47,31 +47,21 @@ def extract_svo_constructs(sentence: Span, participants: List[Participant]) -> L
                 # Check if svo wasn't already discovered
                 for tmp_svo in tmp_output:
                     if svo.get_subject() == tmp_svo.get_subject() \
-                            and svo.get_verb() == tmp_svo.get_verb() \
-                            and svo.get_object() == tmp_svo.get_object():
+                            and svo.get_verb() == tmp_svo.get_verb():
                         insert_flag = False
                 if insert_flag:
                     tmp_output.append(svo)
             else:
                 tmp_output.append(svo)
-    extract_svos_from_conjunction(sentence, tmp_output)
 
-    # Check if extracted svo can be assigned to verified participant
-    for svo in tmp_output:
-        for participant in participants:
-            if participant.get_participant_token() == svo.get_subject():
-                svo.set_participant(participant)
-    return tmp_output
-
-
-def extract_svos_from_conjunction(sentence: Span, tmp_output: List[SvoConstruct]) -> List[SvoConstruct]:
+    # Check if conjunction exists in sentence and extract possible SVO
     for word in sentence:
         if word.dep_ == "conj":
-            conj_verb = word
-            output_object = find_token_in_ancestors(conj_verb, Consts.objects_set)
+            conjunction = word
+            output_object = find_token_in_ancestors(conjunction, Consts.objects_set)
 
             subject = None
-            token = conj_verb
+            token = conjunction
             while token is not None and subject is None:
                 subject = find_token_in_ancestors(token, Consts.subjects_set)
                 if token.dep_ == "ROOT":
@@ -80,7 +70,7 @@ def extract_svos_from_conjunction(sentence: Span, tmp_output: List[SvoConstruct]
                     token = token.head
 
             if subject is not None:
-                svo = SvoConstruct(subject=subject, verb=conj_verb, new_object=output_object, position=conj_verb.i)
+                svo = SvoConstruct(subject=subject, verb=conjunction, new_object=output_object, position=conjunction.i)
                 if len(tmp_output) > 0:
                     insert_flag = True
                     for tmp_svo in tmp_output:
@@ -93,6 +83,12 @@ def extract_svos_from_conjunction(sentence: Span, tmp_output: List[SvoConstruct]
                 else:
                     tmp_output.append(svo)
 
+    # Check if extracted svo can be assigned to verified participant
+    for svo in tmp_output:
+        for participant in participants:
+            if participant.get_participant_token() == svo.get_subject():
+                svo.set_participant(participant)
+    return tmp_output
 
 def find_token_in_ancestors(token: Token, dependencies_set):
     for child in token.children:

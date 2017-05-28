@@ -5,14 +5,11 @@ from nltk.corpus import wordnet as wn
 
 import main.extract_process_elements as extract
 import main.find_gateway_keywords as gateways
+from main.consts import Consts
 from main.objects.svoconstruct import SvoConstruct
 
 
 def generate_intermediate_model(filename: str, directory: str, output_directory: str):
-    conditional_words = ["if", "whether", "whereas", "whenever"]
-    default_flow_words = ["otherwise", "optionally"]
-    parallel_words = ["while", "meanwhile", "concurrently", "meantime"]
-
     full_filepath = directory + filename
     nlp = spacy.load("en")
 
@@ -28,13 +25,8 @@ def generate_intermediate_model(filename: str, directory: str, output_directory:
         svos += out_svos
 
     # semantic analysis - find possible gateway relations
-    svos = gateways.find_gateway_keywords(doc, svos)
+    gateways.find_gateway_keywords(doc, svos)
     svos.sort(key=lambda svo: svo.get_position(), reverse=False)
-    '''
-    with open(output_directory + filename + "_gateway_keywords", "w") as fi1e:
-        for svo in svos:
-            fi1e.write(svo.gateway_keyword_print() + "\n")
-    '''
 
     # generate intermediate diagram model
     conditional_gateway_started = False
@@ -48,7 +40,7 @@ def generate_intermediate_model(filename: str, directory: str, output_directory:
         while svos:
             svo, svos = (lambda list: (list[0], list[1:]))(svos)
             # check if this svo is a part of conditional gateway
-            if svo.get_gateway_keyword() is not None and svo.get_gateway_keyword().casefold() in conditional_words:
+            if svo.get_gateway_keyword() is not None and svo.get_gateway_keyword().casefold() in Consts.conditional_keywords:
                 if parallel_gateway_started:
                     parallel_gateway_started = False
                 if not conditional_gateway_started:
@@ -71,7 +63,7 @@ def generate_intermediate_model(filename: str, directory: str, output_directory:
 
                 alphabet_suffix_index += 1
             # check if this svo is a part of parallel gateway
-            elif svo.get_gateway_keyword() is not None and svo.get_gateway_keyword().casefold() in parallel_words:
+            elif svo.get_gateway_keyword() is not None and svo.get_gateway_keyword().casefold() in Consts.parallel_keywords:
                 if conditional_gateway_started:
                     conditional_gateway_started = False
                 if not parallel_gateway_started:
@@ -95,7 +87,7 @@ def generate_intermediate_model(filename: str, directory: str, output_directory:
                     fi1e.write(str(order) + suffix + "1," + svo.pretty_print() + ",,,,\n")
                 alphabet_suffix_index += 1
             # treat task as a part of sequence
-            elif svo.get_gateway_keyword() is not None and svo.get_gateway_keyword().casefold() in default_flow_words:
+            elif svo.get_gateway_keyword() is not None and svo.get_gateway_keyword().casefold() in Consts.default_flow_keywords:
                 # check if it is a default flow of gateway
                 if parallel_gateway_started:
                     suffix = string.ascii_lowercase[alphabet_suffix_index]

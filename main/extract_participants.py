@@ -14,11 +14,11 @@ from main.objects.participant import Participant
 def extract_participants(sentence: Span) -> List[Participant]:
     pronoun_set = ("I", "Me", "We", "Us", "You", "She", "Her", "He", "Him", "It", "They", "Them", "who", "whom",
                    "whose", "what", "which", "that")
-    participants_keywords_set = {"atm", "crm", "crs", "office", "officer", "provisioning", "service",
+    participant_keywords_set = {"atm", "crm", "crs", "office", "officer", "provisioning", "service",
                                  "secretary", "support", "storehouse"}
-    participants_base_keywords_list = {"group", "organization", "person", "service", "system"}
+    participant_hypernyms_list = {"group", "organization", "person", "service", "system"}
     participants_base_keywords_synonyms = []
-    for term in participants_base_keywords_list:
+    for term in participant_hypernyms_list:
         participants_base_keywords_synonyms.extend(wn.synsets(term))
     participants_base_keywords_synonyms = set(participants_base_keywords_synonyms)
 
@@ -72,7 +72,7 @@ def extract_participants(sentence: Span) -> List[Participant]:
 
         if flag is False:
             # Check if participant is one of keywords
-            for participant_keyword in participants_keywords_set:
+            for participant_keyword in participant_keywords_set:
                 if participant_text.casefold() == participant_keyword.casefold():
                     flag = True
         if flag:
