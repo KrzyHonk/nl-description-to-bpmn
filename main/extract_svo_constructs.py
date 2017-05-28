@@ -9,11 +9,11 @@ from spacy.tokens.token import Token
 
 import main.find_tokens_with_dependency as dep
 from main.objects.svoconstruct import SvoConstruct
-from main.objects.actor import Actor
+from main.objects.participant import Participant
 from main.consts import Consts
 
 
-def extract_svo_constructs(sentence: Span, actors: List[Actor]) -> List[SvoConstruct]:
+def extract_svo_constructs(sentence: Span, participants: List[Participant]) -> List[SvoConstruct]:
     tmp_output = []
     root = sentence.root
     nsubj_list = dep.find_tokens_with_dependencies_for_token_in_subtree(root, ["nsubj"])
@@ -56,11 +56,11 @@ def extract_svo_constructs(sentence: Span, actors: List[Actor]) -> List[SvoConst
                 tmp_output.append(svo)
     extract_svos_from_conjunction(sentence, tmp_output)
 
-    # Check if extracted svo can be assigned to verified actor
+    # Check if extracted svo can be assigned to verified participant
     for svo in tmp_output:
-        for actor in actors:
-            if actor.get_actor_token() == svo.get_subject():
-                svo.set_actor(actor)
+        for participant in participants:
+            if participant.get_participant_token() == svo.get_subject():
+                svo.set_participant(participant)
     return tmp_output
 
 
@@ -98,7 +98,7 @@ def find_token_in_ancestors(token: Token, dependencies_set):
     for child in token.children:
         if child.dep_ in dependencies_set:
             return child
-        elif child.dep_ in Consts.actor_descriptors_set:
+        elif child.dep_ in Consts.participant_descriptors_set:
             for grandchild in child.children:
                 output = find_token_in_ancestors(grandchild, dependencies_set)
                 if output is not None:

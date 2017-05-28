@@ -1,6 +1,6 @@
 # coding=utf-8
 """
-Actorsextraction tests
+Participants extraction tests
 """
 
 import unittest
@@ -11,7 +11,7 @@ import main.extract_process_elements as extract
 import main.utils as utils
 
 
-class ActorsTests(unittest.TestCase):
+class ParticipantsTests(unittest.TestCase):
     def test_example_phrase_one(self):
         filepath = "../examples/example_phrase_one"
         nlp = spacy.load("en")
@@ -19,14 +19,14 @@ class ActorsTests(unittest.TestCase):
         text = open(filepath).read().replace("\n", " ")
         doc = nlp(text)
 
-        actors = []
+        participants = []
         for sentence in doc.sents:
             [utils.to_nltk_tree(sent.root).pretty_print() for sent in doc.sents]
-            tmp_actors, svos = extract.extract_process_elements(sentence)
-            actors.extend(tmp_actors)
-            for actor in tmp_actors:
-                print(actor.pretty_print())
-        self.assertEqual(len(actors), 2, "Actors list length is incorrect")
+            tmp_participants, svos = extract.extract_process_elements(sentence)
+            participants.extend(tmp_participants)
+            for participant in tmp_participants:
+                print(participant.pretty_print())
+        self.assertEqual(len(participants), 2, "Participants list length is incorrect")
 
     def test_example_phrase_two(self):
         filepath = "../examples/example_phrase_two"
@@ -35,13 +35,13 @@ class ActorsTests(unittest.TestCase):
         text = open(filepath).read().replace("\n", " ")
         doc = nlp(text)
 
-        actors = []
+        participants = []
         for sentence in doc.sents:
             [utils.to_nltk_tree(sent.root).pretty_print() for sent in doc.sents]
-            actors, svos = extract.extract_process_elements(sentence)
-            for actor in actors:
-                print(actor.pretty_print())
-        self.assertEqual(len(actors), 1, "Actors list length is incorrect")
+            participants, svos = extract.extract_process_elements(sentence)
+            for participant in participants:
+                print(participant.pretty_print())
+        self.assertEqual(len(participants), 1, "Participants list length is incorrect")
 
     def test_example_phrase_three(self):
         filepath = "../examples/example_phrase_three"
@@ -50,13 +50,13 @@ class ActorsTests(unittest.TestCase):
         text = open(filepath).read().replace("\n", " ")
         doc = nlp(text)
 
-        actors = []
+        participants = []
         for sentence in doc.sents:
             [utils.to_nltk_tree(sent.root).pretty_print() for sent in doc.sents]
-            actors, svos = extract.extract_process_elements(sentence)
-            for actor in actors:
-                print(actor.pretty_print())
-        self.assertEqual(len(actors), 4, "Actors list length is incorrect")
+            participants, svos = extract.extract_process_elements(sentence)
+            for participant in participants:
+                print(participant.pretty_print())
+        self.assertEqual(len(participants), 4, "Participants list length is incorrect")
 
     def test_example_phrase_four(self):
         filepath = "../examples/example_phrase_four"
@@ -65,13 +65,13 @@ class ActorsTests(unittest.TestCase):
         text = open(filepath).read().replace("\n", " ")
         doc = nlp(text)
 
-        actors = []
+        participants = []
         for sentence in doc.sents:
             [utils.to_nltk_tree(sent.root).pretty_print() for sent in doc.sents]
-            actors, svos = extract.extract_process_elements(sentence)
-            for actor in actors:
-                print(actor.pretty_print())
-        self.assertEqual(len(actors), 3, "Actors list length is incorrect")
+            participants, svos = extract.extract_process_elements(sentence)
+            for participant in participants:
+                print(participant.pretty_print())
+        self.assertEqual(len(participants), 3, "Participants list length is incorrect")
 
     def test_example_phrase_five(self):
         filepath = "../examples/example_phrase_five"
@@ -80,13 +80,13 @@ class ActorsTests(unittest.TestCase):
         text = open(filepath).read().replace("\n", " ")
         doc = nlp(text)
 
-        actors = []
+        participants = []
         for sentence in doc.sents:
             [utils.to_nltk_tree(sent.root).pretty_print() for sent in doc.sents]
-            actors, svos = extract.extract_process_elements(sentence)
-            for actor in actors:
-                print(actor.pretty_print())
-        self.assertEqual(len(actors), 2, "Actors list length is incorrect")
+            participants, svos = extract.extract_process_elements(sentence)
+            for participant in participants:
+                print(participant.pretty_print())
+        self.assertEqual(len(participants), 2, "Participants list length is incorrect")
 
     def test_example_phrase_six(self):
         filepath = "../examples/example_phrase_six"
@@ -95,13 +95,13 @@ class ActorsTests(unittest.TestCase):
         text = open(filepath).read().replace("\n", " ")
         doc = nlp(text)
 
-        actors = []
+        participants = []
         for sentence in doc.sents:
             [utils.to_nltk_tree(sent.root).pretty_print() for sent in doc.sents]
-            actors, svos = extract.extract_process_elements(sentence)
-            for actor in actors:
-                print(actor.pretty_print())
-        self.assertEqual(len(actors), 0, "Actors list length is incorrect")
+            participants, svos = extract.extract_process_elements(sentence)
+            for participant in participants:
+                print(participant.pretty_print())
+        self.assertEqual(len(participants), 0, "Participants list length is incorrect")
 
     def test_example_phrase_seven(self):
         filepath = "../examples/example_phrase_seven"
@@ -110,13 +110,13 @@ class ActorsTests(unittest.TestCase):
         text = open(filepath).read().replace("\n", " ")
         doc = nlp(text)
 
-        actors = []
+        participants = []
         for sentence in doc.sents:
             [utils.to_nltk_tree(sent.root).pretty_print() for sent in doc.sents]
-            actors, svos = extract.extract_process_elements(sentence)
-            for actor in actors:
-                print(actor.pretty_print())
-        self.assertEqual(len(actors), 1, "Actors list length is incorrect")
+            participants, svos = extract.extract_process_elements(sentence)
+            for participant in participants:
+                print(participant.pretty_print())
+        self.assertEqual(len(participants), 1, "Participants list length is incorrect")
 
     def test_example_phrase_eight(self):
         filepath = "../examples/example_phrase_eight"
@@ -125,13 +125,13 @@ class ActorsTests(unittest.TestCase):
         text = open(filepath).read().replace("\n", " ")
         doc = nlp(text)
 
-        actors = []
+        participants = []
         for sentence in doc.sents:
             [utils.to_nltk_tree(sent.root).pretty_print() for sent in doc.sents]
-            actors, svos = extract.extract_process_elements(sentence)
-            for actor in actors:
-                print(actor.pretty_print())
-        self.assertEqual(len(actors), 2, "Actors list length is incorrect")
+            participants, svos = extract.extract_process_elements(sentence)
+            for participant in participants:
+                print(participant.pretty_print())
+        self.assertEqual(len(participants), 2, "Participants list length is incorrect")
 
 
 if __name__ == "__main__":

@@ -20,11 +20,11 @@ def generate_intermediate_model(filename: str, directory: str, output_directory:
     doc = nlp(text)
 
     # elements extraction phase
-    actors = []
+    participants = []
     svos = []
     for sentence in doc.sents:
-        out_actors, out_svos = extract.extract_process_elements(sentence)
-        actors += out_actors
+        out_participants, out_svos = extract.extract_process_elements(sentence)
+        participants += out_participants
         svos += out_svos
 
     # semantic analysis - find possible gateway relations
@@ -62,9 +62,9 @@ def generate_intermediate_model(filename: str, directory: str, output_directory:
 
                 suffix = string.ascii_lowercase[alphabet_suffix_index]
 
-                if svo.get_actor() is not None and not svo.get_actor().is_anaphora():
+                if svo.get_participant() is not None and not svo.get_participant().is_anaphora():
                     fi1e.write(str(order) + suffix + "1," + svo.pretty_print() + "," +
-                               condition.pretty_print() + "," + svo.get_actor().pretty_print() + ",,\n")
+                               condition.pretty_print() + "," + svo.get_participant().pretty_print() + ",,\n")
                 else:
                     fi1e.write(str(order) + suffix + "1," + svo.pretty_print() + "," +
                                condition.pretty_print() + ",,,\n")
@@ -79,18 +79,18 @@ def generate_intermediate_model(filename: str, directory: str, output_directory:
                     parallel_gateway_started = True
                     alphabet_suffix_index = 0
                 suffix = string.ascii_lowercase[alphabet_suffix_index]
-                if svo.get_actor() is not None and not svo.get_actor().is_anaphora():
+                if svo.get_participant() is not None and not svo.get_participant().is_anaphora():
                     fi1e.write(str(order) + suffix + "1," + svo.pretty_print() + ",,"
-                               + svo.get_actor().pretty_print() + ",,\n")
+                               + svo.get_participant().pretty_print() + ",,\n")
                 else:
                     fi1e.write(str(order) + suffix + "1," + svo.pretty_print() + ",,,,\n")
                 alphabet_suffix_index += 1
                 # Get the second task in parallel
                 svo, svos = (lambda list: (list[0], list[1:]))(svos)
                 suffix = string.ascii_lowercase[alphabet_suffix_index]
-                if svo.get_actor() is not None and not svo.get_actor().is_anaphora():
+                if svo.get_participant() is not None and not svo.get_participant().is_anaphora():
                     fi1e.write(str(order) + suffix + "1," + svo.pretty_print() + ",,"
-                               + svo.get_actor().pretty_print() + ",,\n")
+                               + svo.get_participant().pretty_print() + ",,\n")
                 else:
                     fi1e.write(str(order) + suffix + "1," + svo.pretty_print() + ",,,,\n")
                 alphabet_suffix_index += 1
@@ -99,17 +99,17 @@ def generate_intermediate_model(filename: str, directory: str, output_directory:
                 # check if it is a default flow of gateway
                 if parallel_gateway_started:
                     suffix = string.ascii_lowercase[alphabet_suffix_index]
-                    if svo.get_actor() is not None and not svo.get_actor().is_anaphora():
+                    if svo.get_participant() is not None and not svo.get_participant().is_anaphora():
                         fi1e.write(str(order) + suffix + "1," + svo.pretty_print() + ",,"
-                                   + svo.get_actor().pretty_print() + ",,\n")
+                                   + svo.get_participant().pretty_print() + ",,\n")
                     else:
                         fi1e.write(str(order) + suffix + "1," + svo.pretty_print() + ",,,,\n")
                     alphabet_suffix_index += 1
                 elif conditional_gateway_started:
                     suffix = string.ascii_lowercase[alphabet_suffix_index]
-                    if svo.get_actor() is not None and not svo.get_actor().is_anaphora():
+                    if svo.get_participant() is not None and not svo.get_participant().is_anaphora():
                         fi1e.write(str(order) + suffix + "1," + svo.pretty_print() + ",else,"
-                                   + svo.get_actor().pretty_print() + ",,\n")
+                                   + svo.get_participant().pretty_print() + ",,\n")
                     else:
                         fi1e.write(str(order) + suffix + "1," + svo.pretty_print() + ",else,,,\n")
                     alphabet_suffix_index += 1
@@ -121,12 +121,12 @@ def generate_intermediate_model(filename: str, directory: str, output_directory:
                     if parallel_gateway_started:
                         parallel_gateway_started = False
                         alphabet_suffix_index = 0
-                    # validate if svo has proper actor attached
-                    if svo.get_actor() and validate_svo_no_ignored_verb(svo):
+                    # validate if svo has proper participant attached
+                    if svo.get_participant() and validate_svo_no_ignored_verb(svo):
                         order += 1
-                        if svo.get_actor() is not None and not svo.get_actor().is_anaphora():
+                        if svo.get_participant() is not None and not svo.get_participant().is_anaphora():
                             fi1e.write(str(order) + "," + svo.pretty_print() + ",," +
-                                       svo.get_actor().pretty_print() + ",,\n")
+                                       svo.get_participant().pretty_print() + ",,\n")
                         else:
                             fi1e.write(str(order) + "," + svo.pretty_print() + ",,,,\n")
             else:
@@ -143,12 +143,12 @@ def generate_intermediate_model(filename: str, directory: str, output_directory:
                 if parallel_gateway_started:
                     parallel_gateway_started = False
                     alphabet_suffix_index = 0
-                # validate if svo has proper actor attached
-                if svo.get_actor() and validate_svo_no_ignored_verb(svo):
-                    if svo.get_actor() is not None and not svo.get_actor().is_anaphora():
+                # validate if svo has proper participant attached
+                if svo.get_participant() and validate_svo_no_ignored_verb(svo):
+                    if svo.get_participant() is not None and not svo.get_participant().is_anaphora():
                         order += 1
                         fi1e.write(str(order) + "," + svo.pretty_print() + ",," +
-                                   svo.get_actor().pretty_print() + ",,\n")
+                                   svo.get_participant().pretty_print() + ",,\n")
                     else:
                         order += 1
                         fi1e.write(str(order) + "," + svo.pretty_print() + ",,,,\n")

@@ -7,12 +7,12 @@ from typing import List
 from spacy.tokens.span import Span
 from spacy.tokens.token import Token
 
-from main.extract_actors import extract_actors
+from main.extract_participants import extract_participants
 from main.extract_svo_constructs import extract_svo_constructs
 
 
 def extract_process_elements(sentence: Span) -> (List[Token], List[Token]):
-    actors = extract_actors(sentence)
-    svos = extract_svo_constructs(sentence, actors)
+    participants = extract_participants(sentence)
+    svos = extract_svo_constructs(sentence, participants)
 
-    return actors, svos
+    return participants, svos

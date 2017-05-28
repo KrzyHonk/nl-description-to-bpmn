@@ -5,7 +5,7 @@ Class for subject-verb-object constructs extracted from text
 from spacy.tokens.token import Token
 
 from main.consts import Consts
-from main.objects.actor import Actor
+from main.objects.participant import Participant
 from main.objects.base_element import BaseElement
 
 
@@ -26,7 +26,7 @@ class SvoConstruct(BaseElement):
         self.__subject = subject
         self.__verb = verb
         self.__object = new_object
-        self.__actor = None
+        self.__participant = None
         self.__passive = False
         self.__position = position
         self.__gateway_keyword = None
@@ -73,19 +73,19 @@ class SvoConstruct(BaseElement):
         """
         self.__object = new_object
 
-    def set_actor(self, actor: Actor):
+    def set_participant(self, participant: Participant):
         """
-        Setter for '__actor' field.
-        :param actor - a new verb for '__actor' field.
+        Setter for '__participant' field.
+        :param participant - a new verb for '__participant' field.
         """
-        self.__actor = actor
+        self.__participant = participant
 
-    def get_actor(self) -> Actor:
+    def get_participant(self) -> Participant:
         """
-        Getter for '__actor' field.
-        :return: object set as '__actor' field.
+        Getter for '__participant' field.
+        :return: object set as '__participant' field.
         """
-        return self.__actor
+        return self.__participant
 
     def set_passive(self, passive: bool):
         """
@@ -126,10 +126,10 @@ class SvoConstruct(BaseElement):
         left = ""
         right = " "
         for token in self.__subject.lefts:
-            if token.dep_ in Consts.actor_descriptors_set:
+            if token.dep_ in Consts.participant_descriptors_set:
                 left += (token.text.casefold() + " ")
         for token in self.__subject.rights:
-            if token.dep_ in Consts.actor_descriptors_set:
+            if token.dep_ in Consts.participant_descriptors_set:
                 right += (token.text.casefold() + " ")
         subject_text = left + self.__subject.text.casefold() + right
 
@@ -148,10 +148,10 @@ class SvoConstruct(BaseElement):
         object_text = ""
         if self.__object is not None:
             for token in self.__object.lefts:
-                if token.dep_ in Consts.actor_descriptors_set:
+                if token.dep_ in Consts.participant_descriptors_set:
                     left += (token.text.casefold() + " ")
             for token in self.__object.rights:
-                if token.dep_ in Consts.actor_descriptors_set:
+                if token.dep_ in Consts.participant_descriptors_set:
                     right += (token.text.casefold() + " ")
             object_text = left + self.__object.text.casefold() + right
 

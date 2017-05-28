@@ -22,7 +22,7 @@ class SubsentenceTests(unittest.TestCase):
         svos = []
         for sentence in doc.sents:
             [utils.to_nltk_tree(sent.root).pretty_print() for sent in doc.sents]
-            actors, svos = extract.extract_process_elements(sentence)
+            participants, svos = extract.extract_process_elements(sentence)
             for svo in svos:
                 print(svo.pretty_print())
         self.assertEqual(len(svos), 2, "SVO list length is incorrect")
@@ -37,7 +37,7 @@ class SubsentenceTests(unittest.TestCase):
         svos = []
         for sentence in doc.sents:
             [utils.to_nltk_tree(sent.root).pretty_print() for sent in doc.sents]
-            actors, svos = extract.extract_process_elements(sentence)
+            participants, svos = extract.extract_process_elements(sentence)
             for svo in svos:
                 print(svo.pretty_print())
         self.assertEqual(len(svos), 1, "SVO list length is incorrect")
@@ -52,7 +52,7 @@ class SubsentenceTests(unittest.TestCase):
         svos = []
         for sentence in doc.sents:
             [utils.to_nltk_tree(sent.root).pretty_print() for sent in doc.sents]
-            actors, svos = extract.extract_process_elements(sentence)
+            participants, svos = extract.extract_process_elements(sentence)
             for svo in svos:
                 print(svo.pretty_print())
         self.assertEqual(len(svos), 4, "SVO list length is incorrect")
@@ -67,7 +67,7 @@ class SubsentenceTests(unittest.TestCase):
         svos = []
         for sentence in doc.sents:
             [utils.to_nltk_tree(sent.root).pretty_print() for sent in doc.sents]
-            actors, svos = extract.extract_process_elements(sentence)
+            participants, svos = extract.extract_process_elements(sentence)
             for svo in svos:
                 print(svo.pretty_print())
         self.assertEqual(len(svos), 2, "SVO list length is incorrect")
@@ -82,7 +82,7 @@ class SubsentenceTests(unittest.TestCase):
         svos = []
         for sentence in doc.sents:
             [utils.to_nltk_tree(sent.root).pretty_print() for sent in doc.sents]
-            actors, svos = extract.extract_process_elements(sentence)
+            participants, svos = extract.extract_process_elements(sentence)
             for svo in svos:
                 print(svo.pretty_print())
         self.assertEqual(len(svos), 2, "SVO list length is incorrect")
@@ -97,7 +97,7 @@ class SubsentenceTests(unittest.TestCase):
         svos = []
         for sentence in doc.sents:
             [utils.to_nltk_tree(sent.root).pretty_print() for sent in doc.sents]
-            actors, svos = extract.extract_process_elements(sentence)
+            participants, svos = extract.extract_process_elements(sentence)
             for svo in svos:
                 print(svo.pretty_print())
         self.assertEqual(len(svos), 1, "SVO list length is incorrect")
@@ -112,7 +112,7 @@ class SubsentenceTests(unittest.TestCase):
         svos = []
         for sentence in doc.sents:
             [utils.to_nltk_tree(sent.root).pretty_print() for sent in doc.sents]
-            actors, svos = extract.extract_process_elements(sentence)
+            participants, svos = extract.extract_process_elements(sentence)
             for svo in svos:
                 print(svo.pretty_print())
         self.assertEqual(len(svos), 2, "SVO list length is incorrect")
@@ -127,7 +127,7 @@ class SubsentenceTests(unittest.TestCase):
         svos = []
         for sentence in doc.sents:
             [utils.to_nltk_tree(sent.root).pretty_print() for sent in doc.sents]
-            actors, svos = extract.extract_process_elements(sentence)
+            participants, svos = extract.extract_process_elements(sentence)
             for svo in svos:
                 print(svo.pretty_print())
         self.assertEqual(len(svos), 3, "SVO list length is incorrect")
