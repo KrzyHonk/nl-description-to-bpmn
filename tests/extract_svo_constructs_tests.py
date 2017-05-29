@@ -85,7 +85,7 @@ class SubsentenceTests(unittest.TestCase):
             participants, svos = extract.extract_process_elements(sentence)
             for svo in svos:
                 print(svo.pretty_print())
-        self.assertEqual(len(svos), 2, "SVO list length is incorrect")
+        self.assertEqual(len(svos), 3, "SVO list length is incorrect")
 
     def test_example_phrase_six(self):
         filepath = "../examples/example_phrase_six"

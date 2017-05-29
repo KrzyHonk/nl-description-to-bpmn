@@ -26,7 +26,7 @@ class ParticipantsTests(unittest.TestCase):
             participants.extend(tmp_participants)
             for participant in tmp_participants:
                 print(participant.pretty_print())
-        self.assertEqual(len(participants), 2, "Participants list length is incorrect")
+        self.assertEqual(len(participants), 1, "Participants list length is incorrect")
 
     def test_example_phrase_two(self):
         filepath = "../examples/example_phrase_two"
@@ -71,7 +71,7 @@ class ParticipantsTests(unittest.TestCase):
             participants, svos = extract.extract_process_elements(sentence)
             for participant in participants:
                 print(participant.pretty_print())
-        self.assertEqual(len(participants), 2, "Participants list length is incorrect")
+        self.assertEqual(len(participants), 3, "Participants list length is incorrect")
 
     def test_example_phrase_five(self):
         filepath = "../examples/example_phrase_five"
@@ -86,7 +86,7 @@ class ParticipantsTests(unittest.TestCase):
             participants, svos = extract.extract_process_elements(sentence)
             for participant in participants:
                 print(participant.pretty_print())
-        self.assertEqual(len(participants), 2, "Participants list length is incorrect")
+        self.assertEqual(len(participants), 1, "Participants list length is incorrect")
 
     def test_example_phrase_six(self):
         filepath = "../examples/example_phrase_six"
