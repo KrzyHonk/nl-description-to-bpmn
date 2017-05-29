@@ -1,7 +1,7 @@
 import string
 
-import spacy
 from nltk.corpus import wordnet as wn
+from spacy.tokens.doc import Doc
 
 import main.extract_process_elements as extract
 import main.find_gateway_keywords as gateways
@@ -9,13 +9,7 @@ from main.consts import Consts
 from main.objects.svoconstruct import SvoConstruct
 
 
-def generate_intermediate_model(filename: str, directory: str, output_directory: str):
-    full_filepath = directory + filename
-    nlp = spacy.load("en")
-
-    text = open(full_filepath).read().replace("\n", " ")
-    doc = nlp(text)
-
+def generate_intermediate_model(doc: Doc, filename: str, output_directory: str):
     # elements extraction phase
     participants = []
     svos = []
@@ -27,6 +21,9 @@ def generate_intermediate_model(filename: str, directory: str, output_directory:
     # semantic analysis - find possible gateway relations
     gateways.find_gateway_keywords(doc, svos)
     svos.sort(key=lambda svo: svo.get_position(), reverse=False)
+    with open(output_directory + filename + "_markers", "w") as fi1e:
+        for action in svos:
+            fi1e.write(action.gateway_keyword_print() + "\n")
 
     # generate intermediate diagram model
     conditional_gateway_started = False
@@ -153,7 +150,7 @@ def generate_intermediate_model(filename: str, directory: str, output_directory:
 
 
 def validate_svo_no_ignored_verb(svo: SvoConstruct) -> bool:
-    ignore_verbs = ["be", "have", "do", "achieve", "start", "exist", "base"]
+    ignore_verbs = ["be", "have", "do", "achieve", "exist", "base", "by"]
 
     base_verb = wn.morphy(svo.get_verb().text, wn.VERB)
     if base_verb is not None and base_verb.casefold() not in ignore_verbs:
