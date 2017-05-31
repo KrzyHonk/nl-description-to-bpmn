@@ -46,19 +46,28 @@ def generate_intermediate_model(doc: Doc, filename: str, output_directory: str):
                     gateway_branch_index = 0
 
                 # create pair of condition and action
-                condition = svo
-                svo, svos = (lambda list: (list[0], list[1:]))(svos)
+                if len(svos) > 1:
+                    condition = svo
+                    svo, svos = (lambda list: (list[0], list[1:]))(svos)
 
-                suffix = string.ascii_lowercase[gateway_branch_index]
+                    suffix = string.ascii_lowercase[gateway_branch_index]
 
-                if svo.get_participant() is not None and not svo.get_participant().is_pronoun():
-                    fi1e.write(str(order) + suffix + "1," + svo.pretty_print() + "," +
-                               condition.pretty_print() + "," + svo.get_participant().pretty_print() + ",,\n")
+                    if svo.get_participant() is not None and not svo.get_participant().is_pronoun():
+                        fi1e.write(str(order) + suffix + "1," + svo.pretty_print() + "," +
+                                   condition.pretty_print() + "," + svo.get_participant().pretty_print() + ",,\n")
+                    else:
+                        fi1e.write(str(order) + suffix + "1," + svo.pretty_print() + "," +
+                                   condition.pretty_print() + ",,,\n")
+
+                    gateway_branch_index += 1
                 else:
-                    fi1e.write(str(order) + suffix + "1," + svo.pretty_print() + "," +
-                               condition.pretty_print() + ",,,\n")
+                    order += 1
+                    if svo.get_participant() is not None and not svo.get_participant().is_pronoun():
+                        fi1e.write(str(order) + "," + svo.pretty_print() + ",," +
+                                   svo.get_participant().pretty_print() + ",,\n")
+                    else:
+                        fi1e.write(str(order) + "," + svo.pretty_print() + ",,,,\n")
 
-                gateway_branch_index += 1
             # check if this svo is a part of parallel gateway
             elif svo.get_gateway_keyword() is not None and svo.get_gateway_keyword().casefold() in Consts.parallel_keywords:
                 if conditional_gateway_started:
@@ -74,15 +83,24 @@ def generate_intermediate_model(doc: Doc, filename: str, output_directory: str):
                 else:
                     fi1e.write(str(order) + suffix + "1," + svo.pretty_print() + ",,,,\n")
                 gateway_branch_index += 1
+
                 # Get the second task in parallel
-                svo, svos = (lambda list: (list[0], list[1:]))(svos)
-                suffix = string.ascii_lowercase[gateway_branch_index]
-                if svo.get_participant() is not None and not svo.get_participant().is_pronoun():
-                    fi1e.write(str(order) + suffix + "1," + svo.pretty_print() + ",,"
-                               + svo.get_participant().pretty_print() + ",,\n")
+                if len(svos) > 1:
+                    svo, svos = (lambda list: (list[0], list[1:]))(svos)
+                    suffix = string.ascii_lowercase[gateway_branch_index]
+                    if svo.get_participant() is not None and not svo.get_participant().is_pronoun():
+                        fi1e.write(str(order) + suffix + "1," + svo.pretty_print() + ",,"
+                                   + svo.get_participant().pretty_print() + ",,\n")
+                    else:
+                        fi1e.write(str(order) + suffix + "1," + svo.pretty_print() + ",,,,\n")
+                    gateway_branch_index += 1
                 else:
-                    fi1e.write(str(order) + suffix + "1," + svo.pretty_print() + ",,,,\n")
-                gateway_branch_index += 1
+                    order += 1
+                    if svo.get_participant() is not None and not svo.get_participant().is_pronoun():
+                        fi1e.write(str(order) + "," + svo.pretty_print() + ",," +
+                                   svo.get_participant().pretty_print() + ",,\n")
+                    else:
+                        fi1e.write(str(order) + "," + svo.pretty_print() + ",,,,\n")
             # treat task as a part of sequence
             elif svo.get_gateway_keyword() is not None and svo.get_gateway_keyword().casefold() in Consts.default_flow_keywords:
                 # check if it is a default flow of gateway
@@ -110,14 +128,13 @@ def generate_intermediate_model(doc: Doc, filename: str, output_directory: str):
                     if parallel_gateway_started:
                         parallel_gateway_started = False
                         gateway_branch_index = 0
-                    # validate if svo has proper participant attached
-                    if svo.get_participant() is not None:
-                        order += 1
-                        if not svo.get_participant().is_pronoun():
-                            fi1e.write(str(order) + "," + svo.pretty_print() + ",," +
-                                       svo.get_participant().pretty_print() + ",,\n")
-                        else:
-                            fi1e.write(str(order) + "," + svo.pretty_print() + ",,,,\n")
+
+                    order += 1
+                    if svo.get_participant() is not None and not svo.get_participant().is_pronoun():
+                        fi1e.write(str(order) + "," + svo.pretty_print() + ",," +
+                                    svo.get_participant().pretty_print() + ",,\n")
+                    else:
+                        fi1e.write(str(order) + "," + svo.pretty_print() + ",,,,\n")
             else:
                 if conditional_gateway_started:
                     # if conditional gateway has only one flow, add default flow which leads to end event
@@ -132,15 +149,14 @@ def generate_intermediate_model(doc: Doc, filename: str, output_directory: str):
                 if parallel_gateway_started:
                     parallel_gateway_started = False
                     gateway_branch_index = 0
-                # validate if svo has proper participant attached
-                if svo.get_participant() is not None:
-                    order += 1
-                    if not svo.get_participant().is_pronoun():
-                        fi1e.write(str(order) + "," + svo.pretty_print() + ",," +
-                                   svo.get_participant().pretty_print() + ",,\n")
-                    else:
-                        fi1e.write(str(order) + "," + svo.pretty_print() + ",,,,\n")
-        if conditional_gateway_started and gateway_branch_index < 2:
+
+                order += 1
+                if svo.get_participant() is not None and not svo.get_participant().is_pronoun():
+                    fi1e.write(str(order) + "," + svo.pretty_print() + ",," +
+                                svo.get_participant().pretty_print() + ",,\n")
+                else:
+                    fi1e.write(str(order) + "," + svo.pretty_print() + ",,,,\n")
+        if conditional_gateway_started and gateway_branch_index == 1:
             suffix = string.ascii_lowercase[gateway_branch_index]
             tmp_order = order + 1
             fi1e.write(str(order) + suffix + "1,goto " + str(tmp_order) + ",else,,,\n")
@@ -149,7 +165,7 @@ def generate_intermediate_model(doc: Doc, filename: str, output_directory: str):
 
 
 def validate_svo_no_ignored_verb(svo: SvoConstruct) -> bool:
-    ignore_verbs = ["have", "do", "achieve", "exist", "base", "by"]
+    ignore_verbs = ["can", "achieve", "exist", "base", "by"]
 
     base_verb = wn.morphy(svo.get_verb().text, wn.VERB)
     if base_verb is not None and base_verb.casefold() not in ignore_verbs:

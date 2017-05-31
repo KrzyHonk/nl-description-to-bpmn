@@ -1,10 +1,9 @@
 class Consts(object):
-    subjects_set = ("nsubj", "nsubjpass")
+    noun_subjects_set = ("nsubj", "nsubjpass", "compound")
     objects_set = ("dobj", "iobj", "pobj", "attr")
     svo_descriptors_set = ("amod", "acomp", "aux", "auxpass", "neg", "prep")
     participant_descriptors_set = ("amod", "acomp", "aux", "auxpass", "compound", "det", "neg", "poss")
-    conditional_keywords = ["if", "whether", "whereas", "whenever"]
-    default_flow_keywords = ["otherwise", "optionally"]
-    parallel_keywords = ["while", "meanwhile", "concurrently", "meantime"]
+    conditional_keywords = ["if", "whether", "whenever"]
+    default_flow_keywords = ["otherwise"]
+    parallel_keywords = ["while"]
     gateways_keywords = conditional_keywords + default_flow_keywords + parallel_keywords
-    gateways_dependencies = ["mark", "advmod", "ccomp", "acl"]

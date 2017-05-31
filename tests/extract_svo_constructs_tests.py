@@ -70,7 +70,7 @@ class SubsentenceTests(unittest.TestCase):
             participants, svos = extract.extract_process_elements(sentence)
             for svo in svos:
                 print(svo.pretty_print())
-        self.assertEqual(len(svos), 2, "SVO list length is incorrect")
+        self.assertEqual(len(svos), 1, "SVO list length is incorrect")
 
     def test_example_phrase_five(self):
         filepath = "../examples/example_phrase_five"
@@ -130,7 +130,7 @@ class SubsentenceTests(unittest.TestCase):
             participants, svos = extract.extract_process_elements(sentence)
             for svo in svos:
                 print(svo.pretty_print())
-        self.assertEqual(len(svos), 3, "SVO list length is incorrect")
+        self.assertEqual(len(svos), 2, "SVO list length is incorrect")
 
 
 if __name__ == "__main__":

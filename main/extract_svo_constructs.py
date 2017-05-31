@@ -4,13 +4,14 @@ Function for extracting svos from sentence
 """
 from typing import List
 
+from nltk.corpus import wordnet as wn
 from spacy.tokens.span import Span
 from spacy.tokens.token import Token
 
 import main.find_tokens_with_dependency as dep
-from main.objects.svoconstruct import SvoConstruct
-from main.objects.participant import Participant
 from main.consts import Consts
+from main.objects.participant import Participant
+from main.objects.svoconstruct import SvoConstruct
 
 
 def extract_svo_constructs(sentence: Span, participants: List[Participant]) -> List[SvoConstruct]:
@@ -23,54 +24,55 @@ def extract_svo_constructs(sentence: Span, participants: List[Participant]) -> L
             subject = token
             verb = subject.head
             output_obj = find_token_in_ancestors(verb, Consts.objects_set)
-
-            svo = SvoConstruct(subject=subject, verb=verb, new_object=output_obj, position=verb.i)
-            insert_flag = True
-            if len(tmp_output) > 0:
-                for tmp_svo in tmp_output:
-                    if svo.get_subject() == tmp_svo.get_subject() \
-                            and svo.get_verb() == tmp_svo.get_verb() \
-                            and svo.get_object() == tmp_svo.get_object():
-                        insert_flag = False
-                if insert_flag:
+            if subject is not None and verb is not None:
+                svo = SvoConstruct(subject=subject, verb=verb, new_object=output_obj, position=verb.i)
+                insert_flag = True
+                if len(tmp_output) > 0:
+                    for tmp_svo in tmp_output:
+                        if svo.get_subject() == tmp_svo.get_subject() \
+                                and svo.get_verb() == tmp_svo.get_verb() \
+                                and svo.get_object() == tmp_svo.get_object():
+                            insert_flag = False
+                    if insert_flag:
+                        tmp_output.append(svo)
+                else:
                     tmp_output.append(svo)
-            else:
-                tmp_output.append(svo)
     if len(nsubjpass_list) > 0:
         for token in nsubjpass_list:
             subject = token
             verb = subject.head
-            svo = SvoConstruct(subject=subject, verb=verb, position=verb.i)
-            svo.set_passive(True)
-            insert_flag = True
-            if len(tmp_output) > 0:
-                # Check if svo wasn't already discovered
-                for tmp_svo in tmp_output:
-                    if svo.get_subject() == tmp_svo.get_subject() \
-                            and svo.get_verb() == tmp_svo.get_verb():
-                        insert_flag = False
-                if insert_flag:
+            if subject is not None and verb is not None:
+                svo = SvoConstruct(subject=subject, verb=verb, position=verb.i)
+                svo.set_passive(True)
+                insert_flag = True
+                if len(tmp_output) > 0:
+                    # Check if svo wasn't already discovered
+                    for tmp_svo in tmp_output:
+                        if svo.get_subject() == tmp_svo.get_subject() \
+                                and svo.get_verb() == tmp_svo.get_verb():
+                            insert_flag = False
+                    if insert_flag:
+                        tmp_output.append(svo)
+                else:
                     tmp_output.append(svo)
-            else:
-                tmp_output.append(svo)
 
     # Check if conjunction exists in sentence and extract possible SVO
     for word in sentence:
-        if word.dep_ == "conj":
+        if word.dep_ == "conj" and word.pos_ == "VERB" is not None:
             conjunction = word
-            output_object = find_token_in_ancestors(conjunction, Consts.objects_set)
+            output_obj = find_token_in_ancestors(conjunction, Consts.objects_set)
 
             subject = None
             token = conjunction
             while token is not None and subject is None:
-                subject = find_token_in_ancestors(token, Consts.subjects_set)
+                subject = find_token_in_ancestors(token, Consts.noun_subjects_set)
                 if token.dep_ == "ROOT":
                     break
                 if subject is None:
                     token = token.head
 
-            if subject is not None:
-                svo = SvoConstruct(subject=subject, verb=conjunction, new_object=output_object, position=conjunction.i)
+            if subject is not None and conjunction is not None and output_obj is not None:
+                svo = SvoConstruct(subject=subject, verb=conjunction, new_object=output_obj, position=conjunction.i)
                 if len(tmp_output) > 0:
                     insert_flag = True
                     for tmp_svo in tmp_output:
@@ -89,6 +91,7 @@ def extract_svo_constructs(sentence: Span, participants: List[Participant]) -> L
             if participant.get_participant_token() == svo.get_subject():
                 svo.set_participant(participant)
     return tmp_output
+
 
 def find_token_in_ancestors(token: Token, dependencies_set):
     for child in token.children:

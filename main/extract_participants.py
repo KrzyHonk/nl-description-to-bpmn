@@ -14,7 +14,7 @@ from main.objects.participant import Participant
 def extract_participants(sentence: Span) -> List[Participant]:
     pronoun_set = ("I", "Me", "We", "Us", "You", "She", "Her", "He", "Him", "It", "They", "Them", "who", "whom",
                    "whose", "what", "which", "that")
-    participant_keywords_set = {"atm", "crm", "crs", "office", "officer", "post", "process", "task", "provisioning", "service",
+    participant_keywords_set = {"atm", "crm", "crs", "office", "officer", "provisioning", "service",
                                  "secretary", "support", "storehouse"}
     participant_hypernyms_list = {"group", "organization", "person", "service", "system"}
     participants_base_keywords_synonyms = []
