@@ -1,6 +1,4 @@
 class Consts(object):
-    noun_subjects_set = ("nsubj", "nsubjpass", "compound")
-    objects_set = ("dobj", "iobj", "pobj", "attr")
     svo_descriptors_set = ("amod", "acomp", "aux", "auxpass", "neg", "prep")
     participant_descriptors_set = ("amod", "acomp", "aux", "auxpass", "compound", "det", "neg", "poss")
     conditional_keywords = ["if", "whether", "whenever"]

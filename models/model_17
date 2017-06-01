@@ -6,7 +6,7 @@ the process will end. If the request is asked to make a change then it is return
 to the petitioner/employee who can review the comments for the change request. If the
 request is approved it will go to the purchase department that will be in charge of making
 quotations (using a subprocess) and select a vendor. If the vendor is not valid in the
-system the purchase department will have to choose a dierent vendor. After a vendor
+system the purchase department will have to choose a different vendor. After a vendor
 is selected and confirmed, the system will generate and send a purchase order and wait
 for the product to be delivered and the invoice received. In any case the system will send
 a notification to let the user know what the result was. In any of the cases, approval,

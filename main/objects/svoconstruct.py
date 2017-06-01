@@ -27,7 +27,6 @@ class SvoConstruct(BaseElement):
         self.__verb = verb
         self.__object = new_object
         self.__participant = None
-        self.__passive = False
         self.__position = position
         self.__gateway_keyword = None
 
@@ -86,20 +85,6 @@ class SvoConstruct(BaseElement):
         :return: object set as '__participant' field.
         """
         return self.__participant
-
-    def set_passive(self, passive: bool):
-        """
-        Setter for '__passive' field.
-        :param passive - a new verb for '__passive' field.
-        """
-        self.__passive = passive
-
-    def get_passive(self) -> bool:
-        """
-        Getter for '__passive' field.
-        :return: object set as '__passive' field.
-        """
-        return self.__passive
 
     def get_position(self) -> int:
         """
