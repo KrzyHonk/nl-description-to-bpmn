@@ -19,7 +19,7 @@ def generate_intermediate_model(doc: Doc, filename: str, output_directory: str):
 
     # sort SVO in ascending order by position in sentence
     sort_svos_by_position(svos)
-    with open(output_directory + "markers/" + filename + "_markers", "w") as file:
+    with open(output_directory + "markers/" + filename.split(".")[0] + "_markers", "w") as file:
         for action in svos:
             file.write(action.gateway_keyword_print() + "\n")
 
@@ -28,7 +28,7 @@ def generate_intermediate_model(doc: Doc, filename: str, output_directory: str):
     parallel_gateway_started = False
     gateway_branch_index = 0
 
-    with open(output_directory + filename + "_intermediate_model", "w") as file:
+    with open(output_directory + filename.split(".")[0] + "_intermediate_model.csv", "w") as file:
         order = 0
         add_header_and_start_activity(file)
 
@@ -195,7 +195,7 @@ def add_default_flow_pointing_to_end_event(file, order, suffix):
 
 
 def add_end_event(file, order):
-    file.write(str(order) + ",,,,,,yes\n")
+    file.write(str(order) + ",,,,,yes\n")
 
 
 def get_head_from_list(svos: List[SvoConstruct]):
