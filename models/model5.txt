@@ -6,7 +6,7 @@ are. Based on this, the necessary counter measures are determined including thei
 An electronic service then determines the significance of the customer based on information that has
 been collected during the history of the contractual relationship. In case the customer is premium, the
 process will link to an extra problem fix process (this process will not be detailed here). In case the
-customer is of certain significance which would aect the counter measures previously decided upon,
+customer is of certain significance which would affect the counter measures previously decided upon,
 the process goes back to re-prioritize these measures otherwise the process continues. Taking together
 the information (i.e. contract commitment data + prioritized actions) a detailed problem report is
 created. The detailed problem report is then sent to Service Management. Service Management deals
