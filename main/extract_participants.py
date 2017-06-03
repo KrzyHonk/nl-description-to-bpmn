@@ -41,6 +41,8 @@ def extract_participants(sentence: Span) -> List[Participant]:
             for child in word.children:
                 if child.dep_ in ("pobj", "dobj", "iobj", "attr"):
                     participant = Participant(participant_token=child)
+                    if child.pos_ == "pron":
+                        participant.set_pronoun(True)
                     tmp_output.append(participant)
 
     # Check if Participant is an acceptable entity
