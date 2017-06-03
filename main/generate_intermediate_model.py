@@ -19,7 +19,7 @@ def generate_intermediate_model(doc: Doc, filename: str, output_directory: str):
 
     # sort SVO in ascending order by position in sentence
     sort_svos_by_position(svos)
-    with open(output_directory + filename + "_markers", "w") as file:
+    with open(output_directory + "markers/" + filename + "_markers", "w") as file:
         for action in svos:
             file.write(action.gateway_keyword_print() + "\n")
 

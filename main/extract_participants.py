@@ -11,9 +11,8 @@ from main.objects.participant import Participant
 
 
 def extract_participants(sentence: Span) -> List[Participant]:
-    participant_keywords_list = {"atm", "crm", "crs", "office", "officer", "provisioning", "service",
-                                "secretary", "support", "storehouse"}
-    participant_hypernyms_list = {"group", "organization", "person", "service", "system"}
+    participant_keywords_list = {"atm", "crm", "crs", "office", "provisioning", "secretary", "support"}
+    participant_hypernyms_list = {"facility", "group", "organization", "person", "service", "system"}
     participants_base_keywords_synonyms = []
     for term in participant_hypernyms_list:
         participants_base_keywords_synonyms.extend(wn.synsets(term))
