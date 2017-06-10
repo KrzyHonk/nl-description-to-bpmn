@@ -25,7 +25,7 @@ class ParticipantsTests(unittest.TestCase):
             tmp_participants, svos = extract.extract_process_elements(sentence)
             participants.extend(tmp_participants)
             for participant in tmp_participants:
-                print(participant.pretty_print())
+                print(utils.participant_print_full_name(participant))
         self.assertEqual(len(participants), 1, "Participants list length is incorrect")
 
     def test_example_phrase_two(self):
@@ -40,7 +40,7 @@ class ParticipantsTests(unittest.TestCase):
             [utils.to_nltk_tree(sent.root).pretty_print() for sent in doc.sents]
             participants, svos = extract.extract_process_elements(sentence)
             for participant in participants:
-                print(participant.pretty_print())
+                print(utils.participant_print_full_name(participant))
         self.assertEqual(len(participants), 1, "Participants list length is incorrect")
 
     def test_example_phrase_three(self):
@@ -55,8 +55,8 @@ class ParticipantsTests(unittest.TestCase):
             [utils.to_nltk_tree(sent.root).pretty_print() for sent in doc.sents]
             participants, svos = extract.extract_process_elements(sentence)
             for participant in participants:
-                print(participant.pretty_print())
-        self.assertEqual(len(participants), 4, "Participants list length is incorrect")
+                print(utils.participant_print_full_name(participant))
+        self.assertEqual(len(participants), 2, "Participants list length is incorrect")
 
     def test_example_phrase_four(self):
         filepath = "../examples/example_phrase_four"
@@ -70,8 +70,8 @@ class ParticipantsTests(unittest.TestCase):
             [utils.to_nltk_tree(sent.root).pretty_print() for sent in doc.sents]
             participants, svos = extract.extract_process_elements(sentence)
             for participant in participants:
-                print(participant.pretty_print())
-        self.assertEqual(len(participants), 3, "Participants list length is incorrect")
+                print(utils.participant_print_full_name(participant))
+        self.assertEqual(len(participants), 2, "Participants list length is incorrect")
 
     def test_example_phrase_five(self):
         filepath = "../examples/example_phrase_five"
@@ -85,7 +85,7 @@ class ParticipantsTests(unittest.TestCase):
             [utils.to_nltk_tree(sent.root).pretty_print() for sent in doc.sents]
             participants, svos = extract.extract_process_elements(sentence)
             for participant in participants:
-                print(participant.pretty_print())
+                print(utils.participant_print_full_name(participant))
         self.assertEqual(len(participants), 1, "Participants list length is incorrect")
 
     def test_example_phrase_six(self):
@@ -100,7 +100,7 @@ class ParticipantsTests(unittest.TestCase):
             [utils.to_nltk_tree(sent.root).pretty_print() for sent in doc.sents]
             participants, svos = extract.extract_process_elements(sentence)
             for participant in participants:
-                print(participant.pretty_print())
+                print(utils.participant_print_full_name(participant))
         self.assertEqual(len(participants), 0, "Participants list length is incorrect")
 
     def test_example_phrase_seven(self):
@@ -115,7 +115,7 @@ class ParticipantsTests(unittest.TestCase):
             [utils.to_nltk_tree(sent.root).pretty_print() for sent in doc.sents]
             participants, svos = extract.extract_process_elements(sentence)
             for participant in participants:
-                print(participant.pretty_print())
+                print(utils.participant_print_full_name(participant))
         self.assertEqual(len(participants), 1, "Participants list length is incorrect")
 
     def test_example_phrase_eight(self):
@@ -130,7 +130,7 @@ class ParticipantsTests(unittest.TestCase):
             [utils.to_nltk_tree(sent.root).pretty_print() for sent in doc.sents]
             participants, svos = extract.extract_process_elements(sentence)
             for participant in participants:
-                print(participant.pretty_print())
+                print(utils.participant_print_full_name(participant))
         self.assertEqual(len(participants), 2, "Participants list length is incorrect")
 
 

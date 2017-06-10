@@ -48,15 +48,3 @@ class Participant(BaseElement):
         :param pronoun - a new value of '__pronoun' field.
         """
         self.__pronoun = pronoun
-
-    def pretty_print(self) -> str:
-        left = ""
-        right = " "
-        for token in self.__participant_token.lefts:
-            if token.dep_ in Consts.participant_descriptors_set:
-                left += (token.text.casefold() + " ")
-
-        for token in self.__participant_token.rights:
-            if token.dep_ in Consts.participant_descriptors_set:
-                right += (token.text.casefold() + " ")
-        return left + self.__participant_token.text.casefold() + right

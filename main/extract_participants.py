@@ -21,7 +21,7 @@ def extract_participants(sentence: Span) -> List[Participant]:
     tmp_output = []
     output = []
     for word in sentence:
-        if word.dep_ in ("nsubj", "nsubjpass"):
+        if word.dep_ in {"nsubj", "nsubjpass"}:
             participant = Participant(participant_token=word)
             if word.pos_ == "pron":
                 participant.set_pronoun(True)
@@ -38,7 +38,7 @@ def extract_participants(sentence: Span) -> List[Participant]:
     for word in sentence:
         if word.dep_ == "conj":
             for child in word.children:
-                if child.dep_ in ("pobj", "dobj", "iobj", "attr"):
+                if child.dep_ in {"pobj", "dobj", "iobj", "attr"}:
                     participant = Participant(participant_token=child)
                     if child.pos_ == "pron":
                         participant.set_pronoun(True)

@@ -22,7 +22,7 @@ def extract_svo_constructs(sentence: Span, participants: List[Participant]) -> L
         for token in nsubj_list:
             subject = token
             verb = subject.head
-            output_obj = find_token_in_ancestors(verb, ("dobj", "iobj", "pobj", "attr"))
+            output_obj = find_token_in_ancestors(verb, ["dobj", "iobj", "pobj", "attr"])
             if subject is not None and verb is not None:
                 svo = SvoConstruct(subject=subject, verb=verb, new_object=output_obj, position=verb.i)
                 if len(tmp_output) > 0:
@@ -45,11 +45,11 @@ def extract_svo_constructs(sentence: Span, participants: List[Participant]) -> L
 
     # Check if conjunction exists in sentence and extract possible SVO
     for token in sentence:
-        if token.dep_ == "conj" and token.pos_ == "VERB" is not None:
-            output_obj = find_token_in_ancestors(token, ("dobj", "iobj", "pobj", "attr"))
+        if token.dep_ == "conj" and token.pos_ == "VERB":
+            output_obj = find_token_in_ancestors(token, ["dobj", "iobj", "pobj", "attr"])
             subject = find_subject_for_conjunction(token)
 
-            if subject is not None and token is not None and output_obj is not None:
+            if subject is not None and token is not None:
                 svo = SvoConstruct(subject=subject, verb=token, new_object=output_obj, position=token.i)
                 if len(tmp_output) > 0:
                     if check_if_svo_is_unique(svo, tmp_output):
@@ -63,21 +63,32 @@ def extract_svo_constructs(sentence: Span, participants: List[Participant]) -> L
 
 
 def find_token_in_ancestors(token: Token, dependencies_set):
-    for child in token.children:
-        if child.dep_ in dependencies_set:
-            return child
-        elif child.dep_ in Consts.participant_descriptors_set:
-            for grandchild in child.children:
-                output = find_token_in_ancestors(grandchild, dependencies_set)
+    if token.dep_ in dependencies_set:
+        return token
+    else:
+        for child in token.children:
+            if child.dep_ in dependencies_set:
+                return child
+            elif child.dep_ in Consts.skippable_dependencies_set:
+                output = find_token_in_ancestors(child, dependencies_set)
                 if output is not None:
                     return output
     return None
 
 
+def find_token_in_children(token: Token, dependencies_set):
+    if token.dep_ in dependencies_set:
+        return token
+    else:
+        for child in token.children:
+            if child.dep_ in dependencies_set:
+                return child
+    return None
+
+
 def check_if_svo_is_unique(svo: SvoConstruct, svos: List[SvoConstruct]):
     for tmp_svo in svos:
-        if svo.get_subject() == tmp_svo.get_subject() \
-                and svo.get_verb() == tmp_svo.get_verb() \
+        if svo.get_verb() == tmp_svo.get_verb() \
                 and svo.get_object() == tmp_svo.get_object():
             return False
     return True
@@ -90,12 +101,5 @@ def assign_svo_to_participant(svos: List[SvoConstruct], participants: List[Parti
                 svo.set_participant(participant)
 
 
-def find_subject_for_conjunction(conjunction):
-    subject = None
-    while conjunction is not None and subject is None:
-        subject = find_token_in_ancestors(conjunction, ("nsubj", "nsubjpass", "compound"))
-        if conjunction.dep_ == "ROOT":
-            break
-        if subject is None:
-            conjunction = conjunction.head
-    return subject
+def find_subject_for_conjunction(conjunction: Token):
+    return find_token_in_children(conjunction.head, ["nsubj", "nsubjpass", "compound"])

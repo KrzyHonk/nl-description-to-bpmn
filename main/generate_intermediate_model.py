@@ -1,11 +1,11 @@
 import string
 from typing import List
 
-from nltk.corpus import wordnet as wn
 from spacy.tokens.doc import Doc
 
 import main.extract_process_elements as extract
 import main.find_gateway_keywords as gateways
+from main import utils
 from main.consts import Consts
 from main.objects.svoconstruct import SvoConstruct
 
@@ -21,7 +21,7 @@ def generate_intermediate_model(doc: Doc, filename: str, output_directory: str):
     sort_svos_by_position(svos)
     with open(output_directory + "markers/" + filename.split(".")[0] + "_markers", "w") as file:
         for action in svos:
-            file.write(action.gateway_keyword_print() + "\n")
+            file.write(utils.svo_gateway_keyword_print(action) + "\n")
 
     # generate intermediate diagram model
     conditional_gateway_started = False
@@ -153,34 +153,36 @@ def add_header_and_start_activity(file):
 
 def add_sequence_flow(file, order, action: SvoConstruct):
     if action.get_participant() is not None and not action.get_participant().is_pronoun():
-        file.write(str(order) + "," + action.pretty_print() + ",," + action.get_participant().pretty_print() + ",,\n")
+        file.write(str(order) + "," + create_activity_from_svo(action) + ",,"
+                   + utils.participant_print_full_name(action.get_participant()) + ",,\n")
     else:
-        file.write(str(order) + "," + action.pretty_print() + ",,,,\n")
+        file.write(str(order) + "," + create_activity_from_svo(action) + ",,,,\n")
 
 
 def add_conditional_gateway_branch(file, order, suffix, condition: SvoConstruct, action: SvoConstruct):
     if action.get_participant() is not None and not action.get_participant().is_pronoun():
-        file.write(str(order) + suffix + "1," + action.pretty_print() + "," +
-                   condition.pretty_print() + "," + action.get_participant().pretty_print() + ",,\n")
+        file.write(str(order) + suffix + "1," + create_activity_from_svo(action) + "," +
+                   utils.svo_print_full_name(condition) + ","
+                   + utils.participant_print_full_name(action.get_participant()) + ",,\n")
     else:
-        file.write(str(order) + suffix + "1," + action.pretty_print() + "," +
-                   condition.pretty_print() + ",,,\n")
+        file.write(str(order) + suffix + "1," + create_activity_from_svo(action) + "," +
+                   utils.svo_print_full_name(condition) + ",,,\n")
 
 
 def add_default_flow_to_conditional_gateway(file, order, suffix, action: SvoConstruct):
     if action.get_participant() is not None and not action.get_participant().is_pronoun():
-        file.write(str(order) + suffix + "1," + action.pretty_print() + ",else,"
-                   + action.get_participant().pretty_print() + ",,\n")
+        file.write(str(order) + suffix + "1," + create_activity_from_svo(action) + ",else,"
+                   + utils.participant_print_full_name(action.get_participant()) + ",,\n")
     else:
-        file.write(str(order) + suffix + "1," + action.pretty_print() + ",else,,,\n")
+        file.write(str(order) + suffix + "1," + create_activity_from_svo(action) + ",else,,,\n")
 
 
 def add_parallel_gateway_branch(file, order, suffix, action: SvoConstruct):
     if action.get_participant() is not None and not action.get_participant().is_pronoun():
-        file.write(str(order) + suffix + "1," + action.pretty_print() + ",,"
-                   + action.get_participant().pretty_print() + ",,\n")
+        file.write(str(order) + suffix + "1," + create_activity_from_svo(action) + ",,"
+                   + utils.participant_print_full_name(action.get_participant()) + ",,\n")
     else:
-        file.write(str(order) + suffix + "1," + action.pretty_print() + ",,,,\n")
+        file.write(str(order) + suffix + "1," + create_activity_from_svo(action) + ",,,,\n")
 
 
 def add_default_flow_with_end_event(file, order, suffix):
@@ -200,3 +202,11 @@ def add_end_event(file, order):
 
 def get_head_from_list(svos: List[SvoConstruct]):
     return (lambda collection: (collection[0], collection[1:]))(svos)
+
+
+def create_activity_from_svo(svo: SvoConstruct):
+    # Determine if activity should be created as verb-subject or verb-object
+    if svo.get_object() is None or svo.get_object().pos_ == "VERB":
+        return utils.svo_print_verb_subject(svo)
+    else:
+        return utils.svo_print_verb_object(svo)

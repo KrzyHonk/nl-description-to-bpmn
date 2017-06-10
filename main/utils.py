@@ -3,6 +3,12 @@
 Utility functions
 """
 from nltk import Tree
+from nltk.corpus import wordnet as wn
+from spacy.tokens.token import Token
+
+from main.consts import Consts
+from main.objects.participant import Participant
+from main.objects.svoconstruct import SvoConstruct
 
 
 def to_nltk_tree(node):
@@ -11,3 +17,117 @@ def to_nltk_tree(node):
                     [to_nltk_tree(child) for child in node.children])
     else:
         return "Text: " + node.orth_ + ", POS: " + node.pos_ + ", TAG: " + node.tag_ + ", DEP: " + node.dep_
+
+
+def participant_print_full_name(participant: Participant):
+    left = ""
+    right = " "
+    for token in participant.get_participant_token().lefts:
+        if token.dep_ in Consts.participant_descriptors_set:
+            left += (token.text.casefold() + " ")
+
+    for token in participant.get_participant_token().rights:
+        if token.dep_ in Consts.participant_descriptors_set:
+            right += (token.text.casefold() + " ")
+    return left + participant.get_participant_token().text.casefold() + right
+
+
+def svo_print_full_name(svo: SvoConstruct):
+    left = ""
+    right = " "
+    for token in svo.get_subject().lefts:
+        if token.dep_ in Consts.participant_descriptors_set:
+            left += (token.text.casefold() + " ")
+    for token in svo.get_subject().rights:
+        if token.dep_ in Consts.participant_descriptors_set:
+            right += (token.text.casefold() + " ")
+    subject_text = left + svo.get_subject().text.casefold() + right
+
+    left = ""
+    right = " "
+    for token in svo.get_verb().lefts:
+        if token.dep_ in Consts.svo_descriptors_set:
+            left += (token.text.casefold() + " ")
+    for token in svo.get_verb().rights:
+        if token.dep_ in Consts.svo_descriptors_set:
+            right += (token.text.casefold() + " ")
+    verb_text = left + svo.get_verb().text.casefold() + right
+
+    left = ""
+    right = " "
+    object_text = ""
+    if svo.get_object() is not None:
+        for token in svo.get_object().lefts:
+            if token.dep_ in Consts.participant_descriptors_set:
+                left += (token.text.casefold() + " ")
+        for token in svo.get_object().rights:
+            if token.dep_ in Consts.participant_descriptors_set:
+                right += (token.text.casefold() + " ")
+        object_text = left + svo.get_object().text.casefold() + right
+
+    return subject_text + verb_text + object_text
+
+
+def svo_print_verb_object(svo: SvoConstruct):
+    verb_text = get_verb_form(svo.get_verb())
+
+    left = ""
+    right = " "
+    for token in svo.get_object().lefts:
+        if token.dep_ in Consts.participant_descriptors_set:
+            left += (token.text.casefold() + " ")
+    for token in svo.get_object().rights:
+        if token.dep_ in Consts.participant_descriptors_set:
+            right += (token.text.casefold() + " ")
+    object_text = left + svo.get_object().text.casefold() + right
+
+    return verb_text + " " + object_text
+
+
+def svo_print_verb_subject(svo: SvoConstruct):
+    verb_text = get_verb_form(svo.get_verb())
+
+    left = ""
+    right = " "
+    for token in svo.get_subject().lefts:
+        if token.dep_ in Consts.participant_descriptors_set:
+            left += (token.text.casefold() + " ")
+    for token in svo.get_subject().rights:
+        if token.dep_ in Consts.participant_descriptors_set:
+            right += (token.text.casefold() + " ")
+    subject_text = left + svo.get_subject().text.casefold() + right
+
+    return verb_text + " " + subject_text
+
+
+def svo_gateway_keyword_print(svo: SvoConstruct) -> str:
+    return "SVO: " + svo_print_full_name(svo) + " Gateway keyword: " + \
+           (svo.get_gateway_keyword() if svo.get_gateway_keyword() is not None else "")
+
+
+def get_verb_form(verb: Token):
+    base_verb = None
+    if svo_validate_ignored_verb(verb):
+        for child in verb.children:
+            if child.pos_ is "VERB" and not svo_validate_ignored_verb(child):
+                base_verb = wn.morphy(child.text, wn.VERB)
+                if base_verb is None:
+                    base_verb = child.text
+                break
+    else:
+        base_verb = wn.morphy(verb.text.casefold(), wn.VERB)
+
+    if base_verb is not None:
+        return base_verb
+    else:
+        return verb.text.casefold()
+
+
+def svo_validate_ignored_verb(verb: Token) -> bool:
+    ignore_verbs = ["achieve", "base", "be", "by", "have", "do", "exist", "know", "need"]
+
+    base_verb = wn.morphy(verb.text, wn.VERB)
+    if base_verb is not None and base_verb.casefold() in ignore_verbs:
+        return True
+    else:
+        return False
