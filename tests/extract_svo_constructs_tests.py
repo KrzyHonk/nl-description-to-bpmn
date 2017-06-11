@@ -21,7 +21,7 @@ class SubsentenceTests(unittest.TestCase):
 
         svos = []
         for sentence in doc.sents:
-            [utils.to_nltk_tree(sent.root).pretty_print() for sent in doc.sents]
+            utils.to_nltk_tree(sentence.root).pretty_print()
             participants, svos = extract.extract_process_elements(sentence)
             for svo in svos:
                 print(utils.svo_print_full_name(svo))
@@ -36,7 +36,7 @@ class SubsentenceTests(unittest.TestCase):
 
         svos = []
         for sentence in doc.sents:
-            [utils.to_nltk_tree(sent.root).pretty_print() for sent in doc.sents]
+            utils.to_nltk_tree(sentence.root).pretty_print()
             participants, svos = extract.extract_process_elements(sentence)
             for svo in svos:
                 print(utils.svo_print_full_name(svo))
@@ -51,7 +51,7 @@ class SubsentenceTests(unittest.TestCase):
 
         svos = []
         for sentence in doc.sents:
-            [utils.to_nltk_tree(sent.root).pretty_print() for sent in doc.sents]
+            utils.to_nltk_tree(sentence.root).pretty_print()
             participants, svos = extract.extract_process_elements(sentence)
             for svo in svos:
                 print(utils.svo_print_full_name(svo))
@@ -66,7 +66,7 @@ class SubsentenceTests(unittest.TestCase):
 
         svos = []
         for sentence in doc.sents:
-            [utils.to_nltk_tree(sent.root).pretty_print() for sent in doc.sents]
+            utils.to_nltk_tree(sentence.root).pretty_print()
             participants, svos = extract.extract_process_elements(sentence)
             for svo in svos:
                 print(utils.svo_print_full_name(svo))
@@ -81,7 +81,7 @@ class SubsentenceTests(unittest.TestCase):
 
         svos = []
         for sentence in doc.sents:
-            [utils.to_nltk_tree(sent.root).pretty_print() for sent in doc.sents]
+            utils.to_nltk_tree(sentence.root).pretty_print()
             participants, svos = extract.extract_process_elements(sentence)
             for svo in svos:
                 print(utils.svo_print_full_name(svo))
@@ -96,7 +96,7 @@ class SubsentenceTests(unittest.TestCase):
 
         svos = []
         for sentence in doc.sents:
-            [utils.to_nltk_tree(sent.root).pretty_print() for sent in doc.sents]
+            utils.to_nltk_tree(sentence.root).pretty_print()
             participants, svos = extract.extract_process_elements(sentence)
             for svo in svos:
                 print(utils.svo_print_full_name(svo))
@@ -111,7 +111,7 @@ class SubsentenceTests(unittest.TestCase):
 
         svos = []
         for sentence in doc.sents:
-            [utils.to_nltk_tree(sent.root).pretty_print() for sent in doc.sents]
+            utils.to_nltk_tree(sentence.root).pretty_print()
             participants, svos = extract.extract_process_elements(sentence)
             for svo in svos:
                 print(utils.svo_print_full_name(svo))
@@ -126,7 +126,7 @@ class SubsentenceTests(unittest.TestCase):
 
         svos = []
         for sentence in doc.sents:
-            [utils.to_nltk_tree(sent.root).pretty_print() for sent in doc.sents]
+            utils.to_nltk_tree(sentence.root).pretty_print()
             participants, svos = extract.extract_process_elements(sentence)
             for svo in svos:
                 print(utils.svo_print_full_name(svo))

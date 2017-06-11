@@ -48,13 +48,17 @@ def generate_intermediate_model(doc: Doc, filename: str, output_directory: str):
                 if len(svos) > 0:
                     condition = svo
                     action, svos = get_head_from_list(svos)
-
                     suffix = string.ascii_lowercase[gateway_branch_index]
-                    add_conditional_gateway_branch(file, order, suffix, condition, action)
+                    while not svo_check_validity_as_activity(action) and len(svos) > 0:
+                        condition = action
+                        action, svos = get_head_from_list(svos)
+                    if svo_check_validity_as_activity(action):
+                        add_conditional_gateway_branch(file, order, suffix, condition, action)
+                    else:
+                        parallel_gateway_started = False
                     gateway_branch_index += 1
                 # if it's a last one SVO add it as a sequence flow
                 else:
-                    order += 1
                     add_sequence_flow(file, order, svo)
 
             # check if this svo is a part of parallel gateway
@@ -68,7 +72,12 @@ def generate_intermediate_model(doc: Doc, filename: str, output_directory: str):
                     gateway_branch_index = 0
 
                 suffix = string.ascii_lowercase[gateway_branch_index]
-                add_parallel_gateway_branch(file, order, suffix, svo)
+                while not svo_check_validity_as_activity(svo) and len(svos) > 0:
+                    svo, svos = get_head_from_list(svos)
+                if svo_check_validity_as_activity(svo):
+                    add_parallel_gateway_branch(file, order, suffix, svo)
+                else:
+                    parallel_gateway_started = False
                 gateway_branch_index += 1
 
                 # Add second task in parallel
@@ -76,11 +85,13 @@ def generate_intermediate_model(doc: Doc, filename: str, output_directory: str):
                     svo, svos = get_head_from_list(svos)
 
                     suffix = string.ascii_lowercase[gateway_branch_index]
-                    add_parallel_gateway_branch(file, order, suffix, svo)
+                    while not svo_check_validity_as_activity(svo) and len(svos) > 0:
+                        svo, svos = get_head_from_list(svos)
+                    if svo_check_validity_as_activity(svo):
+                        add_parallel_gateway_branch(file, order, suffix, svo)
+                    else:
+                        parallel_gateway_started = False
                     gateway_branch_index += 1
-                else:
-                    order += 1
-                    add_sequence_flow(file, order, svo)
 
             # check if this SVO is a default flow of gateway
             elif svo.get_gateway_keyword() is not None \
@@ -88,13 +99,19 @@ def generate_intermediate_model(doc: Doc, filename: str, output_directory: str):
                 # check if it is a default flow of conditional gateway
                 if conditional_gateway_started:
                     suffix = string.ascii_lowercase[gateway_branch_index]
-                    add_default_flow_to_conditional_gateway(file, order, suffix, svo)
+                    while not svo_check_validity_as_activity(svo) and len(svos) > 0:
+                        svo, svos = get_head_from_list(svos)
+                    if svo_check_validity_as_activity(svo):
+                        add_default_flow_to_conditional_gateway(file, order, suffix, svo)
                     gateway_branch_index += 1
 
                 # check if it is another flow of parallel gateway
                 elif parallel_gateway_started:
                     suffix = string.ascii_lowercase[gateway_branch_index]
-                    add_parallel_gateway_branch(file, order, suffix, svo)
+                    while not svo_check_validity_as_activity(svo) and len(svos) > 0:
+                        svo, svos = get_head_from_list(svos)
+                    if svo_check_validity_as_activity(svo):
+                        add_parallel_gateway_branch(file, order, suffix, svo)
                     gateway_branch_index += 1
 
                 # add it as a sequence flow
@@ -105,7 +122,10 @@ def generate_intermediate_model(doc: Doc, filename: str, output_directory: str):
                         parallel_gateway_started = False
                     gateway_branch_index = 0
                     order += 1
-                    add_sequence_flow(file, order, svo)
+                    while not svo_check_validity_as_activity(svo) and len(svos) > 0:
+                        svo, svos = get_head_from_list(svos)
+                    if svo_check_validity_as_activity(svo):
+                        add_sequence_flow(file, order, svo)
 
             # add SVO as a task joined by sequence flow
             else:
@@ -121,7 +141,12 @@ def generate_intermediate_model(doc: Doc, filename: str, output_directory: str):
                     parallel_gateway_started = False
                     gateway_branch_index = 0
                 order += 1
-                add_sequence_flow(file, order, svo)
+                while not svo_check_validity_as_activity(svo) and len(svos) > 0:
+                    svo, svos = get_head_from_list(svos)
+                if svo_check_validity_as_activity(svo):
+                    add_sequence_flow(file, order, svo)
+                else:
+                    conditional_gateway_started = False
 
         if conditional_gateway_started and gateway_branch_index == 1:
             suffix = string.ascii_lowercase[gateway_branch_index]
@@ -135,6 +160,8 @@ def extract_elements_from_document(doc: Doc):
     participants = []
     svos = []
     for sentence in doc.sents:
+        print(sentence)
+        utils.to_nltk_tree(sentence.root).pretty_print()
         out_participants, out_svos = extract.extract_process_elements(sentence)
         participants += out_participants
         svos += out_svos
@@ -160,10 +187,10 @@ def add_sequence_flow(file, order, action: SvoConstruct):
 
 
 def add_conditional_gateway_branch(file, order, suffix, condition: SvoConstruct, action: SvoConstruct):
-    if action.get_participant() is not None and not action.get_participant().is_pronoun():
+    if condition.get_participant() is not None and not condition.get_participant().is_pronoun():
         file.write(str(order) + suffix + "1," + create_activity_from_svo(action) + "," +
                    utils.svo_print_full_name(condition) + ","
-                   + utils.participant_print_full_name(action.get_participant()) + ",,\n")
+                   + utils.participant_print_full_name(condition.get_participant()) + ",,\n")
     else:
         file.write(str(order) + suffix + "1," + create_activity_from_svo(action) + "," +
                    utils.svo_print_full_name(condition) + ",,,\n")
@@ -202,6 +229,23 @@ def add_end_event(file, order):
 
 def get_head_from_list(svos: List[SvoConstruct]):
     return (lambda collection: (collection[0], collection[1:]))(svos)
+
+
+def svo_check_validity_as_activity(svo: SvoConstruct):
+    verb = svo.get_verb()
+    if utils.svo_validate_ignorable_verb(verb):
+        # Do not add this SVO as activity
+        return False
+    elif utils.svo_validate_replecable_verb(verb):
+        # Try to find replacement for verb. If no replacement found - ignore this SVO
+        replacement = utils.svo_get_verb_replacement(verb)
+        if replacement is not None:
+            return True
+        else:
+            return False
+    else:
+        # Neither ignorable or replaceable - passes
+        return True
 
 
 def create_activity_from_svo(svo: SvoConstruct):

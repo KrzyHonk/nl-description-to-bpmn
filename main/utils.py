@@ -69,7 +69,7 @@ def svo_print_full_name(svo: SvoConstruct):
 
 
 def svo_print_verb_object(svo: SvoConstruct):
-    verb_text = get_verb_form(svo.get_verb())
+    verb_text = svo_get_verb_base_form(svo.get_verb())
 
     left = ""
     right = " "
@@ -85,7 +85,7 @@ def svo_print_verb_object(svo: SvoConstruct):
 
 
 def svo_print_verb_subject(svo: SvoConstruct):
-    verb_text = get_verb_form(svo.get_verb())
+    verb_text = svo_get_verb_base_form(svo.get_verb())
 
     left = ""
     right = " "
@@ -105,11 +105,11 @@ def svo_gateway_keyword_print(svo: SvoConstruct) -> str:
            (svo.get_gateway_keyword() if svo.get_gateway_keyword() is not None else "")
 
 
-def get_verb_form(verb: Token):
+def svo_get_verb_base_form(verb: Token):
     base_verb = None
-    if svo_validate_ignored_verb(verb):
+    if svo_validate_skippable_verb(verb):
         for child in verb.children:
-            if child.pos_ is "VERB" and not svo_validate_ignored_verb(child):
+            if child.pos_ is "VERB" and not svo_validate_skippable_verb(child):
                 base_verb = wn.morphy(child.text, wn.VERB)
                 if base_verb is None:
                     base_verb = child.text
@@ -123,11 +123,42 @@ def get_verb_form(verb: Token):
         return verb.text.casefold()
 
 
-def svo_validate_ignored_verb(verb: Token) -> bool:
-    ignore_verbs = ["achieve", "base", "be", "by", "have", "do", "exist", "know", "need"]
+def svo_validate_skippable_verb(verb: Token) -> bool:
+    skippable_verbs = Consts.skippable_verbs
+
+    base_verb = wn.morphy(verb.text, wn.VERB)
+    if base_verb is not None and base_verb.casefold() in skippable_verbs:
+        return True
+    else:
+        return False
+
+
+def svo_validate_replecable_verb(verb: Token) -> bool:
+    replaceable_verbs = Consts.skippable_verbs
+
+    base_verb = wn.morphy(verb.text, wn.VERB)
+    if base_verb is not None and base_verb.casefold() in replaceable_verbs:
+        return True
+    else:
+        return False
+
+
+def svo_validate_ignorable_verb(verb: Token) -> bool:
+    ignore_verbs = Consts.ignorable_verbs
 
     base_verb = wn.morphy(verb.text, wn.VERB)
     if base_verb is not None and base_verb.casefold() in ignore_verbs:
         return True
     else:
         return False
+
+
+def svo_get_verb_replacement(verb: Token):
+    verb_replacement = None
+    for child in verb.children:
+        if child.pos_ is "VERB" and not svo_validate_skippable_verb(child):
+            verb_replacement = wn.morphy(child.text, wn.VERB)
+            if verb_replacement is None:
+                verb_replacement = child.text
+            break
+    return verb_replacement
