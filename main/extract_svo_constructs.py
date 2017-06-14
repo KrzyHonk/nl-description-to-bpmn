@@ -22,7 +22,9 @@ def extract_svo_constructs(sentence: Span, participants: List[Participant]) -> L
         for token in nsubj_list:
             subject = token
             verb = subject.head
-            output_obj = find_token_in_ancestors(verb, ["dobj", "iobj", "pobj", "attr"])
+            output_obj = find_token_in_children(verb, ["dobj", "attr"])
+            if output_obj is None:
+                output_obj = find_token_in_ancestors(verb, ["dobj", "iobj", "pobj", "attr", "xcomp"])
             if subject is not None and verb is not None:
                 svo = SvoConstruct(subject=subject, verb=verb, new_object=output_obj, position=verb.i)
                 if len(tmp_output) > 0:
@@ -46,7 +48,9 @@ def extract_svo_constructs(sentence: Span, participants: List[Participant]) -> L
     # Check if conjunction exists in sentence and extract possible SVO
     for token in sentence:
         if token.dep_ == "conj" and token.pos_ == "VERB":
-            output_obj = find_token_in_ancestors(token, ["dobj", "iobj", "pobj", "attr"])
+            output_obj = find_token_in_children(token, ["dobj", "attr"])
+            if output_obj is None:
+                output_obj = find_token_in_ancestors(token, ["dobj", "iobj", "pobj", "attr", "xcomp"])
             subject = find_subject_for_conjunction(token)
 
             if subject is not None and token is not None:

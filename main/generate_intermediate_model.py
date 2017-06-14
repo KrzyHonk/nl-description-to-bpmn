@@ -251,6 +251,6 @@ def svo_check_validity_as_activity(svo: SvoConstruct):
 def create_activity_from_svo(svo: SvoConstruct):
     # Determine if activity should be created as verb-subject or verb-object
     if svo.get_object() is None or svo.get_object().pos_ == "VERB":
-        return utils.svo_print_verb_subject(svo)
+        return utils.activity_verb_subject_order(svo)
     else:
-        return utils.svo_print_verb_object(svo)
+        return utils.activity_verb_object_order(svo)
