@@ -17,3 +17,10 @@ class Consts(object):
     skippable_verbs = replaceable_verbs + ignorable_verbs
 
     message_event_verbs = ["send", "receive"]
+
+    order_prop = "Order"
+    activity_prop = "Activity"
+    condition_prop = "Condition"
+    who_prop = "Who"
+    subprocess_prop = "Subprocess"
+    terminated_prop = "Terminated"

@@ -19,7 +19,7 @@ def to_nltk_tree(node):
         return "Text: " + node.orth_ + ", POS: " + node.pos_ + ", TAG: " + node.tag_ + ", DEP: " + node.dep_
 
 
-def participant_print_full_name(participant: Participant):
+def participant_full_name(participant: Participant):
     left = ""
     right = " "
     for token in participant.get_participant_token().lefts:
@@ -32,7 +32,7 @@ def participant_print_full_name(participant: Participant):
     return left + participant.get_participant_token().text.casefold().capitalize() + right
 
 
-def svo_print_full_name(svo: SvoConstruct):
+def svo_full_name(svo: SvoConstruct):
     left = ""
     right = " "
     for token in svo.get_subject().lefts:
@@ -110,7 +110,7 @@ def activity_verb_subject_order(svo: SvoConstruct):
 
 
 def svo_gateway_keyword_print(svo: SvoConstruct) -> str:
-    return "SVO: " + svo_print_full_name(svo) + " Gateway keyword: " + \
+    return "SVO: " + svo_full_name(svo) + " Gateway keyword: " + \
            (svo.get_gateway_keyword() if svo.get_gateway_keyword() is not None else "")
 
 
