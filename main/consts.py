@@ -1,8 +1,11 @@
 class Consts(object):
-    svo_descriptors_set = ["amod", "acomp", "aux", "auxpass", "neg"]
-    participant_descriptors_set = ["amod", "acomp", "aux", "auxpass", "compound", "neg", "poss"]
-    object_descriptors_set = ["amod", "acomp", "aux", "auxpass", "compound", "det", "neg", "poss"]
-    skippable_dependencies_set = ["amod", "acomp", "aux", "auxpass", "compound", "conj", "neg", "prep", "poss", "xcomp"]
+    svo_descriptors_list = ["amod", "acomp", "aux", "auxpass", "neg"]
+    participant_descriptors_list = ["amod", "acomp", "aux", "auxpass", "compound", "neg", "poss"]
+    object_descriptors_list = ["amod", "acomp", "aux", "auxpass", "compound", "det", "neg", "poss"]
+    skippable_dependencies_list = ["amod", "acomp", "aux", "auxpass", "compound", "conj",
+                                   "neg", "prep", "poss", "xcomp"]
+    pronoun_list = ["i", "me", "we", "us", "you", "she", "her", "he", "him", "it", "they", "them", "who", "whom",
+                    "whose", "what", "which", "that"]
 
     conditional_keywords = ["if", "whether"]
     default_flow_keywords = ["otherwise"]

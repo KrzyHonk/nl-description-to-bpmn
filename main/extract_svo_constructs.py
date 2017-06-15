@@ -22,9 +22,9 @@ def extract_svo_constructs(sentence: Span, participants: List[Participant]) -> L
         for token in nsubj_list:
             subject = token
             verb = subject.head
-            output_obj = find_token_in_children(verb, ["dobj", "attr"])
+            output_obj = find_token_in_children(verb, ["dobj", "attr", "ccomp"])
             if output_obj is None:
-                output_obj = find_token_in_ancestors(verb, ["dobj", "iobj", "pobj", "attr", "xcomp"])
+                output_obj = find_token_in_ancestors(verb, ["dobj", "iobj", "pobj", "attr", "ccomp", "xcomp"])
             if subject is not None and verb is not None:
                 svo = SvoConstruct(subject=subject, verb=verb, new_object=output_obj, position=verb.i)
                 if len(tmp_output) > 0:
@@ -48,9 +48,9 @@ def extract_svo_constructs(sentence: Span, participants: List[Participant]) -> L
     # Check if conjunction exists in sentence and extract possible SVO
     for token in sentence:
         if token.dep_ == "conj" and token.pos_ == "VERB":
-            output_obj = find_token_in_children(token, ["dobj", "attr"])
+            output_obj = find_token_in_children(token, ["dobj", "attr", "ccomp"])
             if output_obj is None:
-                output_obj = find_token_in_ancestors(token, ["dobj", "iobj", "pobj", "attr", "xcomp"])
+                output_obj = find_token_in_ancestors(token, ["dobj", "iobj", "pobj", "attr", "ccomp", "xcomp"])
             subject = find_subject_for_conjunction(token)
 
             if subject is not None and token is not None:
@@ -73,7 +73,7 @@ def find_token_in_ancestors(token: Token, dependencies_set):
         for child in token.children:
             if child.dep_ in dependencies_set:
                 return child
-            elif child.dep_ in Consts.skippable_dependencies_set:
+            elif child.dep_ in Consts.skippable_dependencies_list:
                 output = find_token_in_ancestors(child, dependencies_set)
                 if output is not None:
                     return output

@@ -23,11 +23,11 @@ def participant_print_full_name(participant: Participant):
     left = ""
     right = " "
     for token in participant.get_participant_token().lefts:
-        if token.dep_ in Consts.participant_descriptors_set:
+        if token.dep_ in Consts.participant_descriptors_list:
             left += (token.text.casefold().capitalize() + " ")
 
     for token in participant.get_participant_token().rights:
-        if token.dep_ in Consts.participant_descriptors_set:
+        if token.dep_ in Consts.participant_descriptors_list:
             right += (token.text.casefold().capitalize() + " ")
     return left + participant.get_participant_token().text.casefold().capitalize() + right
 
@@ -36,20 +36,20 @@ def svo_print_full_name(svo: SvoConstruct):
     left = ""
     right = " "
     for token in svo.get_subject().lefts:
-        if token.dep_ in Consts.participant_descriptors_set:
+        if token.dep_ in Consts.participant_descriptors_list:
             left += (token.text.casefold().capitalize() + " ")
     for token in svo.get_subject().rights:
-        if token.dep_ in Consts.participant_descriptors_set:
+        if token.dep_ in Consts.participant_descriptors_list:
             right += (token.text.casefold().capitalize() + " ")
     subject_text = left + svo.get_subject().text.casefold().capitalize() + right
 
     left = ""
     right = " "
     for token in svo.get_verb().lefts:
-        if token.dep_ in Consts.svo_descriptors_set:
+        if token.dep_ in Consts.svo_descriptors_list:
             left += (token.text.casefold() + " ")
     for token in svo.get_verb().rights:
-        if token.dep_ in Consts.svo_descriptors_set:
+        if token.dep_ in Consts.svo_descriptors_list:
             right += (token.text.casefold() + " ")
     verb_text = left + svo.get_verb().text.casefold() + right
 
@@ -58,10 +58,10 @@ def svo_print_full_name(svo: SvoConstruct):
     object_text = ""
     if svo.get_object() is not None:
         for token in svo.get_object().lefts:
-            if token.dep_ in Consts.participant_descriptors_set:
+            if token.dep_ in Consts.participant_descriptors_list:
                 left += (token.text.casefold() + " ")
         for token in svo.get_object().rights:
-            if token.dep_ in Consts.participant_descriptors_set:
+            if token.dep_ in Consts.participant_descriptors_list:
                 right += (token.text.casefold() + " ")
         object_text = left + svo.get_object().text.casefold() + right
 
@@ -74,10 +74,10 @@ def activity_verb_object_order(svo: SvoConstruct):
     left = ""
     right = " "
     for token in svo.get_object().lefts:
-        if token.dep_ in Consts.object_descriptors_set:
+        if token.dep_ in Consts.object_descriptors_list:
             left += (token.text.casefold().capitalize() + " ")
     for token in svo.get_object().rights:
-        if token.dep_ in Consts.object_descriptors_set:
+        if token.dep_ in Consts.object_descriptors_list:
             right += (token.text.casefold().capitalize() + " ")
     object_text = left + svo.get_object().text.casefold().capitalize() + right
 
@@ -90,15 +90,18 @@ def activity_verb_object_order(svo: SvoConstruct):
 def activity_verb_subject_order(svo: SvoConstruct):
     base_verb_form = svo_get_verb_base_form(svo.get_verb())
 
-    left = ""
-    right = " "
-    for token in svo.get_subject().lefts:
-        if token.dep_ in Consts.participant_descriptors_set:
-            left += (token.text.casefold().capitalize() + " ")
-    for token in svo.get_subject().rights:
-        if token.dep_ in Consts.participant_descriptors_set:
-            right += (token.text.casefold().capitalize() + " ")
-    subject_text = left + svo.get_subject().text.casefold().capitalize() + right
+    if svo.get_subject().text in Consts.pronoun_list:
+        subject_text =""
+    else:
+        left = ""
+        right = " "
+        for token in svo.get_subject().lefts:
+            if token.dep_ in Consts.participant_descriptors_list:
+                left += (token.text.casefold().capitalize() + " ")
+        for token in svo.get_subject().rights:
+            if token.dep_ in Consts.participant_descriptors_list:
+                right += (token.text.casefold().capitalize() + " ")
+        subject_text = left + svo.get_subject().text.casefold().capitalize() + right
 
     if base_verb_form in Consts.message_event_verbs:
         return "message " + base_verb_form.capitalize() + " " + subject_text
