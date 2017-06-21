@@ -56,7 +56,7 @@ def generate_intermediate_model(doc: Doc, filename: str, output_directory: str):
                 if svo_check_validity_as_activity(action):
                     add_conditional_gateway_branch(phases_list, order, suffix, condition, action)
                 else:
-                    parallel_gateway_started = False
+                    conditional_gateway_started = False
                 gateway_branch_index += 1
             # if it's a last one SVO add it as a sequence flow
             else:
@@ -135,7 +135,6 @@ def generate_intermediate_model(doc: Doc, filename: str, output_directory: str):
                 if gateway_branch_index < 2:
                     suffix = string.ascii_lowercase[gateway_branch_index]
                     add_default_flow_pointing_to_end_event(phases_list, end_event_jump_phases, order, suffix)
-                    order += 1
                 conditional_gateway_started = False
                 gateway_branch_index = 0
             if parallel_gateway_started:
