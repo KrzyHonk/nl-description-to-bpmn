@@ -1,7 +1,4 @@
 # coding=utf-8
-"""
-Function for extracting svos from sentence
-"""
 from typing import List
 
 from spacy.tokens.span import Span
@@ -14,6 +11,9 @@ from main.objects.svoconstruct import SvoConstruct
 
 
 def extract_svo_constructs(sentence: Span, participants: List[Participant]) -> List[SvoConstruct]:
+    """
+    Function for extracting svos from sentence
+    """
     tmp_output = []
     root = sentence.root
     nsubj_list = utils.find_tokens_with_dependencies_for_token_in_subtree(root, ["nsubj"])

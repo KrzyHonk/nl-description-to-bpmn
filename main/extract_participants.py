@@ -1,7 +1,4 @@
 # coding=utf-8
-"""
-Function for extracting participants from sentence
-"""
 from typing import List
 
 from nltk.corpus import wordnet as wn
@@ -11,12 +8,10 @@ from main.objects.participant import Participant
 
 
 def extract_participants(sentence: Span) -> List[Participant]:
-    participant_keywords_list = {"atm", "crm", "crs", "office", "provisioning", "secretary", "support"}
-    participant_hypernyms_list = {"facility", "group", "organization", "person", "service", "system"}
-    participants_base_keywords_synonyms = []
-    for term in participant_hypernyms_list:
-        participants_base_keywords_synonyms.extend(wn.synsets(term))
-    participants_base_keywords_synonyms = set(participants_base_keywords_synonyms)
+    """
+    Function for extracting participants from sentence
+    """
+    participants_base_keywords_synonyms = prepare_participants_base_keywords_synonyms()
 
     tmp_output = []
     output = []
@@ -52,11 +47,21 @@ def extract_participants(sentence: Span) -> List[Participant]:
 
         if insert_flag is False:
             # Check if participant is one of keywords
-            insert_flag = validate_participant_text_against_keyword_list(participant_text, participant_keywords_list)
+            insert_flag = validate_participant_text_against_keyword_list(participant_text)
         if insert_flag:
             output.append(participant)
 
     return output
+
+
+def prepare_participants_base_keywords_synonyms():
+    participant_hypernyms_list = {"facility", "group", "organization", "person", "service", "system"}
+    participants_base_keywords_synonyms = []
+
+    for term in participant_hypernyms_list:
+        participants_base_keywords_synonyms.extend(wn.synsets(term))
+    participants_base_keywords_synonyms = set(participants_base_keywords_synonyms)
+    return participants_base_keywords_synonyms
 
 
 def analyze_participants_hypernyms(participant_text: str, participants_base_keywords_synonyms):
@@ -71,7 +76,8 @@ def analyze_participants_hypernyms(participant_text: str, participants_base_keyw
     return False
 
 
-def validate_participant_text_against_keyword_list(participant_text, participant_keywords_list):
+def validate_participant_text_against_keyword_list(participant_text):
+    participant_keywords_list = {"atm", "crm", "crs", "office", "provisioning", "secretary", "support"}
     for participant_keyword in participant_keywords_list:
         if participant_text.casefold() == participant_keyword.casefold():
             return True
