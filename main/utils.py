@@ -2,8 +2,11 @@
 """
 Utility functions
 """
+from typing import List
+
 from nltk import Tree
 from nltk.corpus import wordnet as wn
+from spacy.tokens.span import Span
 from spacy.tokens.token import Token
 
 from main.consts import Consts
@@ -19,6 +22,7 @@ def to_nltk_tree(node):
         return "Text: " + node.orth_ + ", POS: " + node.pos_ + ", TAG: " + node.tag_ + ", DEP: " + node.dep_
 
 
+# SVO and Participant printing methods
 def participant_full_name(participant: Participant):
     left = ""
     right = " "
@@ -136,6 +140,7 @@ def svo_get_verb_base_form(verb: Token):
         return verb.text.casefold()
 
 
+#SVO verb analysis methods
 def svo_validate_skippable_verb(verb: Token) -> bool:
     skippable_verbs = Consts.skippable_verbs
 
@@ -175,3 +180,28 @@ def svo_get_verb_replacement(verb: Token):
                 verb_replacement = child.text
             break
     return verb_replacement
+
+
+#Dependency search methods
+def find_tokens_with_dependencies_in_sentence(sentence: Span, dependencies: List[str]) -> List[Token]:
+    output = []
+    for word in sentence:
+        if word.dep_ in dependencies:
+            output.append(word)
+    return output
+
+
+def find_tokens_with_dependencies_for_token_check_children(token: Token, dependencies: List[str]) -> List[Token]:
+    output = []
+    for word in token.subtree:
+        if word.dep_ in dependencies:
+            output.append(word)
+    return output
+
+
+def find_tokens_with_dependencies_for_token_in_subtree(token: Token, dependencies: List[str]) -> List[Token]:
+    output = []
+    for word in token.subtree:
+        if word.dep_ in dependencies:
+            output.append(word)
+    return output

@@ -7,7 +7,7 @@ from typing import List
 from spacy.tokens.span import Span
 from spacy.tokens.token import Token
 
-import main.find_tokens_with_dependency as dep
+import main.utils as utils
 from main.consts import Consts
 from main.objects.participant import Participant
 from main.objects.svoconstruct import SvoConstruct
@@ -16,8 +16,8 @@ from main.objects.svoconstruct import SvoConstruct
 def extract_svo_constructs(sentence: Span, participants: List[Participant]) -> List[SvoConstruct]:
     tmp_output = []
     root = sentence.root
-    nsubj_list = dep.find_tokens_with_dependencies_for_token_in_subtree(root, ["nsubj"])
-    nsubjpass_list = dep.find_tokens_with_dependencies_for_token_in_subtree(root, ["nsubjpass"])
+    nsubj_list = utils.find_tokens_with_dependencies_for_token_in_subtree(root, ["nsubj"])
+    nsubjpass_list = utils.find_tokens_with_dependencies_for_token_in_subtree(root, ["nsubjpass"])
     if len(nsubj_list) > 0:
         for token in nsubj_list:
             subject = token
