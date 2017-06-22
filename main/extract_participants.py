@@ -26,13 +26,6 @@ def extract_participants(sentence: Span) -> List[Participant]:
             if word.pos_ == "pron":
                 participant.set_pronoun(True)
             tmp_output.append(participant)
-        elif word.dep_ == "agent":
-            for child in word.children:
-                if child.dep_ == "pobj":
-                    participant = Participant(participant_token=child)
-                    if child.pos_ == "pron":
-                        participant.set_pronoun(True)
-                    tmp_output.append(participant)
 
     # Check if possible participant is a part of conjunction
     for word in sentence:

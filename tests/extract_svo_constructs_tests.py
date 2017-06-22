@@ -11,7 +11,7 @@ import main.extract_process_elements as extract
 import main.utils as utils
 
 
-class SubsentenceTests(unittest.TestCase):
+class SvoExtractionTests(unittest.TestCase):
     def test_example_phrase_one(self):
         filepath = "../examples/example_phrase_one"
         nlp = spacy.load("en")

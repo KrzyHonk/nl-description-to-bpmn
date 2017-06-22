@@ -162,8 +162,8 @@ def extract_elements_from_document(doc: Doc):
     participants = []
     svos = []
     for sentence in doc.sents:
-        print(sentence)
-        utils.to_nltk_tree(sentence.root).pretty_print()
+        # print(sentence)
+        # utils.to_nltk_tree(sentence.root).pretty_print()
         out_participants, out_svos = extract.extract_process_elements(sentence)
         participants += out_participants
         svos += out_svos

@@ -11,9 +11,44 @@ from main.main_script import nlp_description_to_bpmn
 class GenerateProcessModelTests(unittest.TestCase):
     output_directory = "./output/models-test/"
 
-    def test_presentation_example(self):
+    def test_example_phrase_one(self):
+        example_directory = "../examples/"
+        example_file = "example_phrase_one"
+        nlp_description_to_bpmn(example_file, example_directory, self.output_directory)
+
+    def test_example_phrase_two(self):
+        example_directory = "../examples/"
+        example_file = "example_phrase_two"
+        nlp_description_to_bpmn(example_file, example_directory, self.output_directory)
+
+    def test_example_phrase_three(self):
+        example_directory = "../examples/"
+        example_file = "example_phrase_three"
+        nlp_description_to_bpmn(example_file, example_directory, self.output_directory)
+
+    def test_example_phrase_four(self):
+        example_directory = "../examples/"
+        example_file = "example_phrase_four"
+        nlp_description_to_bpmn(example_file, example_directory, self.output_directory)
+
+    def test_example_phrase_five(self):
+        example_directory = "../examples/"
+        example_file = "example_phrase_five"
+        nlp_description_to_bpmn(example_file, example_directory, self.output_directory)
+
+    def test_example_phrase_six(self):
+        example_directory = "../examples/"
+        example_file = "example_phrase_six"
+        nlp_description_to_bpmn(example_file, example_directory, self.output_directory)
+
+    def test_example_phrase_seven(self):
         example_directory = "../examples/"
         example_file = "example_phrase_seven"
+        nlp_description_to_bpmn(example_file, example_directory, self.output_directory)
+
+    def test_example_phrase_eight(self):
+        example_directory = "../examples/"
+        example_file = "example_phrase_eight"
         nlp_description_to_bpmn(example_file, example_directory, self.output_directory)
 
     def test_model_one(self):
