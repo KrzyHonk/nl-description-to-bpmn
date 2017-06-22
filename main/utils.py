@@ -29,7 +29,7 @@ def participant_full_name(participant: Participant):
     for token in participant.get_participant_token().rights:
         if token.dep_ in Consts.participant_descriptors_list:
             right += (token.text.casefold().capitalize() + " ")
-    return left + participant.get_participant_token().text.casefold().capitalize() + right
+    return (left + participant.get_participant_token().text.casefold().capitalize() + right).replace(",",".")
 
 
 def svo_full_name(svo: SvoConstruct):
@@ -65,7 +65,7 @@ def svo_full_name(svo: SvoConstruct):
                 right += (token.text.casefold() + " ")
         object_text = left + svo.get_object().text.casefold() + right
 
-    return subject_text + verb_text + object_text
+    return (subject_text + verb_text + object_text).replace(",",".")
 
 
 def activity_verb_object_order(svo: SvoConstruct):
@@ -81,10 +81,12 @@ def activity_verb_object_order(svo: SvoConstruct):
             right += (token.text.casefold().capitalize() + " ")
     object_text = left + svo.get_object().text.casefold().capitalize() + right
 
+    '''
     if base_verb_form in Consts.message_event_verbs:
         return "message " + base_verb_form.capitalize() + " " + object_text
     else:
-        return base_verb_form.capitalize() + " " + object_text
+    '''
+    return (base_verb_form.capitalize() + " " + object_text).replace(",",".")
 
 
 def activity_verb_subject_order(svo: SvoConstruct):
@@ -103,10 +105,12 @@ def activity_verb_subject_order(svo: SvoConstruct):
                 right += (token.text.casefold().capitalize() + " ")
         subject_text = left + svo.get_subject().text.casefold().capitalize() + right
 
+    '''
     if base_verb_form in Consts.message_event_verbs:
         return "message " + base_verb_form.capitalize() + " " + subject_text
     else:
-        return base_verb_form.capitalize() + " " + subject_text
+    '''
+    return (base_verb_form.capitalize() + " " + subject_text).replace(",",".")
 
 
 def svo_gateway_keyword_print(svo: SvoConstruct) -> str:
