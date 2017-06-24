@@ -12,8 +12,8 @@ class Consts(object):
     parallel_keywords = ["while"]
     gateways_keywords = conditional_keywords + default_flow_keywords + parallel_keywords
 
-    replaceable_verbs = ["be", "can", "do", "go", "have", "go"]
-    ignorable_verbs = ["achieve", "base", "by", "exist", "know", "make", "need"]
+    replaceable_verbs = ["be", "can", "do", "go", "have"]
+    ignorable_verbs = ["achieve", "base", "exist", "know", "make", "need"]
     skippable_verbs = replaceable_verbs + ignorable_verbs
 
     message_event_verbs = ["send", "receive"]
