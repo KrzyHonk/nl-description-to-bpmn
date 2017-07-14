@@ -56,6 +56,8 @@ def generate_intermediate_model(doc: Doc, filename: str, output_directory: str):
                 if svo_check_validity_as_activity(action):
                     add_conditional_gateway_branch(phases_list, order, suffix, condition, action)
                 else:
+                    # No valid action found in whole list - retract order
+                    order -= 1
                     conditional_gateway_started = False
                 gateway_branch_index += 1
             # if it's a last one SVO add it as a sequence flow
@@ -78,6 +80,8 @@ def generate_intermediate_model(doc: Doc, filename: str, output_directory: str):
             if svo_check_validity_as_activity(svo):
                 add_parallel_gateway_branch(phases_list, order, suffix, svo)
             else:
+                # No valid action found in whole list - retract order
+                order -= 1
                 parallel_gateway_started = False
             gateway_branch_index += 1
 
@@ -122,10 +126,10 @@ def generate_intermediate_model(doc: Doc, filename: str, output_directory: str):
                 if parallel_gateway_started:
                     parallel_gateway_started = False
                 gateway_branch_index = 0
-                order += 1
                 while not svo_check_validity_as_activity(svo) and len(svos) > 0:
                     svo, svos = get_head_from_list(svos)
                 if svo_check_validity_as_activity(svo):
+                    order += 1
                     add_sequence_flow(phases_list, order, svo)
 
         # add SVO as a task joined by sequence flow

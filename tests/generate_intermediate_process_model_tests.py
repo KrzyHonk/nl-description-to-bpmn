@@ -30,8 +30,7 @@ class GenerateProcessModelTests(unittest.TestCase):
             nlp_description_to_bpmn(example_file, example_directory, self.output_directory)
 
             bpmn_graph = diagram.BpmnDiagramGraph()
-            bpmn_graph.load_diagram_from_csv_file(os.path.abspath(self.output_directory +
-                                                                  example_file + "_intermediate_model.csv"))
+            bpmn_graph.load_diagram_from_csv_file(os.path.abspath(self.output_directory + example_file + "_intermediate_model.csv"))
             layouter.generate_layout(bpmn_graph)
             bpmn_graph.export_xml_file_no_di(self.output_directory_bpmn, example_file + "_no_di.bpmn")
             bpmn_graph.export_xml_file(self.output_directory_bpmn, example_file + ".bpmn")
