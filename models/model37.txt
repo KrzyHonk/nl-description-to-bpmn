@@ -1,6 +1,2 @@
-The MSPO deregisters at the GO. The GO verifies the deregistration. The GO rejects
-the deregistration of the MSPO or the GO preliminarily confirms the deregistration of
-the MSPO. The GO assigns himself as MSP. The GO informs the MSPO about the end
-of the assignment and the beginning of the assignment of the GO. The GO informs the
-MPO about the assignment of the GO. The GO informs the SP about the assignment of
-the GO.
+The MSPN sents a dismissal to the MSPO. The MSPO reviews the dismissal. The MSPO
+rejects the dismissal of the MSPN or The MSPO conrms the dismissal of the MSPN.

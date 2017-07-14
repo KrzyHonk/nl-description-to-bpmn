@@ -80,7 +80,9 @@ class GenerateProcessModelTests(unittest.TestCase):
             "model40",
             "model41",
             "model42",
-            "model43"
+            "model43",
+            "model44",
+            "model45"
         ]
         for example_file in examples:
             nlp_description_to_bpmn(example_file + ".txt", example_directory, self.output_directory)
