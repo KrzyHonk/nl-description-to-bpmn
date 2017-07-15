@@ -32,10 +32,7 @@ class GenerateProcessModelTests(unittest.TestCase):
             "model20",
             "model21",
             "model22",
-            "model23"
-        ]
-
-        '''
+            "model23",
             "model24",
             "model25",
             "model26",
@@ -43,23 +40,10 @@ class GenerateProcessModelTests(unittest.TestCase):
             "model28",
             "model29",
             "model30",
-            "model31",
-            "model32",
-            "model33",
-            "model34",
-            "model35",
-            "model36",
-            "model37",
-            "model38",
-            "model39",
-            "model40",
-            "model41",
-            "model42",
-            "model43",
-            "model44",
-            "model45"
-        '''
-        with open("./output/metrics", "w") as file:
+            "model31"
+        ]
+
+        with open("./output/metrics.csv", "w") as file:
             # write header
             file.write("Model name,NOA metric - handmade model,NOAC metric - handmade model,"
                        "Coefficient of network complexity metric - handmade model,"
@@ -77,8 +61,10 @@ class GenerateProcessModelTests(unittest.TestCase):
                 hand_made_noa = metrics.NOA_metric(hand_made_bpmn)
                 hand_made_noac = metrics.NOAC_metric(hand_made_bpmn)
                 hand_made_coeff = metrics.CoefficientOfNetworkComplexity_metric(hand_made_bpmn)
-                # hand_made_avg = metrics.AverageGatewayDegree_metric(hand_made_bpmn)
-                hand_made_avg = 0
+                if metrics.all_gateways_count(hand_made_bpmn) > 0:
+                    hand_made_avg = metrics.AverageGatewayDegree_metric(hand_made_bpmn)
+                else:
+                    hand_made_avg = 0
                 hand_made_heter = metrics.GatewayHeterogenity_metric(hand_made_bpmn)
 
                 generated_bpmn = diagram.BpmnDiagramGraph()
@@ -86,9 +72,10 @@ class GenerateProcessModelTests(unittest.TestCase):
                 generated_noa = metrics.NOA_metric(generated_bpmn)
                 generated_noac = metrics.NOAC_metric(generated_bpmn)
                 generated_coeff = metrics.CoefficientOfNetworkComplexity_metric(generated_bpmn)
-                # TODO temporary - metrics script does not work with zero gateways
-                # generated_avg = metrics.AverageGatewayDegree_metric(generated_bpmn)
-                generated_avg = 0
+                if metrics.all_gateways_count(generated_bpmn) > 0:
+                    generated_avg = metrics.AverageGatewayDegree_metric(generated_bpmn)
+                else:
+                    generated_avg = 0
                 generated_heter = metrics.GatewayHeterogenity_metric(generated_bpmn)
 
                 file.write(model_name + "," + str(hand_made_noa) + "," + str(hand_made_noac) + ","
