@@ -1,7 +1,8 @@
+import math
 import unittest
 
-import bpmn_python.bpmn_diagram_rep as diagram
 import bpmn_python.bpmn_diagram_metrics as metrics
+import bpmn_python.bpmn_diagram_rep as diagram
 
 
 class GenerateProcessModelTests(unittest.TestCase):
@@ -9,6 +10,7 @@ class GenerateProcessModelTests(unittest.TestCase):
     generated_models = "./output/bpmn/"
 
     def test_thesis_models(self):
+        format_string = "{0:.4f}"
         names = [
             "model1",
             "model2",
@@ -43,45 +45,66 @@ class GenerateProcessModelTests(unittest.TestCase):
             "model31"
         ]
 
-        with open("./output/metrics.csv", "w") as file:
-            # write header
-            file.write("Model name,NOA metric - handmade model,NOAC metric - handmade model,"
-                       "Coefficient of network complexity metric - handmade model,"
-                       "Average gateway degree metric - handmade model,"
-                       "Gateway Heterogenity metric - handmade model,"
-                       "NOA metric - generated model,NOAC metric - generated model,"
-                       "Coefficient of network complexity metric - generated model,"
-                       "Average gateway degree metric - generated model,"
-                       "Gateway Heterogenity metric - generated model\n")
+        with open("./output/metrics_part1.csv", "w") as file_one:
+            with open("./output/metrics_part2.csv", "w") as file_two:
+                # write header
+                file_one.write("Model name,NOA metric - handmade model,NOA metric - generated model,"
+                               + "NOA metric - absolute difference,NOA metric - proportion,"
+                               + "NOAC metric - handmade model,NOAC metric - generated model,"
+                               + "NOAC metric - absolute difference,NOAC metric - proportion\n")
+                file_two.write("Model name,Coefficient of network complexity metric - handmade model,"
+                               + "Coefficient of network complexity metric - generated model,"
+                               + "Coefficient of network complexity metric - absolute difference,"
+                               + "Average gateway degree metric - handmade model,"
+                               + "Average gateway degree metric - generated model,"
+                               + "Average gateway degree metric - absolute difference,"
+                               + "Gateway Heterogeneity metric - handmade model,"
+                               + "Gateway Heterogeneity metric - generated model,"
+                               + "Gateway Heterogeneity metric - absolute difference\n")
 
-            for model_name in names:
-                print(model_name)
-                hand_made_bpmn = diagram.BpmnDiagramGraph()
-                hand_made_bpmn.load_diagram_from_xml_file(self.hand_made_models + model_name + ".bpmn")
-                hand_made_noa = metrics.NOA_metric(hand_made_bpmn)
-                hand_made_noac = metrics.NOAC_metric(hand_made_bpmn)
-                hand_made_coeff = metrics.CoefficientOfNetworkComplexity_metric(hand_made_bpmn)
-                if metrics.all_gateways_count(hand_made_bpmn) > 0:
-                    hand_made_avg = metrics.AverageGatewayDegree_metric(hand_made_bpmn)
-                else:
-                    hand_made_avg = 0
-                hand_made_heter = metrics.GatewayHeterogenity_metric(hand_made_bpmn)
+                for model_name in names:
+                    print(model_name)
+                    hand_made_bpmn = diagram.BpmnDiagramGraph()
+                    hand_made_bpmn.load_diagram_from_xml_file(self.hand_made_models + model_name + ".bpmn")
+                    hand_made_noa = metrics.NOA_metric(hand_made_bpmn)
+                    hand_made_noac = metrics.NOAC_metric(hand_made_bpmn)
+                    hand_made_coeff = metrics.CoefficientOfNetworkComplexity_metric(hand_made_bpmn)
+                    if metrics.all_gateways_count(hand_made_bpmn) > 0:
+                        hand_made_avg = metrics.AverageGatewayDegree_metric(hand_made_bpmn)
+                    else:
+                        hand_made_avg = 0
+                    hand_made_heter = metrics.GatewayHeterogenity_metric(hand_made_bpmn)
 
-                generated_bpmn = diagram.BpmnDiagramGraph()
-                generated_bpmn.load_diagram_from_xml_file(self.generated_models + model_name + ".bpmn")
-                generated_noa = metrics.NOA_metric(generated_bpmn)
-                generated_noac = metrics.NOAC_metric(generated_bpmn)
-                generated_coeff = metrics.CoefficientOfNetworkComplexity_metric(generated_bpmn)
-                if metrics.all_gateways_count(generated_bpmn) > 0:
-                    generated_avg = metrics.AverageGatewayDegree_metric(generated_bpmn)
-                else:
-                    generated_avg = 0
-                generated_heter = metrics.GatewayHeterogenity_metric(generated_bpmn)
+                    gen_bpmn = diagram.BpmnDiagramGraph()
+                    gen_bpmn.load_diagram_from_xml_file(self.generated_models + model_name + ".bpmn")
+                    gen_noa = metrics.NOA_metric(gen_bpmn)
+                    gen_noac = metrics.NOAC_metric(gen_bpmn)
+                    gen_coeff = metrics.CoefficientOfNetworkComplexity_metric(gen_bpmn)
+                    if metrics.all_gateways_count(gen_bpmn) > 0:
+                        gen_avg = metrics.AverageGatewayDegree_metric(gen_bpmn)
+                    else:
+                        gen_avg = 0
+                    gen_heter = metrics.GatewayHeterogenity_metric(gen_bpmn)
 
-                file.write(model_name + "," + str(hand_made_noa) + "," + str(hand_made_noac) + ","
-                           + str(hand_made_coeff) + "," + str(hand_made_avg) + "," + str(hand_made_heter) + "," +
-                           str(generated_noa) + "," + str(generated_noac) + "," + str(generated_coeff) + "," +
-                           str(generated_avg) + "," + str(generated_heter) + "\n")
+                    noa_abs = int(math.fabs(hand_made_noa - gen_noa))
+                    noa_prop = (noa_abs * 100.0) / hand_made_noa
+                    noac_abs = int(math.fabs(hand_made_noac - gen_noac))
+                    noac_prop = (noac_abs * 100.0) / hand_made_noac
+                    coeff_abs = math.fabs(hand_made_coeff - gen_coeff)
+                    avg_abs = math.fabs(hand_made_avg - gen_avg)
+                    heter_abs = math.fabs(hand_made_heter - gen_heter)
+
+                    file_one.write(model_name + ","
+                                   + str(hand_made_noa) + "," + str(gen_noa) + "," + str(noa_abs) + ","
+                                   + format_string.format(noa_prop) + "%," + str(hand_made_noac) + "," +
+                                   str(gen_noac) + "," + str(noac_abs) + "," + format_string.format(noac_prop) + "%\n")
+                    file_two.write(model_name + ","
+                                   + format_string.format(hand_made_coeff) + "," + format_string.format(gen_coeff) + ","
+                                   + format_string.format(coeff_abs) + "," + format_string.format(hand_made_avg) + ","
+                                   + format_string.format(gen_avg) + "," + format_string.format(avg_abs) + ","
+                                   + format_string.format(hand_made_heter) + "," + format_string.format(gen_heter) + ","
+                                   + format_string.format(heter_abs) + "\n")
+
 
 if __name__ == "__main__":
     unittest.main()
