@@ -10,7 +10,7 @@ class GenerateProcessModelTests(unittest.TestCase):
     generated_models = "./output/bpmn/"
 
     def test_thesis_models(self):
-        format_string = "{0:.4f}"
+        format_string = "{0:.3f}"
         names = [
             "model1",
             "model2",
@@ -48,19 +48,9 @@ class GenerateProcessModelTests(unittest.TestCase):
         with open("./output/metrics_part1.csv", "w") as file_one:
             with open("./output/metrics_part2.csv", "w") as file_two:
                 # write header
-                file_one.write("Model name,NOA metric - handmade model,NOA metric - generated model,"
-                               + "NOA metric - absolute difference,NOA metric - proportion,"
-                               + "NOAC metric - handmade model,NOAC metric - generated model,"
-                               + "NOAC metric - absolute difference,NOAC metric - proportion\n")
-                file_two.write("Model name,Coefficient of network complexity metric - handmade model,"
-                               + "Coefficient of network complexity metric - generated model,"
-                               + "Coefficient of network complexity metric - absolute difference,"
-                               + "Average gateway degree metric - handmade model,"
-                               + "Average gateway degree metric - generated model,"
-                               + "Average gateway degree metric - absolute difference,"
-                               + "Gateway Heterogeneity metric - handmade model,"
-                               + "Gateway Heterogeneity metric - generated model,"
-                               + "Gateway Heterogeneity metric - absolute difference\n")
+                file_one.write("Model name,NOA-H,NOA-G,NOA-diff,NOA-prop,NOAC-H,NOAC-G,NOAC-diff,NOAC-prop\n")
+                file_two.write("Model name,CNC-H,CNC-G,CNC-diff,Avg-H,Avg-G,Avg-diff,Heter-H,Heter-G,Heter-diff\n")
+                counter = 1
 
                 for model_name in names:
                     print(model_name)
@@ -94,16 +84,17 @@ class GenerateProcessModelTests(unittest.TestCase):
                     avg_abs = math.fabs(hand_made_avg - gen_avg)
                     heter_abs = math.fabs(hand_made_heter - gen_heter)
 
-                    file_one.write(model_name + ","
+                    file_one.write("Model " + str(counter) + ","
                                    + str(hand_made_noa) + "," + str(gen_noa) + "," + str(noa_abs) + ","
-                                   + format_string.format(noa_prop) + "%," + str(hand_made_noac) + "," +
-                                   str(gen_noac) + "," + str(noac_abs) + "," + format_string.format(noac_prop) + "%\n")
-                    file_two.write(model_name + ","
+                                   + format_string.format(noa_prop) + "," + str(hand_made_noac) + "," +
+                                   str(gen_noac) + "," + str(noac_abs) + "," + format_string.format(noac_prop) + "\n")
+                    file_two.write("Model " + str(counter) + ","
                                    + format_string.format(hand_made_coeff) + "," + format_string.format(gen_coeff) + ","
                                    + format_string.format(coeff_abs) + "," + format_string.format(hand_made_avg) + ","
                                    + format_string.format(gen_avg) + "," + format_string.format(avg_abs) + ","
                                    + format_string.format(hand_made_heter) + "," + format_string.format(gen_heter) + ","
                                    + format_string.format(heter_abs) + "\n")
+                    counter += 1
 
 
 if __name__ == "__main__":
