@@ -54,13 +54,21 @@ class GenerateProcessModelTests(unittest.TestCase):
                     counter = 1
 
                     noa_max_diff = None
-                    noa_max_index = 0
+                    noa_max_diff_index = 0
+                    noa_max_prop = None
+                    noa_max_prop_index = 0
                     noa_min_diff = None
-                    noa_min_index = 0
-                    noac_max_diff = None
-                    noac_max_index = 0
-                    noac_min_diff = None
-                    noac_min_index = 0
+                    noa_min_diff_index = 0
+                    noa_min_prop = None
+                    noa_min_prop_index = 0
+                    noc_max_diff = None
+                    noc_max_diff_index = 0
+                    noc_max_prop = None
+                    noc_max_prop_index = 0
+                    noc_min_diff = None
+                    noc_min_diff_index = 0
+                    noc_min_prop = None
+                    noc_min_prop_index = 0
 
                     cnc_max_diff = None
                     cnc_max_index = 0
@@ -84,7 +92,7 @@ class GenerateProcessModelTests(unittest.TestCase):
                         hand_made_bpmn = diagram.BpmnDiagramGraph()
                         hand_made_bpmn.load_diagram_from_xml_file(self.hand_made_models + model_name + ".bpmn")
                         hand_made_noa = metrics.NOA_metric(hand_made_bpmn)
-                        hand_made_noac = metrics.NOAC_metric(hand_made_bpmn) - hand_made_noa
+                        hand_made_noc = metrics.NOAC_metric(hand_made_bpmn) - hand_made_noa
                         hand_made_cnc = metrics.CoefficientOfNetworkComplexity_metric(hand_made_bpmn)
                         if metrics.all_gateways_count(hand_made_bpmn) > 0:
                             hand_made_avg = metrics.AverageGatewayDegree_metric(hand_made_bpmn)
@@ -95,7 +103,7 @@ class GenerateProcessModelTests(unittest.TestCase):
                         gen_bpmn = diagram.BpmnDiagramGraph()
                         gen_bpmn.load_diagram_from_xml_file(self.generated_models + model_name + ".bpmn")
                         gen_noa = metrics.NOA_metric(gen_bpmn)
-                        gen_noac = metrics.NOAC_metric(gen_bpmn) - gen_noa
+                        gen_noc = metrics.NOAC_metric(gen_bpmn) - gen_noa
                         gen_cnc = metrics.CoefficientOfNetworkComplexity_metric(gen_bpmn)
                         if metrics.all_gateways_count(gen_bpmn) > 0:
                             gen_avg = metrics.AverageGatewayDegree_metric(gen_bpmn)
@@ -107,31 +115,55 @@ class GenerateProcessModelTests(unittest.TestCase):
                         noa_prop = (noa_diff * 100.0) / hand_made_noa
                         if noa_max_diff is None:
                             noa_max_diff = noa_diff
-                            noa_max_index = counter
+                            noa_max_diff_index = counter
                         elif noa_diff > noa_max_diff:
                             noa_max_diff = noa_diff
-                            noa_max_index = counter
+                            noa_max_diff_index = counter
+                        if noa_max_prop is None:
+                            noa_max_prop = noa_diff
+                            noa_max_prop_index = counter
+                        elif noa_prop > noa_max_prop:
+                            noa_max_prop = noa_prop
+                            noa_max_prop_index = counter
                         if noa_min_diff is None:
                             noa_min_diff = noa_diff
-                            noa_min_index = counter
+                            noa_min_diff_index = counter
                         elif noa_diff < noa_min_diff:
                             noa_min_diff = noa_diff
-                            noa_min_index = counter
+                            noa_min_diff_index = counter
+                        if noa_min_prop is None:
+                            noa_min_prop = noa_diff
+                            noa_min_prop_index = counter
+                        elif noa_prop < noa_min_prop:
+                            noa_min_prop = noa_prop
+                            noa_min_prop_index = counter
 
-                        noac_diff = hand_made_noac - gen_noac
-                        noac_prop = (noac_diff * 100.0) / hand_made_noac
-                        if noac_max_diff is None:
-                            noac_max_diff = noac_diff
-                            noac_max_index = counter
-                        elif noac_diff > noac_max_diff:
-                            noac_max_diff = noac_diff
-                            noac_max_index = counter
-                        if noac_min_diff is None:
-                            noac_min_diff = noac_diff
-                            noac_min_index = counter
-                        elif noac_diff < noac_min_diff:
-                            noac_min_diff = noac_diff
-                            noac_min_index = counter
+                        noc_diff = hand_made_noc - gen_noc
+                        noc_prop = (noc_diff * 100.0) / hand_made_noc
+                        if noc_max_diff is None:
+                            noc_max_diff = noc_diff
+                            noc_max_diff_index = counter
+                        elif noc_diff > noc_max_diff:
+                            noc_max_diff = noc_diff
+                            noc_max_diff_index = counter
+                        if noc_max_prop is None:
+                            noc_max_prop = noc_prop
+                            noc_max_prop_index = counter
+                        elif noc_prop > noc_max_prop:
+                            noc_max_prop = noc_prop
+                            noc_max_prop_index = counter
+                        if noc_min_diff is None:
+                            noc_min_diff = noc_diff
+                            noc_min_diff_index = counter
+                        elif noc_diff < noc_min_diff:
+                            noc_min_diff = noc_diff
+                            noc_min_diff_index = counter
+                        if noc_min_prop is None:
+                            noc_min_prop = noc_prop
+                            noc_min_prop_index = counter
+                        elif noc_prop < noc_min_prop:
+                            noc_min_prop = noc_prop
+                            noc_min_prop_index = counter
 
                         cnc_diff = hand_made_cnc - gen_cnc
                         cnc_diff_sum += cnc_diff
@@ -173,8 +205,8 @@ class GenerateProcessModelTests(unittest.TestCase):
 
                         file_one.write("Model " + str(counter) + "," + str(hand_made_noa) + "," + str(gen_noa) + ","
                                        + str(noa_diff) + "," + format_two_dec.format(noa_prop) + "\%,"
-                                       + str(hand_made_noac) + "," + str(gen_noac) + "," + str(noac_diff) + ","
-                                       + format_two_dec.format(noac_prop) + "\%\n")
+                                       + str(hand_made_noc) + "," + str(gen_noc) + "," + str(noc_diff) + ","
+                                       + format_two_dec.format(noc_prop) + "\%\n")
                         file_two.write("Model " + str(counter) + "," + format_three_dec.format(hand_made_cnc) + ","
                                        + format_three_dec.format(gen_cnc) + "," + format_three_dec.format(cnc_diff)
                                        + "," + format_three_dec.format(hand_made_avg) + ","
@@ -202,17 +234,29 @@ class GenerateProcessModelTests(unittest.TestCase):
                         + ", max=" + str(heter_max_diff)
                         + ", model: " + str(heter_max_index) + "\n")
                     file_three.write(
-                        "NOA metric: "
+                        "NOA metric (diff): "
                         + "min=" + str(noa_min_diff)
-                        + ", model: " + str(noa_min_index)
+                        + ", model: " + str(noa_min_diff_index)
                         + ", max=" + str(noa_max_diff)
-                        + ", model: " + str(noa_max_index) + "\n")
+                        + ", model: " + str(noa_max_diff_index) + "\n")
                     file_three.write(
-                        "NOAC metric: "
-                        + "min=" + str(noac_min_diff)
-                        + ", model: " + str(noac_min_index)
-                        + ", max=" + str(noac_max_diff)
-                        + ", model: " + str(noac_max_index) + "\n")
+                        "NOA metric (prop): "
+                        + "min=" + format_two_dec.format(noa_min_prop)
+                        + ", model: " + str(noa_min_prop_index)
+                        + ", max=" + format_two_dec.format(noa_max_prop)
+                        + ", model: " + str(noa_max_prop_index) + "\n")
+                    file_three.write(
+                        "NOC metric (diff): "
+                        + "min=" + str(noc_min_diff)
+                        + ", model: " + str(noc_min_diff_index)
+                        + ", max=" + str(noc_max_diff)
+                        + ", model: " + str(noc_max_diff_index) + "\n")
+                    file_three.write(
+                        "NOC metric (prop): "
+                        + "min=" + format_two_dec.format(noc_min_prop)
+                        + ", model: " + str(noc_min_prop_index)
+                        + ", max=" + format_two_dec.format(noc_max_prop)
+                        + ", model: " + str(noc_max_prop_index) + "\n")
 
 
 if __name__ == "__main__":
