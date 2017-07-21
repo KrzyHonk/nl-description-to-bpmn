@@ -42,7 +42,8 @@ class GenerateProcessModelTests(unittest.TestCase):
             "model28",
             "model29",
             "model30",
-            "model31"
+            "model31",
+            "model32"
         ]
 
         with open("./output/metrics_part1.csv", "w") as file_one:
@@ -61,6 +62,8 @@ class GenerateProcessModelTests(unittest.TestCase):
                     noa_min_diff_index = 0
                     noa_min_prop = None
                     noa_min_prop_index = 0
+                    noa_sum = 0
+
                     noc_max_diff = None
                     noc_max_diff_index = 0
                     noc_max_prop = None
@@ -69,9 +72,12 @@ class GenerateProcessModelTests(unittest.TestCase):
                     noc_min_diff_index = 0
                     noc_min_prop = None
                     noc_min_prop_index = 0
+                    noc_sum = 0
 
+                    cnc_max = None
                     cnc_max_diff = None
                     cnc_max_index = 0
+                    cnc_min = None
                     cnc_min_diff = None
                     cnc_min_index = 0
                     cnc_diff_sum = 0
@@ -105,6 +111,14 @@ class GenerateProcessModelTests(unittest.TestCase):
                         gen_noa = metrics.NOA_metric(gen_bpmn)
                         gen_noc = metrics.NOAC_metric(gen_bpmn) - gen_noa
                         gen_cnc = metrics.CoefficientOfNetworkComplexity_metric(gen_bpmn)
+                        if cnc_max is None:
+                            cnc_max = gen_cnc
+                        elif cnc_max < gen_cnc:
+                            cnc_max = gen_cnc
+                        if cnc_min is None:
+                            cnc_min = gen_cnc
+                        elif cnc_min > gen_cnc:
+                            cnc_min = gen_cnc
                         if metrics.all_gateways_count(gen_bpmn) > 0:
                             gen_avg = metrics.AverageGatewayDegree_metric(gen_bpmn)
                         else:
@@ -113,6 +127,7 @@ class GenerateProcessModelTests(unittest.TestCase):
 
                         noa_diff = hand_made_noa - gen_noa
                         noa_prop = (noa_diff * 100.0) / hand_made_noa
+                        noa_sum += noa_prop
                         if noa_max_diff is None:
                             noa_max_diff = noa_diff
                             noa_max_diff_index = counter
@@ -140,6 +155,7 @@ class GenerateProcessModelTests(unittest.TestCase):
 
                         noc_diff = hand_made_noc - gen_noc
                         noc_prop = (noc_diff * 100.0) / hand_made_noc
+                        noc_sum += noc_prop
                         if noc_max_diff is None:
                             noc_max_diff = noc_diff
                             noc_max_diff_index = counter
@@ -220,7 +236,9 @@ class GenerateProcessModelTests(unittest.TestCase):
                         + ", min=" + format_three_dec.format(cnc_min_diff)
                         + ", model: " + str(cnc_min_index)
                         + ", max=" + format_three_dec.format(cnc_max_diff)
-                        + ", model: " + str(cnc_max_index) + "\n")
+                        + ", model: " + str(cnc_max_index)
+                        + ", global min: " + format_three_dec.format(cnc_min)
+                        + ", global max: " + format_three_dec.format(cnc_max) + "\n")
                     file_three.write(
                         "Average Gateway Degree metric: avg=" + format_three_dec.format(avg_diff_sum / counter)
                         + ", min=" + format_three_dec.format(avg_min_diff)
@@ -244,7 +262,8 @@ class GenerateProcessModelTests(unittest.TestCase):
                         + "min=" + format_two_dec.format(noa_min_prop)
                         + ", model: " + str(noa_min_prop_index)
                         + ", max=" + format_two_dec.format(noa_max_prop)
-                        + ", model: " + str(noa_max_prop_index) + "\n")
+                        + ", model: " + str(noa_max_prop_index)
+                        + ", average: " + format_two_dec.format(noa_sum / counter) + "\n")
                     file_three.write(
                         "NOC metric (diff): "
                         + "min=" + str(noc_min_diff)
@@ -256,7 +275,9 @@ class GenerateProcessModelTests(unittest.TestCase):
                         + "min=" + format_two_dec.format(noc_min_prop)
                         + ", model: " + str(noc_min_prop_index)
                         + ", max=" + format_two_dec.format(noc_max_prop)
-                        + ", model: " + str(noc_max_prop_index) + "\n")
+                        + ", model: " + str(noc_max_prop_index)
+                        + ", average: " + format_two_dec.format(noc_sum / counter) + "\n")
+
 
 
 if __name__ == "__main__":

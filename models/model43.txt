@@ -1,3 +1,5 @@
-The EC tells the INQ about the change of his master data. The INQ notifies the IP of
-the change. The IP checks whether the master data can be changed at the desired time.
-The IP confirmes the changes of the INQ or the IP rejectes the changes of the INQ.
+The GO requests the measurements of the MSP. The MSP checks the received request.
+The MSP denies the request of the GO or the MSP performs the measurement. The
+MSP informs the GO about the failure of the reading or the MSP transmits the measured
+values to the GO. The GO processes the measured values. The GO sents the changed
+values to the MSP. The GO transmit the readings to the SP.

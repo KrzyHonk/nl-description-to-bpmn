@@ -1,7 +1,5 @@
-The fault detector reports a failure to the MPO or MPO has a suspicion of their own fault.
-The MPO shall examine the failure. The MPO rejects the failure of the fault detector
-or the MPO confirms the failure of the fault detector. If the MPO confirms the failure
-of the fault detector, he informes the GO and the MSP. The MPO fixes the fault at the
-measuring device. The MPO shares the results of the repairs carried out with the fault
-detector. The MPO will inform the GO about the resolution of the interference. The
-MPO will inform the MSP about the resolution of the interference.
+The SP/PU/GO request changes of the MPO or the MPO himself causes a change. The
+MPO reviews the change request. The MPO rejects the change of the measuring point by
+the SP/PU/GO or the MPO confirmes the request of the SP/PU/GO. The MPO performs
+the measuring point change. The MPO reports the implementation to the SP/PU/GO
+or notifies the SP/PU/GO about the failure of the changes.

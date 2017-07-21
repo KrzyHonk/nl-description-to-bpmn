@@ -1,16 +1,5 @@
-After the Process starts, a Task is performed to locate and distribute any relevant existing
-designs, both electrical and physical. Next, the design of the electrical and physical
-systems starts in parallel. Any existing or previous Electrical and Physical Designs are
-inputs to both Activities. Development of either design is interrupted by a successful
-update of the other design. If interrupted, then all current work is stopped and that
-design must restart. In each department (Electrical Design and Physical Design), any
-existing designs are reviewed, resulting in an Update Plan for their respective designs
-(i.e. one in Electrical and another in Physical). Using the Update Plan and the existing
-Draft of the Electrical/Physical Design, a revised design is created. Once completed the
-revised design is tested. If the design fails the test, then it is sent back to the first Activity
-(in the department) to review and create a new Update Plan. If the design passes the
-test, then it tells the other department that they need to restart their work. When both
-of the designs have been revised, they are combined and tested. If the combined design
-fails the test, then they are both sent back to the beginning to initiate another design
-cycle. If the designs pass the test, then they are deemed complete and are then sent to
-the manufacturing Process [a separate Process].
+After the Expense Report is received, a new account must be created if the employee does not already have one.
+The report is then reviewed for automatic approval. Amounts under $200 are automatically approved, whereas amounts
+equal to or over $200 require approval of the supervisor. In case of rejection, the employee must receive a rejection notice
+by email. The reimbursement goes to the employee's direct deposit bank account. If the request is not completed in 7 days,
+then the employee must receive an "approval in progress" email
